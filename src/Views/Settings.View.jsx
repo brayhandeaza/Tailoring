@@ -31,7 +31,6 @@ class SettingsView extends Component {
     }
 
     handleInputOnChange = (values) => {
-        console.log(values);
         this.setState({
             inputValue: values
         })
@@ -41,6 +40,8 @@ class SettingsView extends Component {
         alert("Pressed")
     }
     render() {
+       
+
         return (height < 670 ?
             <ScrollView contentContainerStyle={styles.Scroll} >
                 <Settings />
