@@ -25,7 +25,7 @@ class Settings extends Component {
                 lName: false,
                 age: false
             },
-            inputColor: "rgba(000,000,000,0.3)"
+            inputColor: "rgba(000,000,000,0.3)",
         }
     }
 
@@ -33,18 +33,16 @@ class Settings extends Component {
         const { fName, lName, age } = this.state.InputEditable
         switch (view) {
             case "isFirstName":
-                this.refs.fName.focus()
                 this.setState({
                     InputEditable: {
                         fName: true,
-                        lName: this.state.InputEditable.lName,
-                        age: this.state.InputEditable.age,
+                        lName,
+                        age
                     },
-                    inputColor: "rgba(0, 128, 0, 0.637)"
+                    inputColor: "rgba(0, 128, 0, 0.637)",
                 })
                 break;
             case "isLastName":
-                this.refs.lName.focus()
                 this.setState({
                     InputEditable: {
                         fName,
@@ -56,7 +54,6 @@ class Settings extends Component {
 
                 break;
             case "isAge":
-                this.refs.age.focus()
                 this.setState({
                     InputEditable: {
                         fName,
@@ -69,8 +66,8 @@ class Settings extends Component {
         }
     }
 
-    handleFistNameOnChange = (values, e) => {
-        const { fName } = this.state.inputValue
+    handleFistNameOnChange = (values) => {
+        const { fName } = this.state.InputEditable
         this.setState({
             isUpdate: false,
             inputValue: {
@@ -118,10 +115,6 @@ class Settings extends Component {
         })
     }
 
-    // componentDidMount() {
-    //     this.refs.lName.focus()
-    // }
-
     render() {
 
         return (
@@ -142,24 +135,24 @@ class Settings extends Component {
                 </View>
                 <View style={styles.Form}>
                     <View style={[styles.ProfileTitlesBox, { borderColor: this.state.inputColor }]}>
-                        <TouchableHighlight style={styles.InputBox} onPress={() => this.handleFistNameOnChange(this.state.inputValue.fName)}>
-                            <TextInput ref={"fName"} style={[styles.Input, { color: this.state.InputEditable.fName ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.fName} onChangeText={(value, input) => this.handleFistNameOnChange(value)} />
+                        <TouchableHighlight style={styles.InputBox} onPress={() => true}>
+                            <TextInput editable={this.state.InputEditable.fName} style={[styles.Input, { color: this.state.InputEditable.fName ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.fName} onChangeText={(value) => this.handleFistNameOnChange(value)} />
                         </TouchableHighlight>
                         <TouchableHighlight underlayColor="white" onPress={(e) => this.handleTitleOnPress(e, "isFirstName")}>
                             <Image style={{ width: 30, height: 30 }} source={Icons.Edit} />
                         </TouchableHighlight>
                     </View>
                     <View style={[styles.ProfileTitlesBox, { borderColor: this.state.InputEditable.lName ? "green" : "rgba(000,000,000,0.3)" }]}>
-                        <TouchableHighlight style={styles.InputBox} onPress={() => this.handleFistNameOnChange(this.state.inputValue.lName)}>
-                            <TextInput ref={"lName"} style={[styles.Input, { color: this.state.InputEditable.lName ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.lName} onChangeText={(value, input) => this.handleLastNameOnChange(value)} />
+                        <TouchableHighlight style={styles.InputBox}>
+                            <TextInput editable={this.state.InputEditable.fName} style={[styles.Input, { color: this.state.InputEditable.lName ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.lName} onChangeText={(value) => this.handleLastNameOnChange(value)} />
                         </TouchableHighlight>
                         <TouchableHighlight underlayColor="white" onPress={(e) => this.handleTitleOnPress(e, "isLastName")}>
                             <Image style={{ width: 30, height: 30 }} source={Icons.Edit} />
                         </TouchableHighlight>
                     </View>
                     <View style={[styles.ProfileTitlesBox, { borderColor: this.state.InputEditable.age ? "green" : "rgba(000,000,000,0.3)" }]}>
-                    <TouchableHighlight style={styles.InputBox} onPress={() => this.handleFistNameOnChange(this.state.inputValue.age)}>
-                            <TextInput ref={"age"} style={[styles.Input, { color: this.state.InputEditable.age ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.age} onChangeText={(value, e) => this.handleAgeNameOnChange(value, e)} />
+                        <TouchableHighlight style={styles.InputBox} onPress={() => true}>
+                            <TextInput editable={this.state.InputEditable.fName} style={[styles.Input, { color: this.state.InputEditable.age ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.age} onChangeText={(value) => this.handleAgeNameOnChange(value)} />
                         </TouchableHighlight>
                         <TouchableHighlight underlayColor="white" onPress={(e) => this.handleTitleOnPress(e, "isAge")}>
                             <Image style={{ width: 30, height: 30 }} source={Icons.Edit} />

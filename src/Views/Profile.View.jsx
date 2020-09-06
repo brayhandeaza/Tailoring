@@ -3,8 +3,9 @@ import {StyleSheet, View, ScrollView, Dimensions} from 'react-native'
 
 
 // components
+import Register from '../components/Register'
 import Login from '../components/Login'
-import ProfileView from '../components/Profile'
+import Account from '../components/Profile'
 
 // redux
 import { connect } from "react-redux"
@@ -20,10 +21,10 @@ class Profile extends Component {
         const {isLogedIn} = this.props.state
 		return ( height < 675 ?
 			<ScrollView contentContainerStyle={styles.Scroll}>
-                {isLogedIn ? <ProfileView/> : <Login/>}
+                {isLogedIn ? <Account/> : <Register/>}
 			</ScrollView> :
 			<View style={styles.Aside}>
-                {isLogedIn ? <ProfileView/> : <Login/>}
+                {isLogedIn ? <Account/> : <Login/>}
 			</View> 
 		)
 	}

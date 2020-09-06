@@ -1,32 +1,31 @@
 import React, { Component } from 'react'
-import {StyleSheet, View, Text, Image , TouchableHighlight, } from 'react-native'
+import {StyleSheet, View, Text, Image , TouchableHighlight, TextInput } from 'react-native'
 import { Icons } from "../constants/Image";
 
 
-class Login extends Component {
+class Register extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {  }
 	}
 	render() {
 		return (
-			<View style={styles.Login}>
-				<View style={styles.LogoContainer}>
-					<Image style={styles.Logo} source={Icons.Logo}/>
+			<View style={styles.Register}>
+				<View style={styles.FormTitle}>
+					<Text style={[styles.IconsOptionText, {color: "rgb(112,112,112)", fontSize: 25, fontWeight: "bold" }]}>Alteration</Text>
 				</View>
-				<View style={styles.LoginOrSignUpContainer}>
-					<View style={styles.TextDetailsBox}>
-						<Text style={styles.DetailsText}>Log in or create an account to manage your portfolio.</Text>
-					</View>
-					<View style={styles.ButtonContainer}>
-						<TouchableHighlight underlayColor="#b2897b" style={styles.Button} onPress={(e) => {}}>
-							<Text style={styles.ButtonText}>Sign Up</Text>
-						</TouchableHighlight>
-						<Text>Already have an account?</Text>
-						<TouchableHighlight underlayColor="#f6f6f6" style={[styles.Button, {borderWidth: 0}]} onPress={(e) => {}}>
-							<Text style={styles.ButtonText}>Log in</Text>
-						</TouchableHighlight>
-					</View>
+				<View style={styles.TextInputContainer}>
+					<TextInput style={styles.Input} placeholder="Email"/>
+					<TextInput style={styles.Input} placeholder="Password"/>
+				</View>
+                <View style={styles.FotgotPass} >
+                    <Text style={[styles.IconsOptionText, {color: "rgb(112,112,112)", fontSize: 16, textDecorationLine: "underline", textAlign: "left"}]}>Forgot your password?</Text>
+                </View>
+				<TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => true}>
+                    <Text style={[styles.IconsOptionText, {color: "rgb(112,112,112)", fontSize: 25, fontWeight: "600" }]}>{"Log In"}</Text>
+                </TouchableHighlight>
+                <View style={styles.Links} >
+					<Text style={[styles.IconsOptionText, {color: "rgb(112,112,112)", fontSize: 16, textDecorationLine: "underline"}]}>Create an account</Text>
 				</View>
 			</View>
 		)
@@ -34,8 +33,10 @@ class Login extends Component {
 }
 
 const styles = StyleSheet.create({
-	Login: {
-		flex: 1,
+	Register: {
+        width: "100%",
+        height: "100%",
+        paddingTop: 50,
 		backgroundColor: "white",
 
 		display: "flex",
@@ -56,55 +57,64 @@ const styles = StyleSheet.create({
 		width: 160,
 		height: 160,
 
-	},
-	LoginOrSignUpContainer: {
-		width: "100%",
+    },
+    FormTitle: {
+        marginTop: 20,
+        marginBottom: 20
+
+    },
+	TextInputContainer: {
+        width: "100%",
+
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
 		
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "flex-end",
-		alignItems: "center"
-	},
-	TextDetailsBox: {
-		width: "100%",
-        padding: 10,
+    },
+    Input: {
+        width: "90%",
+        height: 50,
+        paddingLeft: 10,
+        marginBottom: 15,
+        borderRadius: 5,
+        borderWidth: 0.5,
+        borderColor: "rgba(000,000,000,0.3)"
+    },
+    FotgotPass: {
+        width: "90%",
+        height: 50,
+        paddingLeft: 10,
+    },
+    Touchable: {
+        width: "90%",
+        height: 60,
+        borderRadius: 10,
+        marginBottom: 30,
+        backgroundColor: "white",
+        borderWidth: 0.5,
+        borderColor: "rgba(112,112,112,0.3)",
 
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center"
-	},
-	DetailsText: {
-		textAlign: "center", 
-		fontSize: 18, 
-		color : "black"
-	},
-	ButtonContainer: {
-		width: "100%",
-		height: 200,
-		// backgroundColor: "yellow",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 3.84,
 
-		display: "flex",
-		justifyContent: "flex-start",
-		alignItems: "center"
-	},
-	Button: {
-		width: 200,
-		height: 50,
-		borderRadius: 10,
-		borderWidth: 1,
-		borderColor: "#5e4942",
-		marginTop: 10,
-		marginBottom: 10,
-		// backgroundColor: "#b2897b",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    Links: {
+        width: "90%",
+        // backgroundColor: "red",
 
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center"
-	},
-	ButtonText: {
-		textTransform: "uppercase",
-		color: "#5e4942"
-	}
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    }
 })
 
-export default Login
+export default Register

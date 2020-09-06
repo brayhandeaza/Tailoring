@@ -22,7 +22,7 @@ export default (state = initalState, actions) => {
 		case "isHome":
 			return Object.assign({}, state, {isLogedIn: false ,isJacket: false, isPants: false, isCompleted: false, isRequested: false, isCanceled: false, isHome: true, isOrders: false, isPrices: false, isProfile: false, isBag: false, isSearch: false, isAlteration: false, isHeader: true, isFooter: true, isAside: false })
 		case "isProfile":
-			return Object.assign({}, state, {isLogedIn: true ,isJacket: false, isPants: false, isCompleted: false, isRequested: false, isCanceled: false, isHome: false, isOrders: false, isPrices: false, isProfile: true, isBag: false, isSearch: false, isAlteration: false, isHeader: false, isFooter: true, isAside: false })
+			return Object.assign({}, state, {isLogedIn: false ,isJacket: false, isPants: false, isCompleted: false, isRequested: false, isCanceled: false, isHome: false, isOrders: false, isPrices: false, isProfile: true, isBag: false, isSearch: false, isAlteration: false, isHeader: true, isFooter: true, isAside: false })
 		case "isBag":
 			return Object.assign({}, state, {isLogedIn: false ,isJacket: false, isPants: false, isCompleted: false, isRequested: false, isCanceled: false, isHome: false, isOrders: false, isPrices: false, isProfile: false, isBag: true, isSearch: false, isAlteration: false, isHeader: true, isFooter: true, isAside: false })
 		case "isSearch":
