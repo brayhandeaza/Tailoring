@@ -3,6 +3,9 @@ import { StyleSheet, View, Text, Image, ScrollView, TouchableHighlight, Dimensio
 import { connect } from "react-redux"
 import { Item, Icons } from "../constants/Image"
 
+// compoents
+import Footer from "../components/Footer"
+
 const { width } = Dimensions.get("screen")
 
 class Orders extends Component {
@@ -76,6 +79,7 @@ class Orders extends Component {
                         </View>
                     ))}
                 </ScrollView>
+                <Footer/>
             </View>
         )
     }
@@ -83,7 +87,8 @@ class Orders extends Component {
 
 const styles = StyleSheet.create({
     Appointments: {
-        flex: 1,
+        width: "100%",
+        height: "100%",
         backgroundColor: "white",
 
         display: "flex",

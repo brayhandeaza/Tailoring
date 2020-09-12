@@ -14,19 +14,27 @@ class Navegation extends Component {
     handleOnPress = (e, view, action) => {
         e.stopPropagation()
         this.props.dispatch({ type: action })
+
+        if (action === "isOrders") {
+            this.props.dispatch({ type: "isHeaderHidden" })
+        } else {
+            this.props.dispatch({ type: "isHeaderNotHidden" })
+        }
+
         Actions.reset(view)
     }
 
     isViews = (view) => {
         const isTrue = {
-            borderTopColor: "#9d7869",
+            // borderTopColor: "#9d7869",
+            // borderTopColor: "#2ba97a",
         }
         return view ? isTrue : {}
     }
 
     render() {
-        const { isHome, isProfile, isFooter, isOrders, isPrices } = this.props.state
-        return (isFooter ?
+        const { isHome, isProfile, isOrders, isPrices, isFooter } = this.props.state.Footer
+        return (
             <View style={styles.FooterContainer}>
                 <View style={styles.Footer}>
                     <TouchableHighlight style={[styles.Touchable, this.isViews(isHome)]} underlayColor="white" onPress={!isHome ? (e) => this.handleOnPress(e, "_Home", "isHome") : null}>
@@ -37,7 +45,7 @@ class Navegation extends Component {
                     </TouchableHighlight>
                     <TouchableHighlight style={[styles.Touchable, this.isViews(isOrders)]} underlayColor="white" onPress={!isOrders ? (e) => this.handleOnPress(e, "_Orders", "isOrders") : null}>
                         <View style={styles.Container} >
-                            <Image style={styles.Icons} source={isOrders ? Icons.AppointmentOn : Icons.Appointment}/>
+                            <Image style={styles.Icons} source={isOrders ? Icons.AppointmentOn : Icons.Appointment} />
                         </View>
                     </TouchableHighlight>
                     <TouchableHighlight style={[styles.Touchable, this.isViews(isPrices)]} underlayColor="white" onPress={!isPrices ? (e) => this.handleOnPress(e, "_Prices", "isPrices") : null}>
@@ -51,7 +59,7 @@ class Navegation extends Component {
                         </View>
                     </TouchableHighlight>
                 </View>
-            </View> : null
+            </View>
         )
     }
 }
@@ -77,7 +85,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderWidth: 0.5,
         borderColor: "rgba(112,112,112,0.4)",
-        paddingBottom: 5,
+        paddingBottom: 10,
 
 
         shadowColor: "#000",

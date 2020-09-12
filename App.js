@@ -14,17 +14,17 @@ import Footer from './src/components/Footer'
 import Header from './src/components/Header'
 
 // redux
-import { createStore, combineReducers } from "redux"
-import reducer from "./src/reducers/"
+import { createStore} from "redux"
 import { Provider } from "react-redux"
+import reducer from "./src/reducers/index"
 
 const store = createStore(reducer)
 
 export default function App() {
+	console.log(store.getState());
 	return (
 		<Fragment>
 			<Provider store={store}>
-				<Header/>
 				<Router>
 					<Scene tabs hideTabBar key="root">
 						<Scene modal key="Home" component={Tailor} hideNavBar gestureEnable={false} initial/>
@@ -36,7 +36,6 @@ export default function App() {
 						<Scene modal key="PrivacyPolicy" component={Settings} hideNavBar gestureEnable={false}/>
 					</Scene>
 				</Router>
-				<Footer/>
 			</Provider>
 		</Fragment>
 	)

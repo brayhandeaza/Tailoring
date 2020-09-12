@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Text, Dimensions, TouchableHighlight, Image } from 'react-native'
 import { connect } from "react-redux"
-import { Item, Icons } from "../constants/Image"
-import { Actions } from "react-native-router-flux"
+import { Icons } from "../constants/Image"
+
 
 const { width, height } = Dimensions.get("screen")
 
 class Home extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {}
+    }
+    
+    componentDidMount() {
+    //   console.log(this.props);
     }
     
     render() {

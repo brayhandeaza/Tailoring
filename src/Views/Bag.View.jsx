@@ -6,7 +6,7 @@ import { connect } from "react-redux"
 import Items from "../components/CartItems"
 class Bag extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {  }
     }
 

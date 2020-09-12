@@ -2,13 +2,16 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Text, TouchableHighlight, ScrollView, Dimensions } from 'react-native'
 import { connect } from "react-redux"
 
+// compoents
+import Footer from "../components//Footer"
+
 const { width } = Dimensions.get("screen")
 
 class Prices extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: ["Jackets", "Pants",0 ,0 ,0,0 ,0 ,0,0 ,0 ,0]
+            items: ["Jackets", "Pants", 0 ,0 ,0,0 ,0 ,0,0 ,0 ,0]
         }
     }
    
@@ -19,11 +22,11 @@ class Prices extends Component {
 
     isFilter = (filter) => {
         const isTrue = {
-            backgroundColor: "rgb(163, 119, 102)",
-            
+            backgroundColor: "rgb(163, 119, 102)"
         }
         return filter ? isTrue : {borderWidth: 0.5, borderColor: "rgba(000,000,000,0.3)" }
     }
+    
     isFilterText = (filter) => {
         const isTrue = {
             color: "white",
@@ -56,6 +59,7 @@ class Prices extends Component {
                         </View>
                     ))}
                 </ScrollView>
+                <Footer/>
             </View>
         );
     }

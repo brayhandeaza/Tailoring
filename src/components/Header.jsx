@@ -14,39 +14,37 @@ class Nav extends Component {
     }
 
     handleMenuOnPressed = (e) => {
-        this.props.dispatch({ type: "isAside" })
-        Actions.Aside()
+        this.props.dispatch({ type: "isHome" })
+        Actions.Home()
     }
     render() {
-        const {isHeader} = this.props.state
-        return (isHeader ?
+        const { isHeader, isArrow } = this.props.state.Header
+        console.log(isHeader);
+        return (
             <Header style={styles.Header}>
-                <View style={styles.Touchable} >
-                    <Image style={[styles.Icons, { width: 40, height: 40 }]} source={Icons.Logo} />
-                </View>
-            </Header> : null
+                <TouchableHighlight underlayColor="white" style={styles.Touchable} onPress={this.handleMenuOnPressed} >
+                     <Image style={[styles.Icons, { width: 30, height: 30}]} source={Icons.Arrow} /> 
+                </TouchableHighlight>
+            </Header>
         )
     }
 }
 
 const styles = StyleSheet.create({
     Header: {
+        width: "100%",
         height: 60,
         backgroundColor: "white",
         borderBottomColor: "white",
-
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "flex-end"
     },
     Touchable: {
-        width: 50,
+        width: "100%",
         height: 60,
+        paddingLeft: 20,
 
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "flex-start"
     },
     Icons: {
         width: 30,

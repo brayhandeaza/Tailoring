@@ -24,8 +24,15 @@ const Arrow = require('../../assets/img/icons/arrow.png')
 const Read = require('../../assets/img/icons//book.png')
 const Edit = require('../../assets/img/icons/edit.png')
 
-
-
+// Sign Up
+const User = require('../../assets/img/icons/Login/user.png')
+const UserOn = require('../../assets/img/icons/Login/userOn.png')
+const Email = require('../../assets/img/icons/Login/mail.png')
+const EmailOn = require('../../assets/img/icons/Login/mailOn.png')
+const Phone = require('../../assets/img/icons/Login/phone.png')
+const PhoneOn = require('../../assets/img/icons/Login/phoneOn.png')
+const Password = require('../../assets/img/icons/Login/password.png')
+const PasswordOn = require('../../assets/img/icons/Login/passwordOn.png')
 
 const getit = require('../../assets/img/icons/shoppingColored.png')
 const Search = require('../../assets/img/icons/search.png')
@@ -71,7 +78,17 @@ module.exports = {
         Gift,
         Arrow,
         Edit,
-        Read
+        Read,
+        Login: {
+            User,
+            UserOn,
+            Email,
+            EmailOn,
+            Phone,
+            PhoneOn,
+            Password,
+            PasswordOn
+        }
     }, 
     Img: {
         Avatar

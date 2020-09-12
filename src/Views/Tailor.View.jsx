@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Text, TouchableHighlight, Image } from 'react-native'
 import { connect } from "react-redux"
 import { Icons } from "../constants/Image"
-import { Actions } from "react-native-router-flux";
+import { Actions } from "react-native-router-flux"
+
+// components
+import Footer from "../components/Footer"
 
 class Tailor extends Component {
     constructor(props) {
@@ -15,12 +18,17 @@ class Tailor extends Component {
         Actions.reset(view)
     }
 
+    componentDidMount() {
+      
+    }
+    
+
     render() {
         return (
             <View style={styles.Appointments}>
                 <View style={styles.ItemsOption}>
                     <Text style={[styles.IconsOptionText, {fontSize: 30, fontWeight: "600" }]}>{"Your tailor."}</Text>
-                    <Text style={[styles.IconsOptionText, { color: "#9d7869", fontSize: 30, fontWeight: "600" }]}>{" At Home"}</Text>
+                    <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 30, fontWeight: "600" }]}>{"At Home"}</Text>
                 </View>
                 <View>
                     <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", position: "relative", bottom: 15 }]}>{"By. Miracle Fit"}</Text>
@@ -29,8 +37,9 @@ class Tailor extends Component {
                     <Image source={Icons.Customize} style={styles.ItemsImage}/>
                 </View>
                 <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => this.handleOnPress("_Alretation", "isAlteration")}>
-                    <Text style={[styles.IconsOptionText, {color: "rgb(112,112,112)", fontSize: 25, fontWeight: "600" }]}>{"Get a tailor"}</Text>
+                    <Text style={[styles.IconsOptionText, {color: "rgb(112,112,112)", fontSize: 25, fontWeight: "bold" }]}>{"Get a tailor"}</Text>
                 </TouchableHighlight>
+                <Footer/>
             </View>
         );
     }
@@ -40,6 +49,7 @@ const styles = StyleSheet.create({
     Appointments: {
         flex: 1,
         backgroundColor: "white",
+        paddingTop: 80,
 
         display: "flex",
         justifyContent: "flex-start",
@@ -62,8 +72,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 30,
         backgroundColor: "white",
-        borderWidth: 0.5,
-        borderColor: "rgba(112,112,112,0.3)",
+        borderWidth: 0.2,
+        borderColor: "rgba(000,000,000,0.2)",
+        
+
 
         shadowColor: "#000",
         shadowOffset: {
