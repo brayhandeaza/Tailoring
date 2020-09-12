@@ -9,10 +9,6 @@ import Profile from './src/Views/Profile.View'
 import Prices from './src/Views/Prices.View'
 import Settings from './src/Views/Settings.View'
 
-// cpmponents
-import Footer from './src/components/Footer'
-import Header from './src/components/Header'
-
 // redux
 import { createStore} from "redux"
 import { Provider } from "react-redux"
@@ -21,7 +17,6 @@ import reducer from "./src/reducers/index"
 const store = createStore(reducer)
 
 export default function App() {
-	console.log(store.getState());
 	return (
 		<Fragment>
 			<Provider store={store}>

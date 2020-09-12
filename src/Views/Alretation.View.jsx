@@ -4,6 +4,9 @@ import { Calendar } from "react-native-calendars"
 import Textarea from 'react-native-textarea'
 import { Button } from "native-base"
 
+// componets
+import Header from "../components//Header"
+
 import { connect } from "react-redux"
 import { color } from 'react-native-reanimated'
 
@@ -38,16 +41,17 @@ class Alretation extends Component {
 		const { activeDay } = this.state
 		return (
 			<View style={styles.Alretation}>
+				<Header/>
 				<ScrollView contentContainerStyle={styles.Scroll}>
 					<Calendar
 						minDate={this.handleMinDate()}
 						onDayPress={this.handleDayOnPress}
 						markedDates={{
-							[activeDay]: { dotColor: 'white', disabled: false, selected: true, marked: true, selectedColor: '#b2897b', disableTouchEvent: false },
-							"2020-08-19": { dotColor: 'white', disabled: true, selected: false, marked: false, selectedColor: '#b2897b', disableTouchEvent: true },
+							[activeDay]: { dotColor: 'white', disabled: false, selected: true, marked: true, selectedColor: "#2ba97a", disableTouchEvent: false },
+							"2020-08-19": { dotColor: 'white', disabled: true, selected: false, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true },
 						}}
 						theme={{
-							arrowColor: '#b2897b',
+							arrowColor: "#2ba97a",
 							dotColor: "white",
 							calendarBackground: "white",
 							textSectionTitleColor: "black",
@@ -85,7 +89,6 @@ const styles = StyleSheet.create({
 	Alretation: {
 		flex: 1,
 		backgroundColor: "white",
-
 	},
 	TitleView: {
 		width: "100%",
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
 	},
 	Scroll: {
 		paddingTop: 20,
-		paddingBottom: 360
+		paddingBottom: 60
 	},
 	FormView: {
 		width: "100%",
@@ -139,7 +142,7 @@ const styles = StyleSheet.create({
 	Button: {
 		width: "100%",
 		height: 50,
-		backgroundColor: "#b2897b",
+		backgroundColor: "#2ba97a",
 		marginTop: 20,
 
 		display: "flex",

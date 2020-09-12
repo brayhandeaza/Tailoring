@@ -22,7 +22,7 @@ class Prices extends Component {
 
     isFilter = (filter) => {
         const isTrue = {
-            backgroundColor: "rgb(163, 119, 102)"
+            backgroundColor: "#2ba97a"
         }
         return filter ? isTrue : {borderWidth: 0.5, borderColor: "rgba(000,000,000,0.3)" }
     }
@@ -36,17 +36,17 @@ class Prices extends Component {
     }
 
     render() {
-        const { isJacket, isPants } = this.props.state
+        const { isJacket, isPants } = this.props.state.Filters
         return (
             <View style={styles.Appointments}>
                 <View style={styles.PriceTitleContainer}>
                     <Text style={styles.PriceTitleText}>Prices</Text>
                 </View>
                 <View style={styles.Filter}>
-                    <TouchableHighlight underlayColor="#ac8a7d"  style={[styles.FilterButtoms, this.isFilter(isJacket)]} onPress={(e) => this.handleFilter(e, "isJacket")}>
+                    <TouchableHighlight underlayColor="white"  style={[styles.FilterButtoms, this.isFilter(isJacket)]} onPress={(e) => this.handleFilter(e, "isJacket")}>
                         <Text style={[styles.FilterButtomsText, this.isFilterText(isJacket)]}>{"Jackets"}</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight underlayColor="#ac8a7d"  style={[styles.FilterButtoms, this.isFilter(isPants)]} onPress={(e) => this.handleFilter(e, "isPants")}>
+                    <TouchableHighlight underlayColor="white"  style={[styles.FilterButtoms, this.isFilter(isPants)]} onPress={(e) => this.handleFilter(e, "isPants")}>
                         <Text style={[styles.FilterButtomsText, this.isFilterText(isPants)]}>{"Pants"}</Text>
                     </TouchableHighlight>
                 </View>
@@ -61,7 +61,7 @@ class Prices extends Component {
                 </ScrollView>
                 <Footer/>
             </View>
-        );
+        )
     }
 }
 

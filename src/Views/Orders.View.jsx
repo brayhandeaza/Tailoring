@@ -28,7 +28,7 @@ class Orders extends Component {
 
     isFilter = (filter) => {
         const isTrue = {
-            backgroundColor: "rgb(163, 119, 102)"
+            backgroundColor: "#2ba97a"
         }
         return filter ? isTrue : { borderWidth: 0.5, borderColor: "rgba(000,000,000,0.3)" }
     }
@@ -40,20 +40,20 @@ class Orders extends Component {
         return filter ? isTrue : { color: "rgba(000,000,000,0.3)" }
     }
     render() {
-        const { isCompleted, isRequested, isCanceled } = this.props.state
+        const { isCompleted, isRequested, isCanceled } = this.props.state.Filters
         return (
             <View style={styles.Appointments}>
                 <View style={styles.TitleBox}>
                     <Text style={{ fontSize: 30, color: "#000000", fontWeight: "bold" }}>My Orders</Text>
                 </View>
                 <View style={styles.Filter}>
-                    <TouchableHighlight underlayColor="#5e4941" style={[styles.FilterButtoms, this.isFilter(isRequested)]} onPress={(e) => this.handleFilter(e, "isRequested")}>
+                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isRequested)]} onPress={(e) => this.handleFilter(e, "isRequested")}>
                         <Text style={[styles.FilterButtomsText, this.isFilterText(isRequested)]}>{"Requested"}</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight underlayColor="#5e4941" style={[styles.FilterButtoms, this.isFilter(isCompleted)]} onPress={(e) => this.handleFilter(e, "isCompleted")}>
+                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isCompleted)]} onPress={(e) => this.handleFilter(e, "isCompleted")}>
                         <Text style={[styles.FilterButtomsText, this.isFilterText(isCompleted)]}>{"Completed"}</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight underlayColor="#5e4941" style={[styles.FilterButtoms, this.isFilter(isCanceled)]} onPress={(e) => this.handleFilter(e, "isCanceled")}>
+                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isCanceled)]} onPress={(e) => this.handleFilter(e, "isCanceled")}>
                         <Text style={[styles.FilterButtomsText, this.isFilterText(isCanceled)]}>{"Canceled"}</Text>
                     </TouchableHighlight>
                 </View>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 100,
         paddingTop: 60,
-        paddingLeft: 20,
+        paddingLeft: 25,
 
         display: "flex",
         justifyContent: "center",

@@ -18,17 +18,12 @@ class Tailor extends Component {
         Actions.reset(view)
     }
 
-    componentDidMount() {
-      
-    }
-    
-
     render() {
         return (
             <View style={styles.Appointments}>
                 <View style={styles.ItemsOption}>
                     <Text style={[styles.IconsOptionText, {fontSize: 30, fontWeight: "600" }]}>{"Your tailor."}</Text>
-                    <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 30, fontWeight: "600" }]}>{"At Home"}</Text>
+                    <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 30, fontWeight: "600" }]}>{" At Home"}</Text>
                 </View>
                 <View>
                     <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", position: "relative", bottom: 15 }]}>{"By. Miracle Fit"}</Text>

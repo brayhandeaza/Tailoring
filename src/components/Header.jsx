@@ -19,11 +19,10 @@ class Nav extends Component {
     }
     render() {
         const { isHeader, isArrow } = this.props.state.Header
-        console.log(isHeader);
         return (
             <Header style={styles.Header}>
                 <TouchableHighlight underlayColor="white" style={styles.Touchable} onPress={this.handleMenuOnPressed} >
-                     <Image style={[styles.Icons, { width: 30, height: 30}]} source={Icons.Arrow} /> 
+                     <Image style={[styles.Icons, { width: 25, height: 25}]} source={Icons.Arrow} /> 
                 </TouchableHighlight>
             </Header>
         )
