@@ -8,5 +8,5 @@ const Filters = require("./Filters")
 export default combineReducers({
     Footer,
     Header,
-    Filters
+    Filters,
 })
