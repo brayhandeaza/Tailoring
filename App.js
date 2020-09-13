@@ -17,6 +17,7 @@ import reducer from "./src/reducers/index"
 const store = createStore(reducer)
 
 export default function App() {
+	console.log();
 	return (
 		<Fragment>
 			<Provider store={store}>

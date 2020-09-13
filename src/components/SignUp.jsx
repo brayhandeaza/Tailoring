@@ -13,12 +13,13 @@ class Register extends Component {
             email: '',
             phone: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            formatedPhone: ''
         }
     }
 
     fetchUsers = async () => {
-        await axios.get("http://localhost:3000/users").then((users) => {
+        await axios.get("https://alteration-database.herokuapp.com/users").then((users) => {
             this.setState({
                 users: users.data
             })
@@ -27,17 +28,45 @@ class Register extends Component {
     }
 
     createUsers = async () => {
-        const {fullName, email, password, phone} = this.state
-        await axios.post("http://localhost:3000/users", {
+        const { fullName, email, password, phone } = this.state
+        await axios.post("https://alteration-database.herokuapp.com/users", {
             fullName,
             email,
             password,
             phone
-        }).then((res) => {
-            console.log(res)
-        }).catch(err => {
-            console.log(err)
-        })
+        }).then((User) => {
+            if (!User.data.error) {
+                this.setState({
+                    fullName: "",
+                    email: "",
+                    password: "",
+                    phone: "",
+                    
+                })
+                console.log(User.data);
+            }
+        }).catch(err => console.log(err))
+
+    }
+
+    formatPhoneNumber = (number) => {
+        let phone = []
+        for (let i = 0; i < number.length; i++) {
+            if (i === 0) {
+                phone.push(`(${number[i]}`)
+
+            } else if (i === 2) {
+                phone.push(`${number[i]}) `)
+
+            } else if (i === 6) {
+                phone.push(` - ${number[i]}`)
+
+            } else {
+                phone.push(number[i])
+            } 
+        }
+
+        return phone
     }
 
     handleFullNameOnChange = (value) => {
@@ -52,8 +81,9 @@ class Register extends Component {
     }
     handlePhoneOnChange = (value) => {
         this.setState({
-            phone: value
+            phone: value,
         })
+        console.log(this.state.phone)
     }
     handlePasswordOnChange = (value) => {
         this.setState({
@@ -75,7 +105,7 @@ class Register extends Component {
     }
     render() {
         return (
-            <ScrollView contentContainerStyle={styles.Scroll}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.Scroll}>
                 <View style={styles.Register}>
                     <View style={styles.FormTitle}>
                         <Text style={[styles.IconsOptionText, { color: "black", fontSize: 28, fontWeight: "bold" }]}>Create Account</Text>
@@ -84,23 +114,23 @@ class Register extends Component {
                     <View style={styles.InputContainer}>
                         <View style={styles.InputContainerBox}>
                             <Image style={styles.InputImage} source={Icons.Login.User} />
-                            <TextInput placeholderTextColor="#747374" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)}/>
+                            <TextInput placeholderTextColor="#747374" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
                         </View>
                         <View style={styles.InputContainerBox}>
                             <Image style={styles.InputImage} source={Icons.Login.Email} />
-                            <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)}/>
+                            <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
                         </View>
                         <View style={styles.InputContainerBox}>
                             <Image style={styles.InputImage} source={Icons.Login.Phone} />
-                            <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="phone-pad" placeholder="Phone" onChangeText={(value) => this.handlePhoneOnChange(value)}/>
+                            <TextInput placeholderTextColor="#747374" style={styles.Input}  keyboardType="phone-pad" placeholder="Phone" onTextInput={(text) => console.log(text.currentTarget)} onChangeText={(value, e) => this.handlePhoneOnChange(value)} />
                         </View>
                         <View style={styles.InputContainerBox}>
                             <Image style={styles.InputImage} source={Icons.Login.Password} />
-                            <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(value) => this.handlePasswordOnChange(value)}/>
+                            <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(e, value) => this.handlePasswordOnChange(value)} />
                         </View>
                         <View style={styles.InputContainerBox}>
                             <Image style={styles.InputImage} source={Icons.Login.Password} />
-                            <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Confirm Password"  onChangeText={(value) => this.handleConfirmPasswordOnChange(value)}/>
+                            <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Confirm Password" onChangeText={(value) => this.handleConfirmPasswordOnChange(value)} />
                         </View>
                     </View>
                     <TouchableHighlight style={styles.Touchable} underlayColor="#2ba97a" onPress={this.createUsers}>
@@ -110,7 +140,7 @@ class Register extends Component {
                         <View style={{}}>
                             <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 16 }]}>Already register?</Text>
                         </View>
-                        <TouchableHighlight underlayColor="white" style={styles.Links} onPress={() => alert()}>
+                        <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.fetchUsers}>
                             <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 16, paddingLeft: 5 }]}>Log In</Text>
                         </TouchableHighlight>
                     </View>

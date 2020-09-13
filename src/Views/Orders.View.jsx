@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Text, Image, ScrollView, TouchableHighlight, Dimensions } from 'react-native'
 import { connect } from "react-redux"
 import { Item, Icons } from "../constants/Image"
+import axios from "axios"
 
 // compoents
 import Footer from "../components/Footer"
@@ -12,74 +13,62 @@ class Orders extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: ["Completed", "Requested", "Canceled"],
+            appointments: [],
+            items: ["All","Completed", "Requested", "Canceled"],
             Filter: {
-                isCompleted: true,
+                isAll: true,
+                isCompleted: false,
                 isRequested: false,
                 isCanceled: false,
                 bgColor: ""
-            }
+            },
+            filterTitle: "requested"
         }
-    }
-    handleFilter = (e, filter) => {
-        e.stopPropagation()
-        this.props.dispatch({ type: filter })
     }
 
-    isFilter = (filter) => {
-        const isTrue = {
-            backgroundColor: "#2ba97a"
-        }
-        return filter ? isTrue : { borderWidth: 0.5, borderColor: "rgba(000,000,000,0.3)" }
+    fetchAppointments = async () => {
+        await axios.get(`https://alteration-database.herokuapp.com/appointments/users/${1}`).then((res) => {
+            console.log(res.data.Appointments);
+            this.setState({
+                appointments: res.data.Appointments.filter(appointment => appointment.status == this.state.filterTitle)
+            })
+        })
     }
-    isFilterText = (filter) => {
-        const isTrue = {
-            color: "white",
 
-        }
-        return filter ? isTrue : { color: "rgba(000,000,000,0.3)" }
+    componentDidMount() {
+        this.fetchAppointments()
     }
+
     render() {
-        const { isCompleted, isRequested, isCanceled } = this.props.state.Filters
+        const { isCompleted, isRequested, isCanceled, } = this.props.state.Filters
         return (
             <View style={styles.Appointments}>
                 <View style={styles.TitleBox}>
                     <Text style={{ fontSize: 30, color: "#000000", fontWeight: "bold" }}>My Orders</Text>
                 </View>
-                <View style={styles.Filter}>
-                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isRequested)]} onPress={(e) => this.handleFilter(e, "isRequested")}>
-                        <Text style={[styles.FilterButtomsText, this.isFilterText(isRequested)]}>{"Requested"}</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isCompleted)]} onPress={(e) => this.handleFilter(e, "isCompleted")}>
-                        <Text style={[styles.FilterButtomsText, this.isFilterText(isCompleted)]}>{"Completed"}</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isCanceled)]} onPress={(e) => this.handleFilter(e, "isCanceled")}>
-                        <Text style={[styles.FilterButtomsText, this.isFilterText(isCanceled)]}>{"Canceled"}</Text>
-                    </TouchableHighlight>
-                </View>
                 <ScrollView contentContainerStyle={styles.Scroll}>
-                    {this.state.items.map((items, i) => (
-                        <View key={i} style={styles.Orders}>
+                    {this.state.appointments.map((appointment, i) => (
+                        <TouchableHighlight underlayColor="white" key={i} style={styles.Orders} onPress={() => alert(appointment.fullName)} >
                             <View style={styles.DetailsBox}>
                                 <View style={styles.Top}>
-                                    <Text style={{ fontSize: 20, color: "#000000", fontWeight: "bold" }}>Brayhan De Aza</Text>
-                                    <Text style={{}}>#39798787</Text>
+                                    <Text style={{ fontSize: 20, color: "#000000", fontWeight: "bold", textTransform: "capitalize" }}>{appointment.fullName}</Text>
+                                    <Text style={{ paddingRight: 10 }}>{`#${appointment.appointmentId.slice(0, 10)}`}</Text>
                                 </View>
                                 <View style={styles.Bottom}>
                                     <View style={styles.BottomLeft}>
                                         <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)" }}>Tailor</Text>
-                                        <Text style={{ fontSize: 18, color: "rgba(000,000,000,0.8)", paddingTop: 5 }}>Rosa Polanco</Text>
+                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.7)", paddingTop: 5, textTransform: "capitalize", fontWeight: "bold" }}>Brayhan de Aza</Text>
                                     </View>
                                     <View style={styles.BottomRight}>
                                         <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)" }}>Schedule</Text>
-                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.8)", paddingTop: 5 }}>July 26, 2020 | 11 am</Text>
+                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.8)", paddingTop: 5 }}>{`${appointment.date} ${appointment.time}`}</Text>
                                     </View>
                                 </View>
                             </View>
-                        </View>
+                        </TouchableHighlight>
                     ))}
                 </ScrollView>
-                <Footer/>
+                <Footer />
             </View>
         )
     }
@@ -121,7 +110,7 @@ const styles = StyleSheet.create({
 
     },
     FilterButtoms: {
-        width: 115,
+        width: 80,
         height: 40,
         borderRadius: 18,
         margin: 5,
@@ -148,7 +137,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     Orders: {
-        width: width - 50,
+        width: width - 30,
         height: 125,
         paddingLeft: 15,
         marginTop: 20,

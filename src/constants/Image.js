@@ -42,6 +42,7 @@ const ShopShirt = require('../../assets/img/icons/shopShirt.png')
 const Delete = require('../../assets/img/icons/delete.png')
 const Minus = require('../../assets/img/icons/minus.png')
 const Plus = require('../../assets/img/icons/plus.png')
+const Clock = require('../../assets/img/icons/clock.png')
 
 // Items
 const item1 = require('../../assets/img/items/2.png')
@@ -79,6 +80,7 @@ module.exports = {
         Arrow,
         Edit,
         Read,
+        Clock,
         Login: {
             User,
             UserOn,

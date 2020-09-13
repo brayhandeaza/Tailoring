@@ -1,7 +1,7 @@
 const { modulo } = require("react-native-reanimated")
 
 let initalState = {
-    isRequested: true,
+    isRequested: false,
     isCompleted: false,
     isCanceled: false,
     isJacket: true, 
