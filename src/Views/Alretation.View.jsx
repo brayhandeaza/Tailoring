@@ -4,9 +4,10 @@ import { Calendar } from "react-native-calendars"
 import Textarea from 'react-native-textarea'
 import { Button } from "native-base"
 import { Select, Option } from 'react-native-select-lists'
-import { Icons} from '../constants/Image';
+import { Icons } from '../constants/Image';
 import { connect } from "react-redux"
 import { Actions } from 'react-native-router-flux'
+import axios from "axios"
 
 
 // componets
@@ -19,16 +20,77 @@ class Alretation extends Component {
 		this.state = {
 			activeDay: this.handleMinDate(),
 			timeDate: ["8:00 am", "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm", "12:30 pm", "01:00 pm", "01:30 pm", "02:00 pm", "02:30 pm", "03:00 pm", "03:30 pm", "04:00 pm", "04:30 pm", "05:00 pm", "05:30 pm", "06:00 pm", "06:30 pm", "07:00 pm"],
-			appointments: []
-
+			appointments: [],
+			fullName: "",
+			details: "",
+			phone: "",
+			address: "",
+			date: this.handleMinDate(),
+			time: "8:00 am"
 		}
 	}
 
-	
+	handleMakeAppointment = async () => {
+		const { fullName, details, phone, address, date, time } = this.state
+		await axios.post(`http://localhost:3000/appointments/${1}`, {
+		// await axios.post(`https://alteration-database.herokuapp.com/appointments/${1}`, {
+			fullName,
+			details,
+			phone,
+			address,
+			date,
+			time
+		}).then((res) => {
+			console.log(res);
+			this.props.dispatch({ type: "isOrders" })
+			this.setState({
+				fullName: "",
+				details: "",
+				phone: "",
+				address: "",
+				date: this.handleMinDate(),
+				time: "8:00 am"
+			})
+			Actions.reset("_Orders")
+		}).catch(err => console.log(err))
+	}
+
+	handleFullNameOnChange = (value) => {
+		this.setState({
+			fullName: value
+		})
+	}
+
+	handlePhoneNumberOnChange = (value) => {
+		this.setState({
+			phone: value
+		})
+	}
+
+	handleAddressrOnChange = (value) => {
+		this.setState({
+			address: value
+		})
+	}
+
+	handleDetailsOnChange = (value) => {
+		this.setState({
+			details: value
+		})
+	}
+
+	handleTime = (value) => {
+		this.setState({
+			time: value
+		})
+	}
+
 	handleDayOnPress = (e) => {
 		this.setState({
-			activeDay: e.dateString
+			activeDay: e.dateString,
+			date: e.dateString
 		})
+		console.log(e.dateString);
 	}
 
 	handleMinDate = () => {
@@ -41,10 +103,6 @@ class Alretation extends Component {
 		let year = date.getFullYear()
 
 		return year + "-" + month + "-" + day
-	}
-
-	handleMakeAppointment = () => {
-		Actions.Orders()
 	}
 
 	render() {
@@ -71,22 +129,20 @@ class Alretation extends Component {
 						current={null}
 					/>
 					<View style={styles.Time}>
-						<Image style={{width: 25, height: 25}} source={Icons.Clock} />
-						<Select listStyle={styles.List} listHeight={350} selectStyle={styles.Select} selectTextStyle={styles.SelectText}>
-							{this.state.timeDate.map((time) => (
-								<Option optionTextStyle={styles.OptionText} optionStyle={styles.Option} value={time}>{time}</Option>
+						<Image style={{ width: 25, height: 25 }} source={Icons.Clock} />
+						<Select onSelect={(value) => this.handleTime(value)} listStyle={styles.List} listHeight={350} selectStyle={styles.Select} selectTextStyle={styles.SelectText}>
+							{this.state.timeDate.map((time, i) => (
+								<Option key={i} optionTextStyle={styles.OptionText} optionStyle={styles.Option} value={time}>{time}</Option>
 							))}
 						</Select>
 					</View>
 					<View style={styles.FormView}>
-						<Text style={styles.FormText}>Time</Text>
-						<TextInput style={styles.FormInput} placeholder="Full Name" />
 						<Text style={styles.FormText}>Full Name</Text>
-						<TextInput style={styles.FormInput} placeholder="Full Name" />
+						<TextInput style={styles.FormInput} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
 						<Text style={styles.FormText}>Phone Number</Text>
-						<TextInput style={styles.FormInput} placeholder="Phone Number" />
+						<TextInput style={styles.FormInput} placeholder="Phone Number" onChangeText={(value) => this.handlePhoneNumberOnChange(value)} />
 						<Text style={styles.FormText}>Full Address</Text>
-						<TextInput style={styles.FormInput} placeholder="Full Address" />
+						<TextInput style={styles.FormInput} placeholder="Full Address" onChangeText={(value) => this.handleAddressrOnChange(value)} />
 						<Text style={styles.FormText}>Detals</Text>
 						<Textarea
 							containerStyle={styles.textareaContainer}
@@ -95,6 +151,7 @@ class Alretation extends Component {
 							placeholder={'Details of what will be altered...'}
 							placeholderTextColor={'#c7c7c7'}
 							underlineColorAndroid={'transparent'}
+							onChangeText={(value) => this.handleDetailsOnChange(value)}
 						/>
 						<Button style={styles.Button} onPress={this.handleMakeAppointment}>
 							<Text style={{ color: "white", fontSize: 20 }}>Make An Appointment</Text>
@@ -173,7 +230,7 @@ const styles = StyleSheet.create({
 	Select: {
 		width: 140,
 		height: 50,
-		backgroundColor:  "#2ba97a",
+		backgroundColor: "#2ba97a",
 		// marginLeft: 20,
 		borderRadius: 10,
 
@@ -189,14 +246,14 @@ const styles = StyleSheet.create({
 	},
 	Option: {
 		width: 150,
-		height: 50, 
+		height: 50,
 		marginTop: 5,
 		borderRadius: 10,
-		borderWidth: 0.5, 
+		borderWidth: 0.5,
 		borderColor: "rgba(000,000,000,0.2)",
 		paddingLeft: 20
 	},
-	OptionText:{
+	OptionText: {
 		paddingLeft: 20,
 		fontSize: 18,
 		color: "rgba(000,000,000,0.5)",
@@ -204,8 +261,8 @@ const styles = StyleSheet.create({
 
 	},
 	List: {
-		borderWidth: 0, 
-		width: "90%", 
+		borderWidth: 0,
+		width: "90%",
 		marginTop: 5,
 		marginBottom: 10,
 		borderColor: "rgba(000,000,000,0.5)",
@@ -213,7 +270,7 @@ const styles = StyleSheet.create({
 	},
 	Time: {
 		width: 160,
-		backgroundColor:  "#2ba97a",
+		backgroundColor: "#2ba97a",
 		marginLeft: 20,
 		paddingLeft: 30,
 		borderRadius: 10,

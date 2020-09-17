@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, lazy, Suspense } from 'react'
 import { StyleSheet, View, Text, Image, ScrollView, TouchableHighlight, Dimensions } from 'react-native'
 import { connect } from "react-redux"
-import { Item, Icons } from "../constants/Image"
-import axios from "axios"
+import { Actions } from 'react-native-router-flux'
+import io from "socket.io-client"
 
 // compoents
 import Footer from "../components/Footer"
@@ -14,7 +14,7 @@ class Orders extends Component {
         super(props);
         this.state = {
             appointments: [],
-            items: ["All","Completed", "Requested", "Canceled"],
+            items: ["All", "Completed", "Requested", "Canceled"],
             Filter: {
                 isAll: true,
                 isCompleted: false,
@@ -24,23 +24,28 @@ class Orders extends Component {
             },
             filterTitle: "requested"
         }
+        // this.socket = io("http://localhost:3000/")
+        this.socket = io("https://alteration-database.herokuapp.com/")
     }
 
-    fetchAppointments = async () => {
-        await axios.get(`https://alteration-database.herokuapp.com/appointments/users/${1}`).then((res) => {
-            console.log(res.data.Appointments);
+    fetchAppointment = () => {
+        this.socket.emit("userId", 1)
+        this.socket.on("appointment", (res) => {
             this.setState({
-                appointments: res.data.Appointments.filter(appointment => appointment.status == this.state.filterTitle)
+                appointments: res
             })
         })
     }
 
-    componentDidMount() {
-        this.fetchAppointments()
+    handleOnPress = () => {
+        Actions.Summery("Hello")
     }
 
+    componentDidMount() {
+        this.fetchAppointment()
+    } 
+
     render() {
-        const { isCompleted, isRequested, isCanceled, } = this.props.state.Filters
         return (
             <View style={styles.Appointments}>
                 <View style={styles.TitleBox}>
@@ -48,7 +53,7 @@ class Orders extends Component {
                 </View>
                 <ScrollView contentContainerStyle={styles.Scroll}>
                     {this.state.appointments.map((appointment, i) => (
-                        <TouchableHighlight underlayColor="white" key={i} style={styles.Orders} onPress={() => alert(appointment.fullName)} >
+                        <TouchableHighlight underlayColor="white" key={i} style={styles.Orders} onPress={this.handleOnPress}>
                             <View style={styles.DetailsBox}>
                                 <View style={styles.Top}>
                                     <Text style={{ fontSize: 20, color: "#000000", fontWeight: "bold", textTransform: "capitalize" }}>{appointment.fullName}</Text>

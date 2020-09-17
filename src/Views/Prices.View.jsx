@@ -1,20 +1,27 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, TouchableHighlight, ScrollView, Dimensions } from 'react-native'
+import { StyleSheet, View, Text, TextInput, TouchableHighlight, ScrollView, Dimensions, Image } from 'react-native'
 import { connect } from "react-redux"
+import io from "socket.io-client"
+import Svg, { Path } from "react-native-svg"
+
 
 // compoents
-import Footer from "../components//Footer"
+import Footer from "../components/Footer"
+import { Icons } from '../constants/Image'
 
 const { width } = Dimensions.get("screen")
+
 
 class Prices extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: ["Jackets", "Pants", 0 ,0 ,0,0 ,0 ,0,0 ,0 ,0]
+            prices: [],
         }
+        this.socket = io("https://alteration-database.herokuapp.com/")
+        // this.socket = io("http://localhost:3000/")
     }
-   
+
     handleFilter = (e, filter) => {
         e.stopPropagation()
         this.props.dispatch({ type: filter })
@@ -24,15 +31,27 @@ class Prices extends Component {
         const isTrue = {
             backgroundColor: "#2ba97a"
         }
-        return filter ? isTrue : {borderWidth: 0.5, borderColor: "rgba(000,000,000,0.3)" }
+        return filter ? isTrue : { borderWidth: 0.5, borderColor: "rgba(000,000,000,0.3)" }
     }
-    
+
     isFilterText = (filter) => {
         const isTrue = {
             color: "white",
 
         }
-        return filter ? isTrue : { color: "rgba(000,000,000,0.3)"}
+        return filter ? isTrue : { color: "rgba(000,000,000,0.3)" }
+    }
+
+    fetchPrice = () => {
+        this.socket.on("prices", (prices) => {
+            this.setState({
+                prices
+            })
+        })
+    }
+
+    componentDidMount() {
+        this.fetchPrice()
     }
 
     render() {
@@ -43,23 +62,32 @@ class Prices extends Component {
                     <Text style={styles.PriceTitleText}>Prices</Text>
                 </View>
                 <View style={styles.Filter}>
-                    <TouchableHighlight underlayColor="white"  style={[styles.FilterButtoms, this.isFilter(isJacket)]} onPress={(e) => this.handleFilter(e, "isJacket")}>
+                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isJacket)]} onPress={(e) => this.handleFilter(e, "isJacket")}>
                         <Text style={[styles.FilterButtomsText, this.isFilterText(isJacket)]}>{"Jackets"}</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight underlayColor="white"  style={[styles.FilterButtoms, this.isFilter(isPants)]} onPress={(e) => this.handleFilter(e, "isPants")}>
+                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isPants)]} onPress={(e) => this.handleFilter(e, "isPants")}>
                         <Text style={[styles.FilterButtomsText, this.isFilterText(isPants)]}>{"Pants"}</Text>
                     </TouchableHighlight>
                 </View>
+                <View style={styles.InputContainer}>
+                    <TextInput style={styles.Input} placeholder="Search..." />
+                </View>
                 <ScrollView contentContainerStyle={styles.Scroll}>
-                    {this.state.items.map((items, i) => (
+                    {this.state.prices.map((price, i) => (
                         <View key={i} style={styles.Orders}>
                             <View style={styles.DetailsBox}>
-                                <Text style={{ fontSize: 20, color: "#000000", fontWeight: "bold" }}>Sleeves</Text>
+                                <Text style={{ fontSize: 15, color: "rgba(000,000,000, 0.6)", fontWeight: "bold", textTransform: "capitalize"}}>{price.title}</Text>
+                                <View style={styles.IconPrice}>
+                                    <Svg width={28} height={39} viewBox="0 0 37 48" fill="none">
+                                        <Path d={Icons.Suit.path.d} fill="#2BA97A"/>
+                                    </Svg>
+                                    <Text style={{ marginTop: 15, fontSize: 18, fontWeight: "bold", color: "rgba(000,000,000, 0.5)" }}>{`$${price.price}`}</Text>
+                                </View>
                             </View>
                         </View>
                     ))}
                 </ScrollView>
-                <Footer/>
+                <Footer />
             </View>
         )
     }
@@ -69,16 +97,14 @@ const styles = StyleSheet.create({
     Appointments: {
         flex: 1,
         backgroundColor: "white",
-
     },
     PriceTitleContainer: {
         width: "100%",
-        height: 100,
-        paddingTop: 60,
+        height: 80,
         paddingLeft: 20,
 
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "flex-end",
         alignItems: "flex-start"
     },
     PriceTitleText: {
@@ -92,8 +118,6 @@ const styles = StyleSheet.create({
         padding: 20,
         marginTop: 20,
         marginBottom: 5,
-        // borderWidth: 0.5,
-
 
         display: "flex",
         flexDirection: "row",
@@ -122,7 +146,7 @@ const styles = StyleSheet.create({
     Scroll: {
         width,
         paddingBottom: 125,
-        marginTop: 30,
+        marginTop: 10,
 
         display: "flex",
         flexDirection: "row",
@@ -132,16 +156,17 @@ const styles = StyleSheet.create({
     },
     Orders: {
         width: 180,
-        height: 90,
+        height: 100,
         paddingLeft: 15,
+        paddingRight: 15,
         marginTop: 15,
-        paddingTop: 10,
 
 
         borderRadius: 15,
         backgroundColor: "white",
         borderWidth: 0.5,
-        borderColor: "rgba(112,112,112,0.3)",
+
+        borderColor: "rgba(112,112,112,0.2)",
 
         shadowColor: "#000",
         shadowOffset: {
@@ -158,8 +183,52 @@ const styles = StyleSheet.create({
     },
     DetailsBox: {
         width: "100%",
-        height: 70,
+        height: "100%",
+        paddingTop: 10,
+        paddingBottom: 10,
 
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "flex-start"
+
+    },
+    IconPrice: {
+        width: "100%",
+        height: 50,
+        paddingRight: 10,
+
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "flex-end"
+    },
+    InputContainer: {
+        width: "100%",
+        height: 45,
+        marginTop: 5,
+
+        display: "flex",
+        justifyContent: "flex-start",
+        alignItems: "center"
+    },
+    Input: {
+        width: "90%",
+        height: "100%",
+        paddingLeft: 10,
+        borderWidth: 0.5,
+
+        borderRadius: 10,
+        backgroundColor: "white",
+        borderWidth: 0.5,
+        borderColor: "rgba(112,112,112,0.2)",
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.10,
+        shadowRadius: 3.84,
     }
 })
 

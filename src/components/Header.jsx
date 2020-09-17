@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     Header: {
         width: "100%",
         height: 60,
+        borderWidth: 0,
         backgroundColor: "white",
         borderBottomColor: "white",
     },
@@ -47,14 +48,7 @@ const styles = StyleSheet.create({
     },
     Icons: {
         width: 30,
-        height: 30,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.15,
-        shadowRadius: 3.84,
+        height: 30
     }
 })
 const mapStateToProps = (state) => {

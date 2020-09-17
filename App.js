@@ -8,32 +8,33 @@ import Alretation from './src/Views/Alretation.View'
 import Profile from './src/Views/Profile.View'
 import Prices from './src/Views/Prices.View'
 import Settings from './src/Views/Settings.View'
+import Summery from './src/Views/OrdersSummery.View'
 
 // redux
-import { createStore} from "redux"
+import { createStore } from "redux"
 import { Provider } from "react-redux"
 import reducer from "./src/reducers/index"
 
 const store = createStore(reducer)
 
 export default function App() {
-	console.log();
 	return (
 		<Fragment>
 			<Provider store={store}>
 				<Router>
 					<Scene tabs hideTabBar key="root">
-						<Scene modal key="Home" component={Tailor} hideNavBar gestureEnable={false} initial/>
-						<Scene modal key="Orders" component={Orders} hideNavBar gestureEnable={false}/>
-						<Scene modal key="Profile" component={Profile} hideNavBar gestureEnable={false}/>
-						<Scene modal key="Alretation" component={Alretation} hideNavBar gestureEnable={false}/>
-						<Scene modal key="Prices" component={Prices} hideNavBar gestureEnable={false}/>
-						<Scene modal key="Settings" component={Settings} hideNavBar gestureEnable={false}/>
-						<Scene modal key="PrivacyPolicy" component={Settings} hideNavBar gestureEnable={false}/>
+						<Scene modal key="Home" component={Tailor} hideNavBar gestureEnable={false} initial />
+						<Scene modal key="Orders" component={Orders} hideNavBar gestureEnable={false} />
+						<Scene modal key="Profile" component={Profile} hideNavBar gestureEnable={false} />
+						<Scene modal key="Alretation" component={Alretation} hideNavBar gestureEnable={false} />
+						<Scene modal key="Prices" component={Prices} hideNavBar gestureEnable={false} />
+						<Scene modal key="Settings" component={Settings} hideNavBar gestureEnable={false} />
+						<Scene modal key="PrivacyPolicy" component={Settings} hideNavBar gestureEnable={false} />
+						<Scene modal key="Summery" component={Summery} hideNavBar gestureEnable={false} />
 					</Scene>
 				</Router>
 			</Provider>
 		</Fragment>
 	)
-}      
+}
 
