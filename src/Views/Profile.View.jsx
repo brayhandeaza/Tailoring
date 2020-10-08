@@ -25,15 +25,10 @@ class Profile extends Component {
 	
 	render() {
 		const { isLogedIn } = this.props.state
-		return (height < 675 ?
+		return (
 			<ScrollView contentContainerStyle={styles.Scroll}>
-				{isLogedIn ? <Account /> : <Register />}
-				<Header />
-			</ScrollView> :
-			<View style={styles.Aside}>
-				<Header />
-				{isLogedIn ? <Account /> : <SignUp />}
-			</View>
+				{!isLogedIn ? <Account /> : <Register />}
+			</ScrollView> 
 		)
 	}
 }
@@ -46,11 +41,6 @@ const styles = StyleSheet.create({
 		display: "flex",
 		justifyContent: "flex-start",
 		alignItems: "center"
-	},
-	Scroll: {
-		paddingBottom: 100,
-		paddingTop: 50,
-
 	}
 })
 

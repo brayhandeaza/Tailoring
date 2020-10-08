@@ -13,78 +13,69 @@ class Summery extends Component {
     handdleOnPressArrow = () => {
         Actions.Orders()
         this.props.dispatch({ type: "isOrders" })
-
-    }
-
-
-
-    componentDidMount() {
-        console.log(this.props.navigation)
     }
 
     render() {
         return (
-            <KeyboardAvoidingView>
-                <View style={styles.Summery}>
-                    <View style={styles.Header}>
-                        <TouchableHighlight style={styles.Touchable} onPress={this.handdleOnPressArrow}>
-                            <Image style={styles.Arrow} source={Icons.Arrow} />
-                        </TouchableHighlight>
+            <View style={styles.Summery}>
+                <View style={styles.Header}>
+                    <TouchableHighlight underlayColor="white" style={styles.Touchable} onPress={this.handdleOnPressArrow}>
+                        <Image style={styles.Arrow} source={Icons.Arrow} />
+                    </TouchableHighlight>
+                </View>
+                <ScrollView contentContainerStyle={styles.Scroll}>
+                    <View style={styles.TitleConatiner}>
+                        <Text style={styles.Title}>Order Summery</Text>
                     </View>
-                    <ScrollView contentContainerStyle={styles.Scroll}>
-                        <View style={styles.TitleConatiner}>
-                            <Text style={styles.Title}>Order Summery</Text>
-                        </View>
-                        <View style={styles.Main}>
-                            <View style={styles.StatusContainer}>
-                                <View style={styles.Status}>
-                                    <View style={styles.CircleShadow}>
-                                        <View style={styles.Circle} />
-                                    </View>
-                                    <View style={styles.StatusTitleContainer}>
-                                        <Text style={styles.StatusTitle}>Order Place on July 26</Text>
-                                    </View>
+                    <View style={styles.Main}>
+                        <View style={styles.StatusContainer}>
+                            <View style={styles.Status}>
+                                <View style={styles.CircleShadow}>
+                                    <View style={styles.Circle} />
                                 </View>
-                                <View style={styles.Dash}>
-                                    <Text style={styles.DashText}>-</Text>
-                                    <Text style={styles.DashText}>-</Text>
-                                    <Text style={styles.DashText}>-</Text>
-                                    <Text style={styles.DashText}>-</Text>
-                                    <Text style={styles.DashText}>-</Text>
-                                    <Text style={styles.DashText}>-</Text>
-                                    <Text style={styles.DashText}>-</Text>
+                                <View style={styles.StatusTitleContainer}>
+                                    <Text style={styles.StatusTitle}>Order Placed on July 26</Text>
                                 </View>
-                                <View style={styles.Status}>
-                                    <View style={[styles.CircleShadow, { backgroundColor: "rgba(000, 000, 000, 0.04)" }]}>
-                                        <View style={[styles.Circle, { backgroundColor: "rgba(000, 000, 000, 0.07)", }]} />
-                                    </View>
-                                    <View style={styles.StatusTitleContainer}>
-                                        <Text style={[styles.StatusTitle, { color: "rgba(000, 000, 000, 0.2)" }]}>Order Completed</Text>
-                                    </View>
+                            </View>
+                            <View style={styles.Dash}>
+                                <Text style={styles.DashText}>-</Text>
+                                <Text style={styles.DashText}>-</Text>
+                                <Text style={styles.DashText}>-</Text>
+                                <Text style={styles.DashText}>-</Text>
+                                <Text style={styles.DashText}>-</Text>
+                                <Text style={styles.DashText}>-</Text>
+                                <Text style={styles.DashText}>-</Text>
+                            </View>
+                            <View style={styles.Status}>
+                                <View style={[styles.CircleShadow, { backgroundColor: "rgba(000, 000, 000, 0.04)" }]}>
+                                    <View style={[styles.Circle, { backgroundColor: "rgba(000, 000, 000, 0.07)", }]} />
                                 </View>
-                                <View style={styles.OrderDetailsContainer}>
-                                    <View style={styles.OrderDetails}>
-                                        <View style={styles.OrderDetailsTalorAndId} >
-                                            <Text style={styles.OrderDetailsTitle}>Tailor</Text>
-                                            <Text style={styles.OrderDetailsTitle}>#A:16003503</Text>
-                                        </View>
-                                        <TouchableHighlight style={styles.Tailor} underlayColor="white" onPress={() => alert()}>
-                                            <Text style={styles.OrderDetailsText}>Carlos Morales</Text>
-                                        </TouchableHighlight>
-                                        <View style={styles.OrderDetailsDescription}>
-                                            <Text style={[styles.OrderDetailsTitle, { marginBottom: 5 }]}>Schedele</Text>
-                                            <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, color: "rgba(000, 000, 000, 0.6)" }]} >July 26 2021 4:35 pm</Text>
-                                        </View>
-                                        <TouchableHighlight style={styles.OrderDetailsContacts} underlayColor="white" onPress={() => alert()}>
-                                            <Text style={[styles.OrderDetailsTitle, { color: "rgba(43, 169, 123, 0.7)" }]}>Contact Us</Text>
-                                        </TouchableHighlight>
+                                <View style={styles.StatusTitleContainer}>
+                                    <Text style={[styles.StatusTitle, { color: "rgba(000, 000, 000, 0.2)" }]}>Order Completed</Text>
+                                </View>
+                            </View>
+                            <View style={styles.OrderDetailsContainer}>
+                                <View style={styles.OrderDetails}>
+                                    <View style={styles.OrderDetailsTalorAndId} >
+                                        <Text style={styles.OrderDetailsTitle}>Tailor</Text>
+                                        <Text style={styles.OrderDetailsTitle}>#A:16003503</Text>
                                     </View>
+                                    <TouchableHighlight style={styles.Tailor} underlayColor="white" onPress={() => alert()}>
+                                        <Text style={styles.OrderDetailsText}>Carlos Morales</Text>
+                                    </TouchableHighlight>
+                                    <View style={styles.OrderDetailsDescription}>
+                                        <Text style={[styles.OrderDetailsTitle, { marginBottom: 5 }]}>Schedele</Text>
+                                        <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, color: "rgba(000, 000, 000, 0.6)" }]} >July 26 2021 4:35 pm</Text>
+                                    </View>
+                                    <TouchableHighlight style={styles.OrderDetailsContacts} underlayColor="white" onPress={() => alert()}>
+                                        <Text style={[styles.OrderDetailsTitle, { color: "rgba(43, 169, 123, 1)" }]}>Contact Us</Text>
+                                    </TouchableHighlight>
                                 </View>
                             </View>
                         </View>
-                    </ScrollView>
-                </View>
-            </KeyboardAvoidingView>
+                    </View>
+                </ScrollView>
+            </View>
         )
     }
 }
@@ -192,7 +183,7 @@ const styles = StyleSheet.create({
         width: 15,
         height: 15,
         borderRadius: 100,
-        backgroundColor: "rgba(43, 169, 123, 0.7)"
+        backgroundColor: "rgba(43, 169, 123, 1)"
     },
     Dash: {
         width: "100%",
@@ -248,12 +239,13 @@ const styles = StyleSheet.create({
     },
     OrderDetailsText: {
         fontSize: 18,
-        color: "rgba(43, 169, 123, 0.7)",
+        color: "rgba(43, 169, 123, 1)",
         fontWeight: "600",
     },
     OrderDetailsDescription: {
         width: "90%",
-        marginTop: 40,
+        marginTop: 50,
+        // backgroundColor: "red",
         paddingTop: 20,
         paddingBottom: 20,
         borderTopWidth: 0.5,

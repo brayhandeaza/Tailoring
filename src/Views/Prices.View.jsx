@@ -17,6 +17,7 @@ class Prices extends Component {
         super(props);
         this.state = {
             prices: [],
+            searchValue: ''
         }
         this.socket = io("https://alteration-database.herokuapp.com/")
         // this.socket = io("http://localhost:3000/")
@@ -39,7 +40,7 @@ class Prices extends Component {
             color: "white",
 
         }
-        return filter ? isTrue : { color: "rgba(000,000,000,0.3)" }
+        return filter ? isTrue : { color: "rgba(000,000,000,0.5)" }
     }
 
     fetchPrice = () => {
@@ -50,11 +51,20 @@ class Prices extends Component {
         })
     }
 
+    handleOnChange = (text) => {        
+        this.setState({
+            searchValue: text
+        })
+    }
+
     componentDidMount() {
         this.fetchPrice()
     }
-
+ 
     render() {
+        let filteredPrices = this.state.prices.filter((price) => {
+            return price.title.toLowerCase().includes(this.state.searchValue.toLowerCase())
+        })
         const { isJacket, isPants } = this.props.state.Filters
         return (
             <View style={styles.Appointments}>
@@ -63,25 +73,25 @@ class Prices extends Component {
                 </View>
                 <View style={styles.Filter}>
                     <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isJacket)]} onPress={(e) => this.handleFilter(e, "isJacket")}>
-                        <Text style={[styles.FilterButtomsText, this.isFilterText(isJacket)]}>{"Jackets"}</Text>
+                        <Text style={[styles.FilterButtomsText, this.isFilterText(isJacket),{fontFamily: "Inter-Regular"}]}>{"Jackets"}</Text>
                     </TouchableHighlight>
                     <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isPants)]} onPress={(e) => this.handleFilter(e, "isPants")}>
-                        <Text style={[styles.FilterButtomsText, this.isFilterText(isPants)]}>{"Pants"}</Text>
+                        <Text style={[styles.FilterButtomsText, this.isFilterText(isPants), {fontFamily: "Inter-Regular"}]}>{"Pants"}</Text>
                     </TouchableHighlight>
                 </View>
                 <View style={styles.InputContainer}>
-                    <TextInput style={styles.Input} placeholder="Search..." />
+                    <TextInput style={styles.Input} placeholder="Search..."  onChangeText={(text) => this.handleOnChange(text)}/>
                 </View>
                 <ScrollView contentContainerStyle={styles.Scroll}>
-                    {this.state.prices.map((price, i) => (
+                    {filteredPrices.map((price, i) => (
                         <View key={i} style={styles.Orders}>
                             <View style={styles.DetailsBox}>
-                                <Text style={{ fontSize: 15, color: "rgba(000,000,000, 0.6)", fontWeight: "bold", textTransform: "capitalize"}}>{price.title}</Text>
+                                <Text style={{ fontSize: 15, color: "rgba(000,000,000, 0.8)", fontWeight: "bold", fontFamily: "Inter-Regular", textTransform: "capitalize"}}>{price.title}</Text>
                                 <View style={styles.IconPrice}>
                                     <Svg width={28} height={39} viewBox="0 0 37 48" fill="none">
                                         <Path d={Icons.Suit.path.d} fill="#2BA97A"/>
                                     </Svg>
-                                    <Text style={{ marginTop: 15, fontSize: 18, fontWeight: "bold", color: "rgba(000,000,000, 0.5)" }}>{`$${price.price}`}</Text>
+                                    <Text style={{ marginTop: 15, fontSize: 15, fontWeight: "bold", fontFamily: "Inter-Regular", color: "rgba(000,000,000, 0.5)" }}>{`$${price.price}`}</Text>
                                 </View>
                             </View>
                         </View>
@@ -100,17 +110,18 @@ const styles = StyleSheet.create({
     },
     PriceTitleContainer: {
         width: "100%",
-        height: 80,
+        height: 90,
         paddingLeft: 20,
-
+    
         display: "flex",
         justifyContent: "flex-end",
         alignItems: "flex-start"
     },
     PriceTitleText: {
-        fontSize: 30,
+        fontSize: 25,
         color: "#000000",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontFamily: "Inter-Regular"
     },
     Filter: {
         width: "100%",

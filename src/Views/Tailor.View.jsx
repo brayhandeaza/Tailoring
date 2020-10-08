@@ -15,15 +15,15 @@ class Tailor extends Component {
 
     handleOnPress = (view, action) => {
         this.props.dispatch({ type: action })
-        Actions.reset(view)
+        Actions.reset("_Address")
     }
 
     render() {
         return (
             <View style={styles.Appointments}>
                 <View style={styles.ItemsOption}>
-                    <Text style={[styles.IconsOptionText, { fontSize: 30, fontWeight: "600" }]}>{"Your tailor."}</Text>
-                    <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 30, fontWeight: "600" }]}>{" At Home"}</Text>
+                    <Text style={[styles.IconsOptionText, { fontSize: 30, fontWeight: "600", fontFamily: "Inter-Regular"}]}>{"Your tailor."}</Text>
+                    <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 30, fontWeight: "600"}]}>{" At Home"}</Text>
                 </View>
                 <View>
                     <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", position: "relative", bottom: 15 }]}>{"By. Miracle Fit"}</Text>
@@ -32,7 +32,7 @@ class Tailor extends Component {
                     <Image source={Icons.Customize} style={styles.ItemsImage} />
                 </View>
                 <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => this.handleOnPress("_Alretation", "isAlteration")}>
-                    <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 25, fontWeight: "bold" }]}>{"Get a tailor"}</Text>
+                    <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 20, textTransform: "uppercase" }]}>{"Get a Tailors"}</Text>
                 </TouchableHighlight>
                 <Footer />
             </View>

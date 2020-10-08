@@ -30,8 +30,8 @@ class Register extends Component {
 
     createUsers = async () => {
         const { fullName, email, password, phone } = this.state
-        await axios.post("http://localhost:3000/users", {
-            // await axios.post("https://alteration-database.herokuapp.com/users", {
+        // await axios.post("http://localhost:3000/users", {
+            await axios.post("https://alteration-database.herokuapp.com/users", {
             fullName,
             email,
             password,
@@ -110,8 +110,8 @@ class Register extends Component {
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.Scroll}>
                     <View style={styles.Register}>
                         <View style={styles.FormTitle}>
-                            <Text style={[styles.IconsOptionText, { color: "black", fontSize: 28, fontWeight: "bold" }]}>Create Account</Text>
-                            <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", textAlign: "center" }]}>Create a new account</Text>
+                            <Text style={[styles.IconsOptionText, { color: "black", fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "bold" }]}>Create Account</Text>
+                            <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)",  fontFamily: "Inter-Regular", textAlign: "center" }]}>Create a new account</Text>
                         </View>
                         <View style={styles.InputContainer}>
                             <View style={styles.InputContainerBox}>
@@ -136,14 +136,14 @@ class Register extends Component {
                             </View>
                         </View>
                         <TouchableHighlight style={styles.Touchable} underlayColor="#2ba97a" onPress={this.createUsers}>
-                            <Text style={[styles.IconsOptionText, { color: "white", fontSize: 20, fontWeight: "600" }]}>Create An Account</Text>
+                            <Text style={[styles.IconsOptionText, { color: "white",  fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "600" }]}>Create An Account</Text>
                         </TouchableHighlight>
                         <View style={styles.toLogin}>
                             <View style={{}}>
                                 <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 16 }]}>Already register?</Text>
                             </View>
                             <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.fetchUsers}>
-                                <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 16, paddingLeft: 5 }]}>Log In</Text>
+                                <Text style={[styles.IconsOptionText, { color: "#2ba97a",  fontFamily: "Inter-Regular", fontSize: 16, paddingLeft: 5 }]}>Log In</Text>
                             </TouchableHighlight>
                         </View>
                     </View>
@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         marginLeft: 5,
         borderRadius: 5,
+
         borderColor: "rgba(000,000,000,0.3)",
     },
     FotgotPass: {

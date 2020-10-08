@@ -8,10 +8,16 @@ import { Icons } from '../constants/Image';
 import { connect } from "react-redux"
 import { Actions } from 'react-native-router-flux'
 import axios from "axios"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
+
+
 
 
 // componets
 import Header from "../components//Header"
+import Address from '../Views/Address.View'
+
 import { set } from 'react-native-reanimated'
 
 class Alretation extends Component {
@@ -33,7 +39,7 @@ class Alretation extends Component {
 	handleMakeAppointment = async () => {
 		const { fullName, details, phone, address, date, time } = this.state
 		await axios.post(`http://localhost:3000/appointments/${1}`, {
-		// await axios.post(`https://alteration-database.herokuapp.com/appointments/${1}`, {
+			// await axios.post(`https://alteration-database.herokuapp.com/appointments/${1}`, {
 			fullName,
 			details,
 			phone,
@@ -110,7 +116,7 @@ class Alretation extends Component {
 		return (
 			<View style={styles.Alretation}>
 				<Header />
-				<ScrollView contentContainerStyle={styles.Scroll}>
+				<KeyboardAwareScrollView contentContainerStyle={styles.Scroll}>
 					<Calendar
 						minDate={this.handleMinDate()}
 						onDayPress={this.handleDayOnPress}
@@ -143,21 +149,22 @@ class Alretation extends Component {
 						<TextInput style={styles.FormInput} placeholder="Phone Number" onChangeText={(value) => this.handlePhoneNumberOnChange(value)} />
 						<Text style={styles.FormText}>Full Address</Text>
 						<TextInput style={styles.FormInput} placeholder="Full Address" onChangeText={(value) => this.handleAddressrOnChange(value)} />
-						<Text style={styles.FormText}>Detals</Text>
+						<Text style={styles.FormText}>Details</Text>
 						<Textarea
 							containerStyle={styles.textareaContainer}
 							style={styles.textarea}
 							maxLength={120}
-							placeholder={'Details of what will be altered...'}
+							placeholder={'Please provide details ...'}
 							placeholderTextColor={'#c7c7c7'}
 							underlineColorAndroid={'transparent'}
 							onChangeText={(value) => this.handleDetailsOnChange(value)}
 						/>
 						<Button style={styles.Button} onPress={this.handleMakeAppointment}>
-							<Text style={{ color: "white", fontSize: 20 }}>Make An Appointment</Text>
+							<Text style={{ color: "white", fontFamily: "Inter-Regular", fontSize: 20 }}>Make An Appointment</Text>
 						</Button>
 					</View>
-				</ScrollView>
+				</KeyboardAwareScrollView>
+				<Address position={0}/>
 			</View>
 		)
 	}
@@ -181,8 +188,7 @@ const styles = StyleSheet.create({
 		color: "#636363"
 	},
 	Scroll: {
-		paddingTop: 20,
-		paddingBottom: 355
+		paddingBottom: 55,
 	},
 	FormView: {
 		width: "100%",
@@ -193,8 +199,9 @@ const styles = StyleSheet.create({
 		paddingRight: 25,
 	},
 	FormText: {
-		fontSize: 20,
-		paddingBottom: 10
+		fontSize: 18,
+		paddingBottom: 10,
+		fontFamily: "Inter-Regular"
 	},
 	FormInput: {
 		width: "100%",

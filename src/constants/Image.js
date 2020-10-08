@@ -45,7 +45,6 @@ const Plus = require('../../assets/img/icons/plus.png')
 const Clock = require('../../assets/img/icons/clock.png')
 const Dash = require('../../assets/img/icons/dash.png')
 
-
 // Items
 const item1 = require('../../assets/img/items/2.png')
 const Customize = require('../../assets/img/icons/sewing-machine.png')

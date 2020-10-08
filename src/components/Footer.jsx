@@ -13,7 +13,8 @@ class Navegation extends Component {
 
     handleOnPress = (e, view, action) => {
         e.stopPropagation()
-        this.props.dispatch({ type: action })
+        const {pView} = this.props.state.Footer
+        this.props.dispatch({ type: action, payload: action === "isProfile" ? pView : action })
 
         if (action === "isOrders") {
             this.props.dispatch({ type: "isHeaderHidden" })
@@ -21,6 +22,8 @@ class Navegation extends Component {
             this.props.dispatch({ type: "isHeaderNotHidden" })
         }
 
+        
+        // console.log(pView)
         Actions.reset(view)
     }
 

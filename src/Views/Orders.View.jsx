@@ -49,24 +49,24 @@ class Orders extends Component {
         return (
             <View style={styles.Appointments}>
                 <View style={styles.TitleBox}>
-                    <Text style={{ fontSize: 30, color: "#000000", fontWeight: "bold" }}>My Orders</Text>
+                    <Text style={{fontSize: 30, color: "#000000", fontWeight: "bold", fontFamily: "Inter-Regular"}}>My Orders</Text>
                 </View>
                 <ScrollView contentContainerStyle={styles.Scroll}>
                     {this.state.appointments.map((appointment, i) => (
                         <TouchableHighlight underlayColor="white" key={i} style={styles.Orders} onPress={this.handleOnPress}>
                             <View style={styles.DetailsBox}>
                                 <View style={styles.Top}>
-                                    <Text style={{ fontSize: 20, color: "#000000", fontWeight: "bold", textTransform: "capitalize" }}>{appointment.fullName}</Text>
-                                    <Text style={{ paddingRight: 10 }}>{`#${appointment.appointmentId.slice(0, 10)}`}</Text>
+                                    <Text style={{ fontSize: 20, color: "#000000", fontWeight: "bold", fontFamily: "Inter-Regular", textTransform: "capitalize"}}>{appointment.fullName}</Text>
+                                    <Text style={{ paddingRight: 10, fontFamily: "Inter-Regular" }}>{`#${appointment.appointmentId.slice(0, 10)}`}</Text>
                                 </View>
                                 <View style={styles.Bottom}>
                                     <View style={styles.BottomLeft}>
                                         <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)" }}>Tailor</Text>
-                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.7)", paddingTop: 5, textTransform: "capitalize", fontWeight: "bold" }}>Brayhan de Aza</Text>
+                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.7)", paddingTop: 5, fontFamily: "Inter-Regular", textTransform: "capitalize", fontWeight: "bold" }}>Brayhan de Aza</Text>
                                     </View>
                                     <View style={styles.BottomRight}>
-                                        <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)" }}>Schedule</Text>
-                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.8)", paddingTop: 5 }}>{`${appointment.date} ${appointment.time}`}</Text>
+                                        <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)", fontFamily: "Inter-Regular", }}>Schedule</Text>
+                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5 }}>{`${appointment.date} ${appointment.time}`}</Text>
                                     </View>
                                 </View>
                             </View>
