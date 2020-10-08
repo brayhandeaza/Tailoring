@@ -33,6 +33,7 @@ const Phone = require('../../assets/img/icons/Login/phone.png')
 const PhoneOn = require('../../assets/img/icons/Login/phoneOn.png')
 const Password = require('../../assets/img/icons/Login/password.png')
 const PasswordOn = require('../../assets/img/icons/Login/passwordOn.png')
+const Address = require('../../assets/img/icons/Login/address.png')
 
 const getit = require('../../assets/img/icons/shoppingColored.png')
 const Search = require('../../assets/img/icons/search.png')
@@ -44,6 +45,7 @@ const Minus = require('../../assets/img/icons/minus.png')
 const Plus = require('../../assets/img/icons/plus.png')
 const Clock = require('../../assets/img/icons/clock.png')
 const Dash = require('../../assets/img/icons/dash.png')
+const Drop = require('../../assets/img/icons/dropDown.png')
 
 // Items
 const item1 = require('../../assets/img/items/2.png')
@@ -88,6 +90,7 @@ module.exports = {
         Edit,
         Read,
         Clock,
+        Drop,
         Suit,
         Dash,
         Login: {
@@ -98,7 +101,8 @@ module.exports = {
             Phone,
             PhoneOn,
             Password,
-            PasswordOn
+            PasswordOn,
+            Address
         }
     }, 
     Img: {

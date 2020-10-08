@@ -1,32 +1,40 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, Dimensions, TouchableHighlight, Image } from 'react-native'
+import { StyleSheet, View, Text, TouchableHighlight, Image, Platform } from 'react-native'
 import { connect } from "react-redux"
 import { Icons } from "../constants/Image"
+import { Actions } from "react-native-router-flux"
 
+// components
+import Footer from "../components/Footer"
 
-const { width, height } = Dimensions.get("screen")
-
-class Home extends Component {
+class Tailor extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {}
     }
-    
-    componentDidMount() {
-    //   console.log(this.props);
+
+    handleOnPress = (view, action) => {
+        this.props.dispatch({ type: action })
+        Actions.reset("_Alretation")
     }
-    
+
     render() {
         return (
             <View style={styles.Appointments}>
-                <View style={styles.TouchableComponent}>
-                    <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => alert("Pressed")}>
-                        <View style={styles.ItemsOption}>
-                            <Image source={Icons.Customize} style={styles.ItemsImage}/>
-                            <Text style={[styles.IconsOptionText, {color: "rgb(112,112,112)", fontSize: 25}]}>{"Custom Shirt"}</Text>
-                        </View>
-                    </TouchableHighlight>
+                <View style={styles.ItemsOption}>
+                    <Text style={[styles.IconsOptionText, { fontSize: 30, fontWeight: "600", fontFamily: "Inter-Regular"}]}>{"Your tailor."}</Text>
+                    <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 30, fontWeight: "600"}]}>{" At Home"}</Text>
                 </View>
+                <View>
+                    <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", position: "relative", bottom: 15 }]}>{"By. Miracle Fit"}</Text>
+                </View>
+                <View style={styles.TouchableComponent}>
+                    <Image source={Icons.Customize} style={styles.ItemsImage} />
+                </View>
+                <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => this.handleOnPress("_Alretation", "isAlteration")}>
+                    <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 20, textTransform: "uppercase" }]}>{"Get a Tailors"}</Text>
+                </TouchableHighlight>
+                <Footer />
             </View>
         );
     }
@@ -34,25 +42,35 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
     Appointments: {
-        width,
-        height,
+        flex: 1,
         backgroundColor: "white",
-        paddingTop: 60,
+        paddingTop: 80,
+
+        display: "flex",
+        justifyContent: "flex-start",
+        alignItems: "center"
     },
     TouchableComponent: {
+        width: "100%",
+        height: "40%",
+
         display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-evenly",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+
+
     },
     Touchable: {
-        width: 200,
-        height: 200,
-        borderRadius: 30,
+        width: 300,
+        height: 60,
+        borderRadius: 10,
         marginBottom: 30,
         backgroundColor: "white",
-        borderWidth: 0.5,
-        borderColor: "rgba(112,112,112,0.3)",
+        borderWidth: Platform.OS == "android" ? 0.6 : 0.2,
+        borderColor: "rgba(000,000,000,0.2)",
+
+
 
         shadowColor: "#000",
         shadowOffset: {
@@ -60,39 +78,40 @@ const styles = StyleSheet.create({
             height: 2
         },
         shadowOpacity: 0.15,
-		shadowRadius: 3.84,
+        shadowRadius: 3.84,
 
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
     },
     ItemsImage: {
-		width: 80,
-        height: 80,
+        width: 200,
+        height: 200,
         marginBottom: 10,
-        
-        
+
+
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 2
         },
         shadowOpacity: 0.15,
-		shadowRadius: 3.84,
-		
-	},
-	ItemsOption: {
-		width: "100%",
-		height: 70,
+        shadowRadius: 3.84,
+
+    },
+    ItemsOption: {
+        width: "100%",
+        height: 70,
 
         display: "flex",
+        flexDirection: "row",
         justifyContent: "center",
-		alignItems: "center"
+        alignItems: "center"
     },
     IconsOptionText: {
-		paddingBottom: 5
+        paddingBottom: 5
 
-	},
+    },
 })
 
 const mapStateToProps = (state) => {
@@ -101,4 +120,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps)(Tailor)

@@ -4,7 +4,7 @@ import { AppLoading } from "expo"
 import { useFonts, Inter_400Regular, Inter_900Black } from "@expo-google-fonts/inter";
 
 // views
-import Home from './src/Views/Tailor.View'
+import Home from './src/Views/Home.View'
 import Orders from './src/Views/Orders.View'
 import Alretation from './src/Views/Alretation.View'
 import Profile from './src/Views/Profile.View'

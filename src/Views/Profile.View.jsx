@@ -26,8 +26,10 @@ class Profile extends Component {
 	render() {
 		const { isLogedIn } = this.props.state
 		return (
+			
 			<ScrollView contentContainerStyle={styles.Scroll}>
-				{!isLogedIn ? <Account /> : <Register />}
+				<Header/>
+				{isLogedIn ? <Account /> : <SignUp/>}
 			</ScrollView> 
 		)
 	}

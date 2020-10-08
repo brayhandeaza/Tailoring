@@ -67,7 +67,6 @@ class Prices extends Component {
             this.setState({
                 prices
             })
-            console.log(prices);
         })
     }
 

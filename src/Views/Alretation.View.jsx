@@ -18,8 +18,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Header from "../components//Header"
 import Address from '../Views/Address.View'
 
-import { set } from 'react-native-reanimated'
-
 class Alretation extends Component {
 	constructor(props) {
 		super(props);
@@ -61,24 +59,6 @@ class Alretation extends Component {
 		}).catch(err => console.log(err))
 	}
 
-	handleFullNameOnChange = (value) => {
-		this.setState({
-			fullName: value
-		})
-	}
-
-	handlePhoneNumberOnChange = (value) => {
-		this.setState({
-			phone: value
-		})
-	}
-
-	handleAddressrOnChange = (value) => {
-		this.setState({
-			address: value
-		})
-	}
-
 	handleDetailsOnChange = (value) => {
 		this.setState({
 			details: value
@@ -104,13 +84,33 @@ class Alretation extends Component {
 		let tempMonth = date.getMonth()
 		let tempDay = date.getDate()
 
-		let month = tempMonth < 9 ? ("0" + (tempMonth + 1)) : tempMonth
+		let month = tempMonth < 9 ? ("0" + (tempMonth + 1)) : (tempMonth + 1)
 		let day = tempDay < 9 ? ("0" + (tempDay + 1)) : tempDay + 1
 		let year = date.getFullYear()
 
 		return year + "-" + month + "-" + day
 	}
 
+	handleFullNameOnChange = (value) => {
+        this.setState({
+            fullName: value
+        })
+    }
+	handlePhoneNumberOnChange = (value) => {
+        this.setState({
+            phone: value
+        })
+    }
+	handleAddressOnChange = (value) => {
+        this.setState({
+            address: value
+        })
+	}
+	
+	componentDidMount() {
+	  this.handleMinDate()
+	}
+	
 	render() {
 		const { activeDay } = this.state
 		return (
@@ -121,8 +121,7 @@ class Alretation extends Component {
 						minDate={this.handleMinDate()}
 						onDayPress={this.handleDayOnPress}
 						markedDates={{
-							[activeDay]: { dotColor: 'white', disabled: false, selected: true, marked: true, selectedColor: "#2ba97a", disableTouchEvent: false },
-							"2020-08-19": { dotColor: 'white', disabled: true, selected: false, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true },
+							[activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true },
 						}}
 						enableSwipeMonths={true}
 						theme={{
@@ -141,21 +140,28 @@ class Alretation extends Component {
 								<Option key={i} optionTextStyle={styles.OptionText} optionStyle={styles.Option} value={time}>{time}</Option>
 							))}
 						</Select>
+						<Image style={{ width: 25, height: 25 }} source={Icons.Drop} />
 					</View>
 					<View style={styles.FormView}>
-						<Text style={styles.FormText}>Full Name</Text>
-						<TextInput style={styles.FormInput} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
-						<Text style={styles.FormText}>Phone Number</Text>
-						<TextInput style={styles.FormInput} placeholder="Phone Number" onChangeText={(value) => this.handlePhoneNumberOnChange(value)} />
-						<Text style={styles.FormText}>Full Address</Text>
-						<TextInput style={styles.FormInput} placeholder="Full Address" onChangeText={(value) => this.handleAddressrOnChange(value)} />
-						<Text style={styles.FormText}>Details</Text>
+						<View style={styles.InputContainerBox}>
+							<Image style={styles.InputImage} source={Icons.Login.User} />
+							<TextInput placeholderTextColor="#747374" style={styles.Input} placeholder="Full Name" onChangeText={(e, value) => this.handleFullNameOnChange(value)} />
+						</View>
+						<View style={styles.InputContainerBox}>
+							<Image style={styles.InputImage} source={Icons.Login.Phone} />
+							<TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" keyboardType="phone-pad" style={styles.Input} placeholder="Phone Number" onChangeText={(e, value) => this.handlePhoneNumberOnChange(value)} />
+						</View>
+						<View style={styles.InputContainerBox}>
+							<Image style={styles.InputImage} source={Icons.Login.Address} />
+							<TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" autoCorrect={false} style={styles.Input} placeholder="Full Address" onChangeText={(e, value) => this.handleAddressOnChange(value)} />
+						</View>
+						{/* <Text style={styles.FormText}>Details</Text> */}
 						<Textarea
 							containerStyle={styles.textareaContainer}
 							style={styles.textarea}
 							maxLength={120}
 							placeholder={'Please provide details ...'}
-							placeholderTextColor={'#c7c7c7'}
+							placeholderTextColor={"rgba(000,000,000,0.5)"}
 							underlineColorAndroid={'transparent'}
 							onChangeText={(value) => this.handleDetailsOnChange(value)}
 						/>
@@ -164,7 +170,7 @@ class Alretation extends Component {
 						</Button>
 					</View>
 				</KeyboardAwareScrollView>
-				<Address position={0}/>
+				{/* <Address position={0}/> */}
 			</View>
 		)
 	}
@@ -175,6 +181,38 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "white",
 	},
+	InputContainerBox: {
+		height: 60,
+		// backgroundColor: "red",
+		
+		marginBottom: 20,
+		paddingLeft: 5,
+
+		borderRadius: 5,
+		borderWidth: 1,
+        borderColor: "rgba(000,000,000,0.1)",
+		
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center"
+	},
+	Scroll: {
+		paddingBottom: 10
+	},
+    InputImage: {
+        width: 25,
+        height: 25
+    },
+    Input: {
+        width: "70%",
+        height: 50,
+        paddingLeft: 10,
+        marginLeft: 5,
+        borderRadius: 5,
+
+        borderColor: "rgba(000,000,000,0.3)",
+    },
 	TitleView: {
 		width: "100%",
 		height: 60,
@@ -187,9 +225,6 @@ const styles = StyleSheet.create({
 		fontSize: 25,
 		color: "#636363"
 	},
-	Scroll: {
-		paddingBottom: 55,
-	},
 	FormView: {
 		width: "100%",
 		height: "100%",
@@ -201,7 +236,6 @@ const styles = StyleSheet.create({
 	FormText: {
 		fontSize: 18,
 		paddingBottom: 10,
-		fontFamily: "Inter-Regular"
 	},
 	FormInput: {
 		width: "100%",
@@ -216,13 +250,18 @@ const styles = StyleSheet.create({
 		height: 180,
 		padding: 5,
 		borderWidth: 1,
-		borderColor: "rgba(000,000,000,0.2)"
+		borderColor: "rgba(000,000,000,0.1)",
+		borderRadius: 5,
 	},
 	textarea: {
 		textAlignVertical: 'top',
 		height: 170,
-		fontSize: 14,
+		fontSize: 15,
+		paddingLeft: 5,
+		paddingRight: 5,
+		
 		color: '#333',
+		fontFamily: "Inter-Regular",
 	},
 	Button: {
 		width: "100%",
@@ -235,7 +274,7 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	Select: {
-		width: 140,
+		width: 100,
 		height: 50,
 		backgroundColor: "#2ba97a",
 		// marginLeft: 20,
@@ -252,11 +291,12 @@ const styles = StyleSheet.create({
 
 	},
 	Option: {
-		width: 150,
+		width: "90%",
 		height: 50,
 		marginTop: 5,
 		borderRadius: 10,
 		borderWidth: 0.5,
+		backgroundColor: "white",
 		borderColor: "rgba(000,000,000,0.2)",
 		paddingLeft: 20
 	},
@@ -269,19 +309,19 @@ const styles = StyleSheet.create({
 	},
 	List: {
 		borderWidth: 0,
-		width: "90%",
+		width: "50%",
 		marginTop: 5,
+		backgroundColor: "rgba(000,000,000,0.1)",
 		marginBottom: 10,
 		borderColor: "rgba(000,000,000,0.5)",
-
 	},
 	Time: {
-		width: 160,
+		width: 180,
 		backgroundColor: "#2ba97a",
 		marginLeft: 20,
-		paddingLeft: 30,
+		// paddingLeft: 30,
 		borderRadius: 10,
-		marginTop: 10,
+		marginTop: 30,
 
 		display: "flex",
 		flexDirection: "row",
