@@ -53,8 +53,6 @@ class Profile extends Component {
     }
     render() {
         const { isNotificationOn, title } = this.state
-        const {pView} = this.props.state.Footer
-        console.log(pView);
         return (
             <View style={styles.Profile}>
                 <View style={styles.Header}>

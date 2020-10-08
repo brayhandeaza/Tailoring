@@ -17,7 +17,8 @@ class Prices extends Component {
         super(props);
         this.state = {
             prices: [],
-            searchValue: ''
+            searchValue: '',
+            category: ''
         }
         this.socket = io("https://alteration-database.herokuapp.com/")
         // this.socket = io("http://localhost:3000/")
@@ -26,6 +27,24 @@ class Prices extends Component {
     handleFilter = (e, filter) => {
         e.stopPropagation()
         this.props.dispatch({ type: filter })
+
+        switch (filter) {
+            case "isPants":
+                this.setState({
+                    category: "pants"
+                })
+                break;
+            case "isJacket":
+                this.setState({
+                    category: "jacket"
+                })
+                break;
+            default:
+                this.setState({
+                    category: ''
+                })
+                break;
+        }
     }
 
     isFilter = (filter) => {
@@ -48,10 +67,11 @@ class Prices extends Component {
             this.setState({
                 prices
             })
+            console.log(prices);
         })
     }
 
-    handleOnChange = (text) => {        
+    handleOnChange = (text) => {
         this.setState({
             searchValue: text
         })
@@ -60,36 +80,42 @@ class Prices extends Component {
     componentDidMount() {
         this.fetchPrice()
     }
- 
+
     render() {
-        let filteredPrices = this.state.prices.filter((price) => {
+        let filteredCategory = this.state.prices.filter((price) => {
+            return price.category.toLowerCase().includes(this.state.category.toLowerCase())
+        })
+        let filteredPrices = filteredCategory.filter((price) => {
             return price.title.toLowerCase().includes(this.state.searchValue.toLowerCase())
         })
-        const { isJacket, isPants } = this.props.state.Filters
+        const { isJacket, isPants, isAll } = this.props.state.Filters
         return (
             <View style={styles.Appointments}>
                 <View style={styles.PriceTitleContainer}>
                     <Text style={styles.PriceTitleText}>Prices</Text>
                 </View>
                 <View style={styles.Filter}>
+                    <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isAll)]} onPress={(e) => this.handleFilter(e, "isAll")}>
+                        <Text style={[styles.FilterButtomsText, this.isFilterText(isAll), { fontFamily: "Inter-Regular" }]}>{"All"}</Text>
+                    </TouchableHighlight>
                     <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isJacket)]} onPress={(e) => this.handleFilter(e, "isJacket")}>
-                        <Text style={[styles.FilterButtomsText, this.isFilterText(isJacket),{fontFamily: "Inter-Regular"}]}>{"Jackets"}</Text>
+                        <Text style={[styles.FilterButtomsText, this.isFilterText(isJacket), { fontFamily: "Inter-Regular" }]}>{"Jacket"}</Text>
                     </TouchableHighlight>
                     <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isPants)]} onPress={(e) => this.handleFilter(e, "isPants")}>
-                        <Text style={[styles.FilterButtomsText, this.isFilterText(isPants), {fontFamily: "Inter-Regular"}]}>{"Pants"}</Text>
+                        <Text style={[styles.FilterButtomsText, this.isFilterText(isPants), { fontFamily: "Inter-Regular" }]}>{"Pants"}</Text>
                     </TouchableHighlight>
                 </View>
                 <View style={styles.InputContainer}>
-                    <TextInput style={styles.Input} placeholder="Search..."  onChangeText={(text) => this.handleOnChange(text)}/>
+                    <TextInput style={styles.Input} placeholder="Search..." onChangeText={(text) => this.handleOnChange(text)} />
                 </View>
                 <ScrollView contentContainerStyle={styles.Scroll}>
                     {filteredPrices.map((price, i) => (
                         <View key={i} style={styles.Orders}>
                             <View style={styles.DetailsBox}>
-                                <Text style={{ fontSize: 15, color: "rgba(000,000,000, 0.8)", fontWeight: "bold", fontFamily: "Inter-Regular", textTransform: "capitalize"}}>{price.title}</Text>
+                                <Text style={{ fontSize: 15, color: "rgba(000,000,000, 0.8)", fontWeight: "bold", fontFamily: "Inter-Regular", textTransform: "capitalize" }}>{price.title}</Text>
                                 <View style={styles.IconPrice}>
                                     <Svg width={28} height={39} viewBox="0 0 37 48" fill="none">
-                                        <Path d={Icons.Suit.path.d} fill="#2BA97A"/>
+                                        <Path d={Icons.Suit.path.d} fill="#2BA97A" />
                                     </Svg>
                                     <Text style={{ marginTop: 15, fontSize: 15, fontWeight: "bold", fontFamily: "Inter-Regular", color: "rgba(000,000,000, 0.5)" }}>{`$${price.price}`}</Text>
                                 </View>
@@ -112,7 +138,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 90,
         paddingLeft: 20,
-    
+
         display: "flex",
         justifyContent: "flex-end",
         alignItems: "flex-start"
@@ -126,13 +152,13 @@ const styles = StyleSheet.create({
     Filter: {
         width: "100%",
         height: 50,
-        padding: 20,
+        // padding: 20,
         marginTop: 20,
         marginBottom: 5,
 
         display: "flex",
         flexDirection: "row",
-        justifyContent: "flex-start",
+        justifyContent: "space-evenly",
         alignItems: "center"
 
     },
@@ -140,7 +166,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 40,
         borderRadius: 18,
-        marginRight: 20,
+        // marginRight: 20,
 
 
         display: "flex",
