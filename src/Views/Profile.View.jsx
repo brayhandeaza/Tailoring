@@ -28,8 +28,7 @@ class Profile extends Component {
 		return (
 			
 			<ScrollView contentContainerStyle={styles.Scroll}>
-				<Header/>
-				{isLogedIn ? <Account /> : <SignUp/>}
+				{!isLogedIn ? <Account /> : <SignUp/>}
 			</ScrollView> 
 		)
 	}

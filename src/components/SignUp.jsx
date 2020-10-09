@@ -31,12 +31,14 @@ class Register extends Component {
     createUsers = async () => {
         const { fullName, email, password, phone } = this.state
         // await axios.post("http://localhost:3000/users", {
-            await axios.post("https://alteration-database.herokuapp.com/users", {
-            fullName,
-            email,
-            password,
-            phone
+        await axios.post("https://alteration-database.herokuapp.com/users", {
+            "fullName": fullName,
+            "email": email,
+            "password": password,
+            "phone": phone
+            
         }).then((User) => {
+            console.log(User.data);
             if (!User.data.error) {
                 this.setState({
                     fullName: "",
@@ -45,38 +47,21 @@ class Register extends Component {
                     phone: "",
 
                 })
-                console.log(User.data);
+
             }
         }).catch(err => console.log(err))
 
     }
 
-    formatPhoneNumber = (number) => {
-        let phone = []
-        for (let i = 0; i < number.length; i++) {
-            if (i === 0) {
-                phone.push(`(${number[i]}`)
-
-            } else if (i === 2) {
-                phone.push(`${number[i]}) `)
-
-            } else if (i === 6) {
-                phone.push(` - ${number[i]}`)
-
-            } else {
-                phone.push(number[i])
-            }
-        }
-
-        return phone
-    }
-
     handleFullNameOnChange = (value) => {
+        console.log(value);
         this.setState({
             fullName: value
         })
     }
     handleEmailOnChange = (value) => {
+        console.log(value);
+
         this.setState({
             email: value
         })
@@ -107,47 +92,47 @@ class Register extends Component {
     }
     render() {
         return (
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.Scroll}>
-                    <View style={styles.Register}>
-                        <View style={styles.FormTitle}>
-                            <Text style={[styles.IconsOptionText, { color: "black", fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "bold" }]}>Create Account</Text>
-                            <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)",  fontFamily: "Inter-Regular", textAlign: "center" }]}>Create a new account</Text>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.Register}>
+                    <View style={styles.FormTitle}>
+                        <Text style={[styles.IconsOptionText, { color: "black", fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "bold" }]}>Create Account</Text>
+                        <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontFamily: "Inter-Regular", textAlign: "center" }]}>Create a new account</Text>
+                    </View>
+                    <View style={styles.InputContainer}>
+                        <View style={styles.InputContainerBox}>
+                            <Image style={styles.InputImage} source={Icons.Login.User} />
+                            <TextInput placeholderTextColor="#747374" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
                         </View>
-                        <View style={styles.InputContainer}>
-                            <View style={styles.InputContainerBox}>
-                                <Image style={styles.InputImage} source={Icons.Login.User} />
-                                <TextInput placeholderTextColor="#747374" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
-                            </View>
-                            <View style={styles.InputContainerBox}>
-                                <Image style={styles.InputImage} source={Icons.Login.Email} />
-                                <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
-                            </View>
-                            <View style={styles.InputContainerBox}>
-                                <Image style={styles.InputImage} source={Icons.Login.Phone} />
-                                <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="phone-pad" placeholder="Phone" onTextInput={(text) => console.log(text.currentTarget)} onChangeText={(value, e) => this.handlePhoneOnChange(value)} />
-                            </View>
-                            <View style={styles.InputContainerBox}>
-                                <Image style={styles.InputImage} source={Icons.Login.Password} />
-                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(e, value) => this.handlePasswordOnChange(value)} />
-                            </View>
-                            <View style={styles.InputContainerBox}>
-                                <Image style={styles.InputImage} source={Icons.Login.Password} />
-                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Confirm Password" onChangeText={(value) => this.handleConfirmPasswordOnChange(value)} />
-                            </View>
+                        <View style={styles.InputContainerBox}>
+                            <Image style={styles.InputImage} source={Icons.Login.Email} />
+                            <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
                         </View>
-                        <TouchableHighlight style={styles.Touchable} underlayColor="#2ba97a" onPress={this.createUsers}>
-                            <Text style={[styles.IconsOptionText, { color: "white",  fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "600" }]}>Create An Account</Text>
-                        </TouchableHighlight>
-                        <View style={styles.toLogin}>
-                            <View style={{}}>
-                                <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 16 }]}>Already register?</Text>
-                            </View>
-                            <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.fetchUsers}>
-                                <Text style={[styles.IconsOptionText, { color: "#2ba97a",  fontFamily: "Inter-Regular", fontSize: 16, paddingLeft: 5 }]}>Log In</Text>
-                            </TouchableHighlight>
+                        <View style={styles.InputContainerBox}>
+                            <Image style={styles.InputImage} source={Icons.Login.Phone} />
+                            <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="phone-pad" placeholder="Phone" value={this.state.phone.replace(/^(\d{3})(\d{3})(\d)+$/, "($1) $2-$3")} onChangeText={(value, e) => this.handlePhoneOnChange(value)} />
+                        </View>
+                        <View style={styles.InputContainerBox}>
+                            <Image style={styles.InputImage} source={Icons.Login.Password} />
+                            <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(e, value) => this.handlePasswordOnChange(value)} />
+                        </View>
+                        <View style={styles.InputContainerBox}>
+                            <Image style={styles.InputImage} source={Icons.Login.Password} />
+                            <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Confirm Password" onChangeText={(value) => this.handleConfirmPasswordOnChange(value)} />
                         </View>
                     </View>
-            </KeyboardAwareScrollView> 
+                    <TouchableHighlight style={styles.Touchable} underlayColor="#2ba97a" onPress={this.createUsers}>
+                        <Text style={[styles.IconsOptionText, { color: "white", fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "600" }]}>Create An Account</Text>
+                    </TouchableHighlight>
+                    <View style={styles.toLogin}>
+                        <View style={{}}>
+                            <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 16 }]}>Already register?</Text>
+                        </View>
+                        <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.fetchUsers}>
+                            <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontFamily: "Inter-Regular", fontSize: 16, paddingLeft: 5 }]}>Log In</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </KeyboardAwareScrollView>
         )
     }
 }

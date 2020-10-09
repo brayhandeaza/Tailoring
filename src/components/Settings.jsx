@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, TextInput, TouchableHighlight, ScrollView, Dimensions } from 'react-native'
 import { Icons, Img } from '../constants/Image'
-
+import { Actions, } from "react-native-router-flux";
 // redux
 import { connect } from "react-redux"
 
@@ -114,19 +114,30 @@ class Settings extends Component {
             }
         })
     }
+    handdleOnPressArrow = () => {
+        Actions.reset("_Profile")
+    }
 
+    componentDidMount() {
+      console.log(navigator.permissions);
+    }
+    
     render() {
 
         return (
             <View style={styles.Settings}>
                 <View style={styles.SettingsHeaderContainer}>
-                    <View style={[styles.SettingsHeaderContainerImgBox]}>
-                        <Image style={[styles.SettingsHeaderContainerGift]} source={Icons.Gift} />
+                    <TouchableHighlight underlayColor="white" style={styles.TouchableArrow} onPress={this.handdleOnPressArrow}>
+                        <Image style={styles.Arrow} source={Icons.Arrow} />
+                    </TouchableHighlight>
+                    <View underlayColor="white" style={[styles.TouchableArrow, { width: 200 }]} onPress={this.handdleOnPressArrow}>
+                        <Text style={{ color: "rgba(000, 000, 000, 0.7)", fontSize: 18, fontFamily: "Inter-Regular" }}>Hello, Brayhan</Text>
                     </View>
-                    <View style={[styles.SettingsHeaderContainerImgBox, { width: 200, backgroundColor: "white" }]}>
-                        <Text style={styles.SettingsHeaderText}>Hello, Brayhan</Text>
-                    </View>
-                    <View style={[styles.SettingsHeaderContainerImgBox, { backgroundColor: "white" }]}></View>
+                    <TouchableHighlight underlayColor="white" style={styles.TouchableArrow}>
+                        <View style={[styles.SettingsHeaderContainerImgBox]}>
+                            <Image style={[styles.Arrow, {width: 18, height: 18}]} source={Icons.Gift} />
+                        </View>
+                    </TouchableHighlight>
                 </View>
                 <View style={styles.SettingsPictureContainer}>
                     <View style={styles.SettingsPictureImgBox}>
@@ -179,19 +190,18 @@ const styles = StyleSheet.create({
     },
     SettingsHeaderContainer: {
         width: "100%",
-        height: 110,
-        paddingBottom: 10,
-        paddingLeft: 20,
-
+        height: 100,
+        // paddingLeft: 25,
+        // paddingRight: 25,
+        // backgroundColor: "red",
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "flex-end"
+        justifyContent: "space-between"
     },
     SettingsHeaderContainerImgBox: {
         width: 40,
         height: 40,
-        backgroundColor: "#e4d9d5",
+        backgroundColor: "rgba(84,183,124,0.15)",
         borderRadius: 50,
 
         display: "flex",
@@ -219,7 +229,7 @@ const styles = StyleSheet.create({
         width: 130,
         height: 130,
         borderRadius: 100,
-        borderWidth: 5,
+        borderWidth: 2,
         borderColor: "rgba(000,000,000,0.3)"
     },
     SettingsHeaderText: {
@@ -292,8 +302,8 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     ItemsImage: {
-        width: 200,
-        height: 200,
+        width: 40,
+        height: 40,
         marginBottom: 10,
 
 
@@ -319,11 +329,31 @@ const styles = StyleSheet.create({
         paddingBottom: 5
 
     },
+    TouchableArrow: {
+        width: 75,
+        height: 100,
+        paddingBottom: 10,
+
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center"
+    },
+    Arrow: {
+        width: 25,
+        height: 25,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 3.84,
+    },
 })
 
 const mapStateToProps = (state) => {
     return {
-        state
+        state,
     }
 }
 

@@ -13,7 +13,7 @@ class Profile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: ["Notifications", "Settings", "Privacy Policy", "Log Out"],
+            title: ["Notifications", "Settings", "Privacy Policy"],
             isNotificationOn: true
         }
     }
@@ -34,7 +34,7 @@ class Profile extends Component {
     }
 
     handdleOnPressArrow = (view) => {
-        const {pView} = this.props.state.Footer
+        const { pView } = this.props.state.Footer
         switch (pView) {
             case "isHome":
                 Actions.Home()
@@ -49,7 +49,7 @@ class Profile extends Component {
                 Actions.Profile()
                 break;
         }
-        this.props.dispatch({ type: pView})
+        this.props.dispatch({ type: pView })
     }
     render() {
         const { isNotificationOn, title } = this.state
@@ -69,15 +69,18 @@ class Profile extends Component {
                     {title.map((title, i) => (
                         <View key={i} style={styles.ProfileTitlesBox}>
                             <TouchableHighlight underlayColor="white" onPress={title != "Notifications" ? (e) => this.handleTitleOnPress(e, `_${title.replace(" ", "")}`) : null}>
-                                <Text style={[styles.ProfileHeaderText, {fontFamily: "Inter-Regular"}]}>{title}</Text>
+                                <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular" }]}>{title}</Text>
                             </TouchableHighlight>
                             {title == "Notifications" ?
-                                <TouchableHighlight underlayColor="rgba(000,000,000,0.1)" style={[styles.PushBotsContainer, { backgroundColor: isNotificationOn ? "rgba(43, 169, 123, 0.14)" : "rgba(000,000,000,0.1)" , alignItems: isNotificationOn ? "flex-end" : "flex-start" }]} onPress={this.handleNotificationstate}>
-                                    <View style={[styles.PushBotsButton, { backgroundColor: isNotificationOn ?  "rgba(43, 169, 123, 0.5)" : "white" }]}></View>
+                                <TouchableHighlight underlayColor="rgba(000,000,000,0.1)" style={[styles.PushBotsContainer, { backgroundColor: isNotificationOn ? "rgba(43, 169, 123, 0.14)" : "rgba(000,000,000,0.1)", alignItems: isNotificationOn ? "flex-end" : "flex-start" }]} onPress={this.handleNotificationstate}>
+                                    <View style={[styles.PushBotsButton, { backgroundColor: isNotificationOn ? "rgba(43, 169, 123, 1)" : "white" }]}></View>
                                 </TouchableHighlight>
                                 : null}
                         </View>
                     ))}
+                    <TouchableHighlight style={styles.Logout} underlayColor="white">
+                        <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular" , color: "rgba(43, 169, 123, 1)"}]}>{"Log Out"}</Text>
+                    </TouchableHighlight>
                 </View>
             </View>
         )
@@ -162,7 +165,7 @@ const styles = StyleSheet.create({
     ProfileHeaderText: {
         fontSize: 24,
         fontWeight: "600",
-        
+
     },
     SloganContainer: {
         width: "100%",
@@ -183,12 +186,22 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     ProfilePicture: {
-        width: 130,
-        height: 130,
+        width: 135,
+        height: 135,
+        borderRadius: 100,
+
+
+    },
+    ProfilePictureImgBox: {
+        width: 150,
+        height: 150,
         borderRadius: 100,
         borderWidth: 1.5,
         borderColor: "rgba(43, 169, 123, 0.14)",
-        
+
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     },
     ProfileTitlesContainer: {
         width: "100%",
@@ -219,6 +232,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
 
         // backgroundColor: "red"
+    },
+    Logout: {
+        width: "100%",
+        height: 75,
+
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     }
 
 

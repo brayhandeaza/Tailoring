@@ -76,6 +76,7 @@ class Prices extends Component {
         })
     }
 
+    
     componentDidMount() {
         this.fetchPrice()
     }
@@ -91,7 +92,7 @@ class Prices extends Component {
         return (
             <View style={styles.Appointments}>
                 <View style={styles.PriceTitleContainer}>
-                    <Text style={styles.PriceTitleText}>Prices</Text>
+                    <Text style={{ fontSize: 30, color: "#000000", fontWeight: "bold", fontFamily: "Inter-Regular" }}>Prices</Text>
                 </View>
                 <View style={styles.Filter}>
                     <TouchableHighlight underlayColor="white" style={[styles.FilterButtoms, this.isFilter(isAll)]} onPress={(e) => this.handleFilter(e, "isAll")}>
@@ -113,9 +114,16 @@ class Prices extends Component {
                             <View style={styles.DetailsBox}>
                                 <Text style={{ fontSize: 15, color: "rgba(000,000,000, 0.8)", fontWeight: "bold", fontFamily: "Inter-Regular", textTransform: "capitalize" }}>{price.title}</Text>
                                 <View style={styles.IconPrice}>
-                                    <Svg width={28} height={39} viewBox="0 0 37 48" fill="none">
-                                        <Path d={Icons.Suit.path.d} fill="#2BA97A" />
-                                    </Svg>
+                                    {price.category === "jacket" ?
+                                        <Svg width={28} height={39} viewBox="0 0 37 48" fill="none">
+                                            <Path d={Icons.Suit.path.d} fill="#2BA97A" />
+                                        </Svg>
+                                        : price.category === "pants" ?
+                                            <Svg width={35} height={45} viewBox="0 0 512.001 512.001">
+                                                <Path d={Icons.Trouser.path.d} fill="#2BA97A" xmlns="http://www.w3.org/2000/svg" />
+                                            </Svg>
+                                            : null
+                                    }
                                     <Text style={{ marginTop: 15, fontSize: 15, fontWeight: "bold", fontFamily: "Inter-Regular", color: "rgba(000,000,000, 0.5)" }}>{`$${price.price}`}</Text>
                                 </View>
                             </View>
@@ -135,18 +143,12 @@ const styles = StyleSheet.create({
     },
     PriceTitleContainer: {
         width: "100%",
-        height: 90,
+        height: 100,
         paddingLeft: 20,
 
         display: "flex",
         justifyContent: "flex-end",
         alignItems: "flex-start"
-    },
-    PriceTitleText: {
-        fontSize: 25,
-        color: "#000000",
-        fontWeight: "bold",
-        fontFamily: "Inter-Regular"
     },
     Filter: {
         width: "100%",

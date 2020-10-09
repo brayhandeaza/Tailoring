@@ -37,42 +37,59 @@ class Orders extends Component {
         })
     }
 
-    handleOnPress = () => {
-        Actions.Summery("Hello")
+    handleOnPress = (id) => {
+        Actions.reset("_Summery")
+        this.props.dispatch({ type: "summey", payload: Object.assign({}, id) })
+        // console.log(id);
     }
 
     componentDidMount() {
         this.fetchAppointment()
-    } 
+    }
+
+    handleOnPress = (view, action) => {
+        this.props.dispatch({ type: action })
+        Actions.reset("_Alretation")
+    }
 
     render() {
+        let haveOrder = false
         return (
             <View style={styles.Appointments}>
                 <View style={styles.TitleBox}>
-                    <Text style={{fontSize: 30, color: "#000000", fontWeight: "bold", fontFamily: "Inter-Regular"}}>My Orders</Text>
+                    <Text style={{ fontSize: 30, color: "#000000", fontWeight: "bold", fontFamily: "Inter-Regular" }}>My Orders</Text>
                 </View>
-                <ScrollView contentContainerStyle={styles.Scroll}>
-                    {this.state.appointments.map((appointment, i) => (
-                        <TouchableHighlight underlayColor="white" key={i} style={styles.Orders} onPress={this.handleOnPress}>
-                            <View style={styles.DetailsBox}>
-                                <View style={styles.Top}>
-                                    <Text style={{ fontSize: 20, color: "#000000", fontWeight: "bold", fontFamily: "Inter-Regular", textTransform: "capitalize"}}>{appointment.fullName}</Text>
-                                    <Text style={{ paddingRight: 10, fontFamily: "Inter-Regular" }}>{`#${appointment.appointmentId.slice(0, 10)}`}</Text>
-                                </View>
-                                <View style={styles.Bottom}>
-                                    <View style={styles.BottomLeft}>
-                                        <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)" }}>Tailor</Text>
-                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.7)", paddingTop: 5, fontFamily: "Inter-Regular", textTransform: "capitalize", fontWeight: "bold" }}>Brayhan de Aza</Text>
+                { !this.state.appointments.length == 0 ?
+                    <ScrollView contentContainerStyle={styles.Scroll}>
+                        {this.state.appointments.map((appointment, i) => (
+                            <TouchableHighlight underlayColor="white" key={i} style={styles.Orders} onPress={() => this.handleOnPress(appointment)}>
+                                <View style={styles.DetailsBox}>
+                                    <View style={styles.Top}>
+                                        <Text style={{ fontSize: 20, color: "#000000", fontWeight: "bold", fontFamily: "Inter-Regular", textTransform: "capitalize" }}>{appointment.fullName}</Text>
+                                        <Text style={{ paddingRight: 10, fontFamily: "Inter-Regular" }}>{`#${appointment.appointmentId.slice(0, 10)}`}</Text>
                                     </View>
-                                    <View style={styles.BottomRight}>
-                                        <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)", fontFamily: "Inter-Regular", }}>Schedule</Text>
-                                        <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5 }}>{`${appointment.date} ${appointment.time}`}</Text>
+                                    <View style={styles.Bottom}>
+                                        <View style={styles.BottomLeft}>
+                                            <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)" }}>Tailor</Text>
+                                            <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.7)", paddingTop: 5, fontFamily: "Inter-Regular", textTransform: "capitalize", fontWeight: "bold" }}>{appointment.tailor}</Text>
+                                        </View>
+                                        <View style={styles.BottomRight}>
+                                            <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)", fontFamily: "Inter-Regular", }}>Schedule</Text>
+                                            <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5 }}>{`${appointment.date} ${appointment.time}`}</Text>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
+                            </TouchableHighlight>
+                        ))}
+                    </ScrollView> :
+                    <View style={styles.Empty}>
+                        <Text style={{ fontSize: 18, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5 }}>You do not have order yet</Text>
+                        <Text style={{ fontSize: 18, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5, color: "rgba(43, 169, 123, 1)", textDecorationLine: "underline" }}>Would you like to play a new order?</Text>
+                        <TouchableHighlight style={styles.TouchableTailor} underlayColor="#f6f6f6" onPress={(res) => this.handleOnPress("_Alretation", "isAlteration")}>
+                            <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 20, textTransform: "uppercase" }]}>{"Get a Tailors"}</Text>
                         </TouchableHighlight>
-                    ))}
-                </ScrollView>
+                    </View>
+                }
                 <Footer />
             </View>
         )
@@ -105,8 +122,6 @@ const styles = StyleSheet.create({
         padding: 20,
         marginTop: 20,
         marginBottom: 5,
-
-
 
         display: "flex",
         flexDirection: "row",
@@ -219,7 +234,39 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
-    }
+    },
+    Empty: {
+        width: "100%",
+        height: "60%",
+
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    TouchableTailor: {
+        width: 300,
+        height: 60,
+        borderRadius: 10,
+        marginBottom: 30,
+        marginTop: 30,
+        backgroundColor: "white",
+        borderWidth: Platform.OS == "android" ? 0.6 : 0.2,
+        borderColor: "rgba(000,000,000,0.2)",
+
+
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 3.84,
+
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
 })
 
 const mapStateToProps = (state) => {
