@@ -119,7 +119,7 @@ class Prices extends Component {
                                             <Path d={Icons.Suit.path.d} fill="#2BA97A" />
                                         </Svg>
                                         : price.category === "pants" ?
-                                            <Svg width={35} height={45} viewBox="0 0 512.001 512.001">
+                                            <Svg width={35} height={39} viewBox="0 0 512.001 512.001">
                                                 <Path d={Icons.Trouser.path.d} fill="#2BA97A" xmlns="http://www.w3.org/2000/svg" />
                                             </Svg>
                                             : null
