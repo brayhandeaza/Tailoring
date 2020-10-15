@@ -1,129 +1,85 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, View, Image, TextInput, TouchableHighlight, ScrollView, Dimensions } from 'react-native'
+import React, { Component, createRef, useRef } from 'react'
+import { StyleSheet, Text, View, Image, TextInput, TouchableHighlight, ScrollView, Dimensions, Modal } from 'react-native'
 import { Icons, Img } from '../constants/Image'
 import { Actions, } from "react-native-router-flux";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 // redux
 import { connect } from "react-redux"
+import { Rect } from 'react-native-svg';
 
 
 class Settings extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: ["First Name", "Last Name", "Age"],
-            isFirstName: false,
-            isLastName: false,
+            title: ["Full Name", "phone", "Age"],
+
             isAge: false,
-            inputValue: {
-                fName: "First Name",
-                lName: "Last Name",
-                age: "Age",
-            },
             isUpdate: false,
-            InputEditable: {
-                fName: false,
-                lName: false,
-                age: false
-            },
+            hasBorder: false,
+            isSuccefullyUpdated: false,
+
             inputColor: "rgba(000,000,000,0.3)",
+            isFullNameOn: false,
+            isPhoneOn: false,
+
+            textFieldValues: {
+                fullName: "",
+                phone: "",
+                age: ""
+            },
+            isTextField: false,
         }
     }
 
-    handleTitleOnPress = async (e, view) => {
-        const { fName, lName, age } = this.state.InputEditable
-        switch (view) {
-            case "isFirstName":
-                this.setState({
-                    InputEditable: {
-                        fName: true,
-                        lName,
-                        age
-                    },
-                    inputColor: "rgba(0, 128, 0, 0.637)",
-                })
-                break;
-            case "isLastName":
-                this.setState({
-                    InputEditable: {
-                        fName,
-                        lName: true,
-                        age
-                    },
-                    inputColor: "rgba(0, 128, 0, 0.637)"
-                })
-
-                break;
-            case "isAge":
-                this.setState({
-                    InputEditable: {
-                        fName,
-                        lName,
-                        age: true
-                    },
-                    inputColor: "rgba(0, 128, 0, 0.637)"
-                })
-                break;
-        }
-    }
-
-    handleFistNameOnChange = (values) => {
-        const { fName } = this.state.InputEditable
-        this.setState({
-            isUpdate: false,
-            inputValue: {
-                fName: values,
-                lName: this.state.inputValue.lName,
-                age: this.state.inputValue.age
-            },
-            inputColor: values == "" ? "rgba(255, 0, 0, 0.671)" : fName ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000,0.3)"
-        })
-    }
-    handleLastNameOnChange = (values) => {
-        const { lName } = this.state.InputEditable
-        this.setState({
-            isUpdate: false,
-            inputValue: {
-                fName: this.state.inputValue.fName,
-                lName: values,
-                age: this.state.inputValue.age
-            },
-            inputColor: values == "" ? "rgba(255, 0, 0, 0.671)" : lName ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000,0.3)"
-        })
-    }
-    handleAgeNameOnChange = (values) => {
-        const { age } = this.state.InputEditable
-        this.setState({
-            isUpdate: false,
-            inputValue: {
-                fName: this.state.inputValue.fName,
-                lName: this.state.inputValue.lName,
-                age: values
-            },
-            inputColor: values == "" ? "rgba(255, 0, 0, 0.671)" : age ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000,0.3)"
-        })
+    handleCamelize = (str) => {
+        return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+            return index === 0 ? word.toLowerCase() : word.toUpperCase();
+        }).replace(/\s+/g, '');
     }
 
     handleUpdateOnPress = () => {
         this.setState({
+            isTextField: false,
             isUpdate: true,
             isInputEditable: true,
-            InputEditable: {
-                fName: false,
-                lName: false,
-                age: false
-            }
+            isSuccefullyUpdated: true
         })
+
+        setTimeout(() => {
+            this.setState({
+                isSuccefullyUpdated: false
+            })
+        }, 2000)
     }
+
     handdleOnPressArrow = () => {
         Actions.reset("_Profile")
     }
 
-    componentDidMount() {
-      console.log(navigator.permissions);
-    }
-    
-    render() {
+    handleOnchange = (inputs) => {
+        const { fullName, phone, age } = inputs
 
+        this.setState({
+            textFieldValues: {
+                fullName: fullName,
+                phone: phone,
+                age: age
+            }
+        })
+        console.log(this.state.textFieldValues)
+    }
+
+    handleEdit = () => {
+        this.setState({
+            isTextField: true,
+            hasBorder: true
+        })
+    }
+
+    render() {
+        const { isFullNameOn, title, isTextField, hasBorder, isSuccefullyUpdated } = this.state
         return (
             <View style={styles.Settings}>
                 <View style={styles.SettingsHeaderContainer}>
@@ -135,45 +91,42 @@ class Settings extends Component {
                     </View>
                     <TouchableHighlight underlayColor="white" style={styles.TouchableArrow}>
                         <View style={[styles.SettingsHeaderContainerImgBox]}>
-                            <Image style={[styles.Arrow, {width: 18, height: 18}]} source={Icons.Gift} />
+                            <Image style={[styles.Arrow, { width: 18, height: 18 }]} source={Icons.Gift} />
                         </View>
                     </TouchableHighlight>
                 </View>
-                <View style={styles.SettingsPictureContainer}>
-                    <View style={styles.SettingsPictureImgBox}>
-                        <Image style={styles.SettingsPicture} source={Img.Avatar} />
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={styles.Scroll}>
+                    <View style={styles.SettingsPictureContainer}>
+                        <View style={styles.SettingsPictureImgBox}>
+                            <Image style={styles.SettingsPicture} source={Img.Avatar} />
+                        </View>
                     </View>
-                </View>
-                <View style={styles.Form}>
-                    <View style={[styles.ProfileTitlesBox, { borderColor: this.state.inputColor }]}>
-                        <TouchableHighlight style={styles.InputBox} onPress={() => true}>
-                            <TextInput editable={this.state.InputEditable.fName} style={[styles.Input, { color: this.state.InputEditable.fName ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.fName} onChangeText={(value) => this.handleFistNameOnChange(value)} />
-                        </TouchableHighlight>
-                        <TouchableHighlight underlayColor="white" onPress={(e) => this.handleTitleOnPress(e, "isFirstName")}>
-                            <Image style={{ width: 30, height: 30 }} source={Icons.Edit} />
-                        </TouchableHighlight>
+                    <View style={styles.Form}>
+                        {title.map((item) => (
+                            <TouchableHighlight ref={this.myRefs} key={this.handleCamelize(item)} underlayColor="white">
+                                <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isFullNameOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                                    <Image style={styles.InputImage} source={isFullNameOn ? Icons.Login.UserOn : Icons.Login.User} />
+                                    {isTextField ?
+                                        <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleOnchange({ [this.handleCamelize(item)]: value })} />
+                                        :
+                                        <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{"Brayhan De Aza"}</Text>
+                                    }
+                                </View>
+                            </TouchableHighlight>
+                        ))}
                     </View>
-                    <View style={[styles.ProfileTitlesBox, { borderColor: this.state.InputEditable.lName ? "green" : "rgba(000,000,000,0.3)" }]}>
-                        <TouchableHighlight style={styles.InputBox}>
-                            <TextInput editable={this.state.InputEditable.fName} style={[styles.Input, { color: this.state.InputEditable.lName ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.lName} onChangeText={(value) => this.handleLastNameOnChange(value)} />
-                        </TouchableHighlight>
-                        <TouchableHighlight underlayColor="white" onPress={(e) => this.handleTitleOnPress(e, "isLastName")}>
-                            <Image style={{ width: 30, height: 30 }} source={Icons.Edit} />
-                        </TouchableHighlight>
-                    </View>
-                    <View style={[styles.ProfileTitlesBox, { borderColor: this.state.InputEditable.age ? "green" : "rgba(000,000,000,0.3)" }]}>
-                        <TouchableHighlight style={styles.InputBox} onPress={() => true}>
-                            <TextInput editable={this.state.InputEditable.fName} style={[styles.Input, { color: this.state.InputEditable.age ? "rgba(0, 128, 0, 0.637)" : "rgba(000,000,000, 0.6)" }]} value={this.state.inputValue.age} onChangeText={(value) => this.handleAgeNameOnChange(value)} />
-                        </TouchableHighlight>
-                        <TouchableHighlight underlayColor="white" onPress={(e) => this.handleTitleOnPress(e, "isAge")}>
-                            <Image style={{ width: 30, height: 30 }} source={Icons.Edit} />
-                        </TouchableHighlight>
-                    </View>
-                </View>
-                <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => this.handleUpdateOnPress("_Alretation", "isAlteration")}>
-                    <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 25, fontWeight: "600" }]}>{"Update"}</Text>
-                </TouchableHighlight>
-                <Text style={{ color: "green", fontSize: 15 }}>{this.state.isUpdate ? "Succefully updated" : ''}</Text>
+                    {
+                        isTextField ?
+                            <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => this.handleUpdateOnPress("_Alretation", "isAlteration")}>
+                                <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 25, fontWeight: "600" }]}>{"Update"}</Text>
+                            </TouchableHighlight>
+                            :
+                            <TouchableHighlight onPress={this.handleEdit}>
+                                <Text style={{ color: "rgba(43, 169, 123, 1)", fontSize: 18, textTransform: "capitalize", textDecorationLine: "underline" }}>{!isSuccefullyUpdated ? "Update Value" : ""}</Text>
+                            </TouchableHighlight>
+                    }
+                    <Text style={{ color: "green", fontSize: 15 }}>{isSuccefullyUpdated ? "Succefully updated" : ""}</Text>
+                </KeyboardAwareScrollView>
             </View>
         )
     }
@@ -191,9 +144,7 @@ const styles = StyleSheet.create({
     SettingsHeaderContainer: {
         width: "100%",
         height: 100,
-        // paddingLeft: 25,
-        // paddingRight: 25,
-        // backgroundColor: "red",
+
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between"
@@ -209,6 +160,12 @@ const styles = StyleSheet.create({
         alignItems: "center"
 
     },
+    Scroll: {
+        paddingBottom: 85,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
     SettingsHeaderContainerGift: {
         width: 20,
         height: 20,
@@ -219,18 +176,28 @@ const styles = StyleSheet.create({
     },
     SettingsPictureContainer: {
         width: "100%",
-        height: 170,
+        height: 200,
+        paddingTop: 20,
 
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
     },
     SettingsPicture: {
-        width: 130,
-        height: 130,
+        width: 135,
+        height: 135,
         borderRadius: 100,
-        borderWidth: 2,
-        borderColor: "rgba(000,000,000,0.3)"
+    },
+    SettingsPictureImgBox: {
+        width: 150,
+        height: 150,
+        borderRadius: 100,
+        borderWidth: 1.5,
+        borderColor: "rgba(43, 169, 123, 0.14)",
+
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     },
     SettingsHeaderText: {
         fontSize: 18,
@@ -250,9 +217,9 @@ const styles = StyleSheet.create({
         height: 50,
         fontSize: 18,
         fontWeight: "600",
-
-
-        marginBottom: 15
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: "red"
     },
     InputBox: {
         width: "90%",
@@ -283,7 +250,7 @@ const styles = StyleSheet.create({
         width: 300,
         height: 60,
         borderRadius: 10,
-        marginTop: 50,
+        // marginTop: 5,
         marginBottom: 20,
         backgroundColor: "white",
         borderWidth: 0.5,
@@ -348,6 +315,34 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.15,
         shadowRadius: 3.84,
+    },
+    InputContainerBox: {
+        height: 60,
+        // backgroundColor: "red",
+
+        marginBottom: 20,
+        paddingLeft: 10,
+
+        borderRadius: 5,
+        // borderColor: "rgba(000,000,000,0.1)",
+
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center"
+    },
+    InputImage: {
+        width: 25,
+        height: 25
+    },
+    Input: {
+        width: "70%",
+        height: 50,
+        paddingLeft: 10,
+        marginLeft: 5,
+        borderRadius: 5,
+
+        borderColor: "rgba(000,000,000,0.3)",
     },
 })
 

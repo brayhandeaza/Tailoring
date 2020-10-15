@@ -15,7 +15,7 @@ class Tailor extends Component {
 
     handleOnPress = (view, action) => {
         this.props.dispatch({ type: action })
-        Actions.reset("_Alretation")
+        Actions.reset(view)
     }
 
     render() {
@@ -31,7 +31,7 @@ class Tailor extends Component {
                 <View style={styles.TouchableComponent}>
                     <Image source={Icons.Customize} style={styles.ItemsImage} />
                 </View>
-                <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => this.handleOnPress("_Alretation", "isAlteration")}>
+                <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => this.handleOnPress("_Alteration", "isAlteration")}>
                     <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 20, textTransform: "uppercase" }]}>{"Get a Tailors"}</Text>
                 </TouchableHighlight>
                 <Footer />

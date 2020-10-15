@@ -3,7 +3,6 @@ import { StyleSheet, View, Image, TouchableHighlight } from 'react-native'
 import { Header} from "native-base"
 import { connect } from "react-redux"
 import { Icons } from '../constants/Image'
-
 import { Actions } from "react-native-router-flux"
 
 
@@ -14,11 +13,12 @@ class Nav extends Component {
     }
 
     handleMenuOnPressed = (e) => {
-        this.props.dispatch({ type: "isHome" })
-        Actions.Home()
+        const {pView} = this.props.state.Footer
+        this.props.dispatch({ type: pView })
+        Actions.reset(pView == "isHome" ? "_Home" : "_Orders")
     }
+
     render() {
-        const { isHeader, isArrow } = this.props.state.Header
         return (
             <Header style={styles.Header}>
                 <TouchableHighlight underlayColor="white" style={styles.Touchable} onPress={this.handleMenuOnPressed} >

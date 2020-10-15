@@ -4,6 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from "react-redux"
 import { Icons } from "../constants/Image";
 import axios from "axios"
+import { Dialog, ConfirmDialog } from 'react-native-simple-dialogs';
 
 class Summery extends Component {
     constructor(props) {
@@ -12,10 +13,24 @@ class Summery extends Component {
             tailor: '',
             date: '',
             details: '',
-            time: ''
+            time: '',
+            orderId: null
 
         }
 
+    }
+
+    handleDeleteCancelOrder = async (id) => {
+        await axios.delete(`https://alteration-database.herokuapp.com/appointments/${id}`).then(() => {
+            this.setState({
+                dialogVisible: false
+            })
+            this.handdleOnPressArrow()
+        }).catch(() => {
+            alert("Sorry something went wrong!!")
+        })
+
+        
     }
 
     formatDate = (date) => {
@@ -34,28 +49,27 @@ class Summery extends Component {
 
     handdleOnPressArrow = () => {
         Actions.reset("_Orders")
-        this.props.dispatch({ type: "isOrders", payload: null})
-        this.props.dispatch({ type: "", payload: null})
+        this.props.dispatch({ type: "isOrders", payload: null })
+        this.props.dispatch({ type: "", payload: null })
     }
 
     handleAppoinments = () => {
-        const { tailor, date, details, time } = this.props.state.Orders.orderId
-        console.log(details);
+        const { tailor, date, details, time, id } = this.props.state.Orders.orderId
         this.setState({
             tailor: tailor,
             date: this.formatDate(date),
             details: details,
-            time: time
+            time: time,
+            orderId: id,
+            dialogVisible: false
         })
     }
     componentDidMount() {
         this.handleAppoinments()
-        console.log(this.state.date);
     }
 
     render() {
-        const { tailor, date, details, time } = this.state
-        console.log(details)
+        const { tailor, date, details, time, orderId } = this.state
         return (
             <View style={styles.Summery}>
                 <View style={styles.Header}>
@@ -82,7 +96,7 @@ class Summery extends Component {
                                 <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
                                 <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
                                 <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
-                               
+
                             </View>
                             <View style={styles.Status}>
                                 <View style={[styles.CircleShadow, { backgroundColor: "rgba(000, 000, 000, 0.04)" }]}>
@@ -116,10 +130,10 @@ class Summery extends Component {
                                         <Text style={[styles.OrderDetailsText, { fontFamily: "Inter-Regular" }]}>{tailor}</Text>
                                     </TouchableHighlight>
                                     <View style={styles.OrderDetailsDescription}>
-                                        <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, fontFamily: "Inter-Regular", color: "rgba(43, 169, 123, 1)"}]}>Schedele</Text>
+                                        <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, fontFamily: "Inter-Regular", color: "rgba(43, 169, 123, 1)" }]}>Schedele</Text>
                                         <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, color: "rgba(000, 000, 000, 0.6)", fontFamily: "Inter-Regular" }]}>{`${date}, ${time}`}</Text>
                                     </View>
-                                    <View style={[styles.OrderDetailsDescription, {borderColor: "white", marginTop: 0}]}>
+                                    <View style={[styles.OrderDetailsDescription, { borderColor: "white", marginTop: 0 }]}>
                                         <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, fontWeight: "bold", fontFamily: "Inter-Regular", color: "rgba(43, 169, 123, 1)", }]}>Details</Text>
                                         <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, color: "rgba(000, 000, 000, 0.6)", fontFamily: "Inter-Regular" }]}>{details}</Text>
                                     </View>
@@ -127,6 +141,12 @@ class Summery extends Component {
                                         <Text style={[styles.OrderDetailsTitle, { color: "rgba(43, 169, 123, 1)", fontFamily: "Inter-Regular" }]}>Contact Us</Text>
                                     </TouchableHighlight>
                                 </View>
+                                <TouchableHighlight style={styles.OrderDetailsContacts} underlayColor="white" onPress={() => this.setState({dialogVisible: true})}>
+                                    <Text style={[styles.OrderDetailsTitle, { color: "red", fontFamily: "Inter-Regular" }]}>Cancel Order</Text>
+                                </TouchableHighlight>
+                                <ConfirmDialog title="Are you sure you want o cancel this order?" visible={this.state.dialogVisible} onTouchOutside={() => this.setState({ dialogVisible: false })}
+                                    positiveButton={{ title: "Yes", onPress: () => this.handleDeleteCancelOrder(orderId)}} negativeButton={{ title: "No", onPress: () => this.setState({ dialogVisible: false})}} >
+                                </ConfirmDialog>
                             </View>
                         </View>
                     </View>

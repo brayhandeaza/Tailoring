@@ -6,6 +6,7 @@ import io from "socket.io-client"
 
 // compoents
 import Footer from "../components/Footer"
+import { or } from 'react-native-reanimated'
 
 const { width } = Dimensions.get("screen")
 
@@ -43,17 +44,18 @@ class Orders extends Component {
         // console.log(id);
     }
 
+    handleOnPressEmpty = () => {
+        Actions.reset("_Alteration")
+        this.props.dispatch({ type: "isAlteration" })
+    }
+
     componentDidMount() {
         this.fetchAppointment()
+        console.log(this.state.appointments);
     }
 
-    handleOnPress = (view, action) => {
-        this.props.dispatch({ type: action })
-        Actions.reset("_Alretation")
-    }
 
     render() {
-        let haveOrder = false
         return (
             <View style={styles.Appointments}>
                 <View style={styles.TitleBox}>
@@ -85,7 +87,7 @@ class Orders extends Component {
                     <View style={styles.Empty}>
                         <Text style={{ fontSize: 18, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5 }}>You do not have order yet</Text>
                         <Text style={{ fontSize: 18, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5, color: "rgba(43, 169, 123, 1)", textDecorationLine: "underline" }}>Would you like to play a new order?</Text>
-                        <TouchableHighlight style={styles.TouchableTailor} underlayColor="#f6f6f6" onPress={(res) => this.handleOnPress("_Alretation", "isAlteration")}>
+                        <TouchableHighlight style={styles.TouchableTailor} underlayColor="#f6f6f6" onPress={() => this.handleOnPressEmpty()}>
                             <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 20, textTransform: "uppercase" }]}>{"Get a Tailors"}</Text>
                         </TouchableHighlight>
                     </View>

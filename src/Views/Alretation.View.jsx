@@ -160,6 +160,7 @@ class Alretation extends Component {
 	componentDidMount() {
 		this.handleMinDate()
 		this.handleErrors()
+		console.log(this.props.state);
 	}
 
 	render() {

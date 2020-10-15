@@ -42,7 +42,7 @@ export default function App() {
 						<Scene modal key="Home" component={Home} hideNavBar gestureEnable={false} initial/>
 						<Scene modal key="Orders" component={Orders} hideNavBar gestureEnable={false} />
 						<Scene modal key="Profile" component={Profile} hideNavBar gestureEnable={false} />
-						<Scene modal key="Alretation" component={Alretation} hideNavBar gestureEnable={false} />
+						<Scene modal key="Alteration" component={Alretation} hideNavBar gestureEnable={false} />
 						<Scene modal key="Prices" component={Prices} hideNavBar gestureEnable={false} />
 						<Scene modal key="Settings" component={Settings} hideNavBar gestureEnable={false} />
 						<Scene modal key="PrivacyPolicy" component={Settings} hideNavBar gestureEnable={false} />
