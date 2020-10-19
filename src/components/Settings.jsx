@@ -1,19 +1,19 @@
-import React, { Component, createRef, useRef } from 'react'
-import { StyleSheet, Text, View, Image, TextInput, TouchableHighlight, ScrollView, Dimensions, Modal } from 'react-native'
+import React, { Component } from 'react'
+import { StyleSheet, Text, View, Image, TextInput, TouchableHighlight } from 'react-native'
 import { Icons, Img } from '../constants/Image'
 import { Actions, } from "react-native-router-flux";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 // redux
 import { connect } from "react-redux"
-import { Rect } from 'react-native-svg';
-
 
 class Settings extends Component {
     constructor(props) {
         super(props)
         this.state = {
             title: ["Full Name", "phone", "Age"],
+            titleImg: [Icons.Login.UserOn, Icons.Login.Phone,],
+            phone: "",
 
             isAge: false,
             isUpdate: false,
@@ -23,11 +23,12 @@ class Settings extends Component {
             inputColor: "rgba(000,000,000,0.3)",
             isFullNameOn: false,
             isPhoneOn: false,
+            isEmailOn: false,
 
             textFieldValues: {
                 fullName: "",
                 phone: "",
-                age: ""
+                email: ""
             },
             isTextField: false,
         }
@@ -36,15 +37,17 @@ class Settings extends Component {
     handleCamelize = (str) => {
         return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
             return index === 0 ? word.toLowerCase() : word.toUpperCase();
-        }).replace(/\s+/g, '');
+        }).replace(/\s+/g, '')
     }
+
 
     handleUpdateOnPress = () => {
         this.setState({
             isTextField: false,
             isUpdate: true,
             isInputEditable: true,
-            isSuccefullyUpdated: true
+            isSuccefullyUpdated: true,
+            hasBorder: false
         })
 
         setTimeout(() => {
@@ -58,15 +61,38 @@ class Settings extends Component {
         Actions.reset("_Profile")
     }
 
-    handleOnchange = (inputs) => {
-        const { fullName, phone, age } = inputs
-
+    handleFullNameOnChange = (value) => {
         this.setState({
+            isFullNameOn: value.length > 1 ? true : false,
             textFieldValues: {
-                fullName: fullName,
-                phone: phone,
-                age: age
+                fullName: value
             }
+        })
+    }
+
+    validateEmail = (email) => {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    handleEmailOnChange = (value) => {
+        this.setState({
+            isEmailOn: this.validateEmail(value) ? true : false,
+            // isEmailOn: value.length > 5 ? true : false,
+            textFieldValues: {
+                email: value
+            }
+        })
+        console.log(this.state.textFieldValues)
+    }
+
+    handlePhoneOnChange = (value) => {
+        this.setState({
+            isPhoneOn: value.length > 13 ? true : false,
+            textFieldValues: {
+                phone: value
+            },
+            phone: value
         })
         console.log(this.state.textFieldValues)
     }
@@ -79,7 +105,7 @@ class Settings extends Component {
     }
 
     render() {
-        const { isFullNameOn, title, isTextField, hasBorder, isSuccefullyUpdated } = this.state
+        const { isFullNameOn, isPhoneOn, isEmailOn, isTextField, hasBorder, isSuccefullyUpdated } = this.state
         return (
             <View style={styles.Settings}>
                 <View style={styles.SettingsHeaderContainer}>
@@ -102,18 +128,36 @@ class Settings extends Component {
                         </View>
                     </View>
                     <View style={styles.Form}>
-                        {title.map((item) => (
-                            <TouchableHighlight ref={this.myRefs} key={this.handleCamelize(item)} underlayColor="white">
-                                <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isFullNameOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
-                                    <Image style={styles.InputImage} source={isFullNameOn ? Icons.Login.UserOn : Icons.Login.User} />
-                                    {isTextField ?
-                                        <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleOnchange({ [this.handleCamelize(item)]: value })} />
-                                        :
-                                        <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{"Brayhan De Aza"}</Text>
-                                    }
-                                </View>
-                            </TouchableHighlight>
-                        ))}
+                        <TouchableHighlight ref={this.myRefs} underlayColor="white">
+                            <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isFullNameOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                                <Image style={styles.InputImage} source={isFullNameOn ? Icons.Login.UserOn : Icons.Login.User} />
+                                {isTextField ?
+                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
+                                    :
+                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{"Brayhan De Aza"}</Text>
+                                }
+                            </View>
+                        </TouchableHighlight>
+                        <TouchableHighlight ref={this.myRefs} underlayColor="white">
+                            <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isEmailOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                                <Image style={styles.InputImage} source={isEmailOn ? Icons.Login.EmailOn : Icons.Login.Email} />
+                                {isTextField ?
+                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
+                                    :
+                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{"brayhandeaza@email.com"}</Text>
+                                }
+                            </View>
+                        </TouchableHighlight>
+                        <TouchableHighlight ref={this.myRefs} underlayColor="white">
+                            <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isPhoneOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                                <Image style={styles.InputImage} source={isPhoneOn ? Icons.Login.PhoneOn : Icons.Login.Phone} />
+                                {isTextField ?
+                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" keyboardType="number-pad" maxLength={14} style={styles.Input} placeholder="Phone" value={this.state.phone.replace(/^(\d{3})(\d{3})(\d)+$/, "($1) $2-$3")} onChangeText={(value) => this.handlePhoneOnChange(value)} />
+                                    :
+                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{"(646) 982-73-56"}</Text>
+                                }
+                            </View>
+                        </TouchableHighlight>
                     </View>
                     {
                         isTextField ?
@@ -205,12 +249,10 @@ const styles = StyleSheet.create({
         fontWeight: "600"
     },
     Form: {
-        width: "90%",
-        // height: 200,
+        width: "100%",
         marginTop: 30,
-        paddingLeft: 20,
+        paddingLeft: 10,
         paddingRight: 20,
-        // backgroundColor: "red",
     },
     Input: {
         width: "100%",
@@ -318,13 +360,9 @@ const styles = StyleSheet.create({
     },
     InputContainerBox: {
         height: 60,
-        // backgroundColor: "red",
-
+        paddingLeft: 25,
         marginBottom: 20,
-        paddingLeft: 10,
-
         borderRadius: 5,
-        // borderColor: "rgba(000,000,000,0.1)",
 
         display: "flex",
         flexDirection: "row",

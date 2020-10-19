@@ -107,7 +107,6 @@ class Alretation extends Component {
 				details: this.state.errors.details,
 			}
 		})
-
 	}
 	handlePhoneNumberOnChange = (value) => {
 		this.setState({
