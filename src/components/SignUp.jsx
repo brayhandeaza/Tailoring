@@ -3,6 +3,10 @@ import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput, ScrollVie
 import { Icons } from "../constants/Image"
 import axios from "axios"
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connect } from "react-redux"
+
+// Components
+import Header from "./Header"
 
 
 class Register extends Component {
@@ -15,7 +19,12 @@ class Register extends Component {
             phone: '',
             password: '',
             confirmPassword: '',
-            formatedPhone: ''
+            formatedPhone: '',
+            isPhoneOn: false,
+            isEmailOn: false,
+            isFullNameOn: false,
+            isPasswordComfirmOn: false,
+            isPasswordOn: false
         }
     }
 
@@ -25,7 +34,6 @@ class Register extends Component {
                 users: users.data
             })
         })
-        console.log(this.state.users)
     }
 
     createUsers = async () => {
@@ -36,88 +44,99 @@ class Register extends Component {
             "email": email,
             "password": password,
             "phone": phone
-            
+
         }).then((User) => {
-            console.log(User.data);
             if (!User.data.error) {
                 this.setState({
                     fullName: "",
                     email: "",
                     password: "",
-                    phone: "",
-
+                    phone: ""
                 })
-
             }
         }).catch(err => console.log(err))
-
     }
 
     handleFullNameOnChange = (value) => {
-        console.log(value);
         this.setState({
-            fullName: value
+            isFullNameOn: value.length > 1 ? true : false,
+            textFieldValues: {
+                fullName: value
+            }
         })
     }
-    handleEmailOnChange = (value) => {
-        console.log(value);
 
+    validateEmail = (email) => {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    handleEmailOnChange = (value) => {
         this.setState({
-            email: value
+            isEmailOn: this.validateEmail(value) ? true : false,
+            textFieldValues: {
+                email: value
+            }
         })
     }
+
     handlePhoneOnChange = (value) => {
         this.setState({
+            isPhoneOn: value.length > 13 ? true : false,
             phone: value,
         })
-        console.log(this.state.phone)
     }
+
     handlePasswordOnChange = (value) => {
         this.setState({
+            isPasswordOn: value.length > 5 ? true : false,
             password: value
         })
     }
-    handleConfirmPasswordOnChange = (value) => {
+
+    handlePasswordComfirmOnChange = (value) => {
         this.setState({
-            confirmPassword: value
+            isPasswordComfirmOn: this.state.isPasswordComfirmOn === value ? true : false,
+            password: value
         })
     }
 
+    toLogin = () => {
+        this.props.dispatch({ type: "isLogIn" })
+    }
 
-    handleOnClick = () => {
-        console.log(this.state)
-    }
-    componentDidMount() {
-        this.fetchUsers()
-    }
     render() {
+        const { isPhoneOn, isEmailOn, isFullNameOn, isPasswordOn, isPasswordComfirmOn } = this.state
         return (
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView style={styles.Scroll} showsVerticalScrollIndicator={false}>
+                <Header isHidden={true} />
                 <View style={styles.Register}>
                     <View style={styles.FormTitle}>
                         <Text style={[styles.IconsOptionText, { color: "black", fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "bold" }]}>Create Account</Text>
                         <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontFamily: "Inter-Regular", textAlign: "center" }]}>Create a new account</Text>
                     </View>
-                    <View style={styles.InputContainer}>
-                        <View style={styles.InputContainerBox}>
-                            <Image style={styles.InputImage} source={Icons.Login.User} />
-                            <TextInput placeholderTextColor="#747374" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
-                        </View>
-                        <View style={styles.InputContainerBox}>
-                            <Image style={styles.InputImage} source={Icons.Login.Email} />
-                            <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
-                        </View>
-                        <View style={styles.InputContainerBox}>
-                            <Image style={styles.InputImage} source={Icons.Login.Phone} />
-                            <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="phone-pad" placeholder="Phone" value={this.state.phone.replace(/^(\d{3})(\d{3})(\d)+$/, "($1) $2-$3")} onChangeText={(value, e) => this.handlePhoneOnChange(value)} />
-                        </View>
-                        <View style={styles.InputContainerBox}>
-                            <Image style={styles.InputImage} source={Icons.Login.Password} />
-                            <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(e, value) => this.handlePasswordOnChange(value)} />
-                        </View>
-                        <View style={styles.InputContainerBox}>
-                            <Image style={styles.InputImage} source={Icons.Login.Password} />
-                            <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Confirm Password" onChangeText={(value) => this.handleConfirmPasswordOnChange(value)} />
+                    <View style={styles.Form}>
+                        <View style={styles.InputContainer}>
+                            <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isFullNameOn ? "#54b77c" : "white" }]}>
+                                <Image style={styles.InputImage} source={Icons.Login.User} />
+                                <TextInput placeholderTextColor="#747374" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
+                            </View>
+                            <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isEmailOn ? "#54b77c" : "white" }]}>
+                                <Image style={styles.InputImage} source={Icons.Login.Email} />
+                                <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
+                            </View>
+                            <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPhoneOn ? "#54b77c" : "white" }]}>
+                                <Image style={styles.InputImage} source={Icons.Login.Phone} />
+                                <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="number-pad" maxLength={14} placeholder="Phone" value={this.state.phone.replace(/^(\d{3})(\d{3})(\d)+$/, "($1) $2-$3")} onChangeText={(value) => this.handlePhoneOnChange(value)} />
+                            </View>
+                            <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPasswordOn ? "#54b77c" : "white" }]}>
+                                <Image style={styles.InputImage} source={Icons.Login.Password} />
+                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(value) => this.handlePasswordOnChange(value)} />
+                            </View>
+                            <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPasswordComfirmOn ? "#54b77c" : "white" }]}>
+                                <Image style={styles.InputImage} source={Icons.Login.Password} />
+                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Confirm Password" onChangeText={(value) => this.handlePasswordComfirmOnChange(value)} />
+                            </View>
                         </View>
                     </View>
                     <TouchableHighlight style={styles.Touchable} underlayColor="#2ba97a" onPress={this.createUsers}>
@@ -127,7 +146,7 @@ class Register extends Component {
                         <View style={{}}>
                             <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 16 }]}>Already register?</Text>
                         </View>
-                        <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.fetchUsers}>
+                        <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.toLogin}>
                             <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontFamily: "Inter-Regular", fontSize: 16, paddingLeft: 5 }]}>Log In</Text>
                         </TouchableHighlight>
                     </View>
@@ -138,6 +157,10 @@ class Register extends Component {
 }
 
 const styles = StyleSheet.create({
+    Scroll: {
+        width: "100%",
+        height: "100%"
+    },
     Register: {
         width: "100%",
         height: "100%",
@@ -166,17 +189,27 @@ const styles = StyleSheet.create({
     InputContainer: {
         width: "100%",
 
+
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
     },
+    Form: {
+        width: "100%",
+        marginTop: 30,
+        paddingLeft: 10,
+        paddingRight: 20,
+    },
     InputContainerBox: {
+        width: "90%",
         height: 60,
-
+        paddingLeft: 10,
         marginBottom: 20,
+        borderRadius: 5,
+
         display: "flex",
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         alignItems: "center"
     },
     InputImage: {
@@ -220,4 +253,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Register
+const mapStateToProps = (state) => {
+    return {
+        state
+    }
+}
+
+export default connect(mapStateToProps)(Register)

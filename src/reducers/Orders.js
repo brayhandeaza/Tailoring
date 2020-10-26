@@ -1,5 +1,6 @@
 let initalState = {
-    orderId: null
+    orderId: null,
+    
 }
 
 module.exports = (state = initalState, actions) => {

@@ -32,7 +32,7 @@ class Navegation extends Component {
             Actions.reset(view)
         }
     }
-
+ 
     isViews = (view) => {
         const isTrue = {
             // borderTopColor: "#9d7869",

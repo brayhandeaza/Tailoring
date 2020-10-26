@@ -19,6 +19,7 @@ class Tailor extends Component {
     }
 
     render() {
+        console.log(this.props.state)
         return (
             <View style={styles.Appointments}>
                 <View style={styles.ItemsOption}>

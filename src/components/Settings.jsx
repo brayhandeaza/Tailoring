@@ -83,18 +83,16 @@ class Settings extends Component {
                 email: value
             }
         })
-        console.log(this.state.textFieldValues)
     }
 
     handlePhoneOnChange = (value) => {
         this.setState({
-            isPhoneOn: value.length > 13 ? true : false,
+            
             textFieldValues: {
                 phone: value
             },
             phone: value
         })
-        console.log(this.state.textFieldValues)
     }
 
     handleEdit = () => {

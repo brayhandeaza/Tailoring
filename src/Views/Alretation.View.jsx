@@ -159,7 +159,6 @@ class Alretation extends Component {
 	componentDidMount() {
 		this.handleMinDate()
 		this.handleErrors()
-		console.log(this.props.state);
 	}
 
 	render() {
@@ -284,6 +283,7 @@ const styles = StyleSheet.create({
 	FormView: {
 		width: "100%",
 		height: "100%",
+		backgroundColor: "red",
 		marginTop: 30,
 		paddingTop: 20,
 		paddingLeft: 25,

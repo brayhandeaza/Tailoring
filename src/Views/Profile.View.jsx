@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, ScrollView, Dimensions } from 'react-native'
+import { StyleSheet, Text, ScrollView, Dimensions } from 'react-native'
 import axios from "axios"
 
 
@@ -19,16 +19,18 @@ class Profile extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			users: []
+			isLoged: true
 		}
 	}
-	
+
+
 	render() {
-		const { isLogedIn } = this.props.state
+		const { state } = this.props
 		return (
 			
 			<ScrollView contentContainerStyle={styles.Scroll}>
-				{!isLogedIn ? <Account /> : <SignUp/>}
+				{this.state.isLoged ? <Account /> : state.Login.isLogedIn ? <Login/> : <SignUp/> }
+				<Text style={[styles.Slogan, { color: "rgb(112,112,112)", fontFamily: "Inter-Regular", textAlign: "center" }]}>By Miracle Fit</Text>
 			</ScrollView> 
 		)
 	}
@@ -37,12 +39,25 @@ class Profile extends Component {
 const styles = StyleSheet.create({
 	Aside: {
 		flex: 1,
-		backgroundColor: "white",
+		// height: "100%",
+		backgroundColor: "pink",
 
 		display: "flex",
 		justifyContent: "flex-start",
 		alignItems: "center"
-	}
+	},
+	Scroll: {
+		width: "100%",
+		height: "100%",
+
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center"
+	},
+    Slogan: {
+        position: "absolute",
+        bottom: 50,
+    }
 })
 
 const mapStateToProps = (state) => {
