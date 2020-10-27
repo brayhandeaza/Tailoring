@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, TouchableHighlight, Image, Platform } from 'rea
 import { connect } from "react-redux"
 import { Icons } from "../constants/Image"
 import { Actions } from "react-native-router-flux"
+import AsyncStorage from "@react-native-community/async-storage"
+
 
 // components
 import Footer from "../components/Footer"
@@ -13,18 +15,35 @@ class Tailor extends Component {
         this.state = {}
     }
 
-    handleOnPress = (view, action) => {
+
+    handleOnPress = async (view, action) => {
         this.props.dispatch({ type: action })
         Actions.reset(view)
     }
 
+
+
+    getStorege = async () => {
+        const userId = await AsyncStorage.getItem("userId")
+        if (userId) {
+            // console.log(userId === true)
+            Actions.reset("_Profile")
+        } else {
+            this.props.dispatch({ type: "isHome" })
+        }
+    }
+
+    componentDidMount = async () => {
+        this.getStorege()
+        await AsyncStorage.setItem("userId", 11)
+    }
+
     render() {
-        console.log(this.props.state)
         return (
             <View style={styles.Appointments}>
                 <View style={styles.ItemsOption}>
-                    <Text style={[styles.IconsOptionText, { fontSize: 30, fontWeight: "600", fontFamily: "Inter-Regular"}]}>{"Your tailor."}</Text>
-                    <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 30, fontWeight: "600"}]}>{" At Home"}</Text>
+                    <Text style={[styles.IconsOptionText, { fontSize: 30, fontWeight: "600", fontFamily: "Inter-Regular" }]}>{"Your tailor."}</Text>
+                    <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontSize: 30, fontWeight: "600" }]}>{" At Home"}</Text>
                 </View>
                 <View>
                     <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", position: "relative", bottom: 15 }]}>{"By. Miracle Fit"}</Text>
@@ -35,9 +54,9 @@ class Tailor extends Component {
                 <TouchableHighlight style={styles.Touchable} underlayColor="#f6f6f6" onPress={(res) => this.handleOnPress("_Alteration", "isAlteration")}>
                     <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 20, textTransform: "uppercase" }]}>{"Get a Tailors"}</Text>
                 </TouchableHighlight>
-                <Footer />
+                <Footer/>
             </View>
-        );
+        )
     }
 }
 

@@ -1,5 +1,7 @@
 let initalState = {
-	isLogedIn: true
+	isLogedIn: true,
+	isUserLogedIn: false,
+	goToLogin: false
 }
 
 module.exports = (state = initalState, actions) => {
@@ -9,6 +11,10 @@ module.exports = (state = initalState, actions) => {
 			return Object.assign({}, state, { isLogedIn: true})
 		case "isLogOut":
 			return Object.assign({}, state, { isLogedIn: false})
+		case "isUserLogedIn":
+			return Object.assign({}, state, { isUserLogedIn: actions.payloa})
+		case "goToLogin":
+			return Object.assign({}, state, { goToLogin: actions.payloa})
 		default:
 			return state
 	}

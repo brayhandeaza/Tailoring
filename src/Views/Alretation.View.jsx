@@ -238,7 +238,6 @@ const styles = StyleSheet.create({
 	},
 	InputContainerBox: {
 		height: 60,
-		// backgroundColor: "red",
 
 		marginBottom: 20,
 		paddingLeft: 10,
@@ -283,7 +282,6 @@ const styles = StyleSheet.create({
 	FormView: {
 		width: "100%",
 		height: "100%",
-		backgroundColor: "red",
 		marginTop: 30,
 		paddingTop: 20,
 		paddingLeft: 25,

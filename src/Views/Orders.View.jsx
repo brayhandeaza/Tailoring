@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image, ScrollView, TouchableHighlight, Dimensio
 import { connect } from "react-redux"
 import { Actions } from 'react-native-router-flux'
 import io from "socket.io-client"
+import AsyncStorage from "@react-native-community/async-storage"
 
 // compoents
 import Footer from "../components/Footer"
@@ -29,8 +30,16 @@ class Orders extends Component {
         this.socket = io("https://alteration-database.herokuapp.com/")
     }
 
-    fetchAppointment = () => {
-        this.socket.emit("userId", 1)
+    handleCurrentUserId = async () => {
+        await AsyncStorage.getItem("userId").then((id) => {
+            console.log(parseInt(id));
+            return parseInt(id)
+        })
+    }
+
+    fetchAppointment = async () => {
+        const id = await AsyncStorage.getItem("userId")
+        this.socket.emit("userId", id)
         this.socket.on("appointment", (res) => {
             this.setState({
                 appointments: res
@@ -49,11 +58,10 @@ class Orders extends Component {
         this.props.dispatch({ type: "isAlteration" })
     }
 
-    componentDidMount() {
+   async componentDidMount() {
         this.fetchAppointment()
         console.log(this.state.appointments);
     }
-
 
     render() {
         return (

@@ -1,4 +1,4 @@
-import {combineReducers } from "redux"
+import { combineReducers } from "redux"
 
 // reducers
 const Footer = require("./Footer")

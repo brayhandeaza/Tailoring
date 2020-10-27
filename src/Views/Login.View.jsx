@@ -5,17 +5,16 @@ import AsyncStorage from "@react-native-community/async-storage"
 
 // components
 import Register from '../components/Register'
-import Login from '../components/Login'
+import SignIn from '../components/Login'
 import SignUp from '../components/SignUp'
-import Account from '../components/Profile'
-import Header from "../components/Header"
+
 
 // redux
 import { connect } from "react-redux"
 
 const { width, height } = Dimensions.get("screen")
 
-class Profile extends Component {
+class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -33,14 +32,14 @@ class Profile extends Component {
 	}
 
 	componentDidMount() {
-		//   this.handleIsUserLogedIn()
+	  this.handleIsUserLogedIn()
 	}
-
+	
 	render() {
 		const { isUserLogedIn, isLogedIn } = this.props.state.Login
 		return (
 			<ScrollView contentContainerStyle={styles.Scroll}>
-				<Account />
+				{isLogedIn ? <SignIn /> : <SignUp />}
 				<Text style={[styles.Slogan, { color: "rgb(112,112,112)", fontFamily: "Inter-Regular", textAlign: "center" }]}>By Miracle Fit</Text>
 			</ScrollView>
 		)
@@ -77,4 +76,4 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps)(Profile)
+export default connect(mapStateToProps)(Login)
