@@ -40,13 +40,12 @@ class Register extends Component {
 
     createUsers = async () => {
         const { fullName, email, password, phone } = this.state
-        // await axios.post("http://localhost:3000/users", {
         await axios.post("https://alteration-database.herokuapp.com/users/signup", {
             "fullName": fullName,
             "email": email,
             "password": password,
             "phone": phone,
-            "secreKey": Date.now().toLocaleString().replace(/\s/g, ''),
+            "secreKey": Date.now().toLocaleString().replace(/\s/g,''),
             "toToken": `${(Math.random() % 100).toString()}` + Date.now().toLocaleString().replace(/\s/g, '')
         }).then(async (User) => {
             if (!User.data.error) {
@@ -64,7 +63,7 @@ class Register extends Component {
     handleFullNameOnChange = (value) => {
         this.setState({
             isFullNameOn: value.length > 1 ? true : false,
-            fullName: value
+            fullName: value.toLowerCase()
         })
     }
 
@@ -76,7 +75,7 @@ class Register extends Component {
     handleEmailOnChange = (value) => {
         this.setState({
             isEmailOn: this.validateEmail(value) ? true : false,
-            email: value
+            email: value.toLowerCase()
         })
     }
 

@@ -3,10 +3,11 @@ import { StyleSheet, View, Text, Image, ScrollView, TouchableHighlight, Dimensio
 import { connect } from "react-redux"
 import { Actions } from 'react-native-router-flux'
 import io from "socket.io-client"
+import AsyncStorage from "@react-native-community/async-storage"
 
 // compoents
 import Footer from "../components/Footer"
-import { or } from 'react-native-reanimated'
+import { log, or } from 'react-native-reanimated'
 
 const { width } = Dimensions.get("screen")
 
@@ -25,16 +26,17 @@ class Orders extends Component {
             },
             filterTitle: "requested"
         }
-        // this.socket = io("http://localhost:3000/")
         this.socket = io("https://alteration-database.herokuapp.com/")
     }
 
-    fetchAppointment = () => {
-        this.socket.emit("userId", 1)
+    fetchAppointment = async () => {
+       const userId = await AsyncStorage.getItem("userId")
+        this.socket.emit("userId", userId)
         this.socket.on("appointment", (res) => {
             this.setState({
                 appointments: res
             })
+            console.log(res);
         })
     }
 

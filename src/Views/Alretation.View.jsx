@@ -9,6 +9,7 @@ import { connect } from "react-redux"
 import { Actions } from 'react-native-router-flux'
 import axios from "axios"
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import AsyncStorage from "@react-native-community/async-storage"
 
 
 
@@ -45,8 +46,9 @@ class Alretation extends Component {
 	}
 
 	handleMakeAppointment = async () => {
+		const token = await AsyncStorage.getItem("userId")
 		const { fullName, details, phone, address, date, time } = this.state
-		await axios.post(`https://alteration-database.herokuapp.com/appointments/1`, {
+		await axios.post(`https://alteration-database.herokuapp.com/appointments/${token}`, {
 			"fullName": fullName,
 			"details": details,
 			"phone": phone,
@@ -236,11 +238,8 @@ const styles = StyleSheet.create({
 	},
 	InputContainerBox: {
 		height: 60,
-		// backgroundColor: "red",
-
 		marginBottom: 20,
 		paddingLeft: 10,
-
 		borderRadius: 5,
 		borderWidth: 1,
 		borderColor: "rgba(000,000,000,0.1)",
@@ -281,7 +280,6 @@ const styles = StyleSheet.create({
 	FormView: {
 		width: "100%",
 		height: "100%",
-		backgroundColor: "red",
 		marginTop: 30,
 		paddingTop: 20,
 		paddingLeft: 25,

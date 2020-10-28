@@ -3,23 +3,20 @@ import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput, ScrollVie
 import { Icons } from "../constants/Image"
 import axios from "axios"
 import { connect } from "react-redux"
-
-import Header from "./Header"
-
+import AsyncStorage from "@react-native-community/async-storage"
+import { Actions } from 'react-native-router-flux'
 
 class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
             users: [],
-            fullName: '',
             email: '',
-            phone: '',
             password: '',
-            confirmPassword: '',
             formatedPhone: '',
             isEmailOn: false,
             isPasswordOn: false,
+            errorMessage: ''
         }
     }
 
@@ -31,25 +28,26 @@ class Register extends Component {
         })
     }
 
-    createUsers = async () => {
-        const { fullName, email, password, phone } = this.state
-        // await axios.post("http://localhost:3000/users", {
-        await axios.post("https://alteration-database.herokuapp.com/users", {
-            "fullName": fullName,
+    handleLogin = async () => {
+        const { email, password } = this.state
+        await axios.post("https://alteration-database.herokuapp.com/users/login", {
             "email": email,
-            "password": password,
-            "phone": phone
-
-        }).then((User) => {
-            if (!User.data.error) {
-                this.setState({
-                    email: "",
-                    password: ""
+            "password": password
+        }).then(async (res) => {
+            if (!res.data.error) {
+                await AsyncStorage.setItem("userId", res.data.User.token).then(() => {
+                    this.props.dispatch({ type: "isUserLogedIn", payloa: true })
+                    this.props.dispatch({ type: "isHome" })
+                    Actions.reset("_Home")
                 })
-
+            } else {
+                this.setState({
+                    errorMessage: res.data.message
+                })
             }
-        }).catch(err => console.log(err))
-
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     validateEmail = (email) => {
@@ -60,22 +58,17 @@ class Register extends Component {
     handleEmailOnChange = (value) => {
         this.setState({
             isEmailOn: this.validateEmail(value) ? true : false,
-            // isEmailOn: value.length > 5 ? true : false,
-            textFieldValues: {
-                email: value
-            }
+            email: value.toLowerCase(),
+            errorMessage: ''
         })
     }
 
     handlePasswordOnChange = (value) => {
         this.setState({
             isPasswordOn: value.length > 5 ? true : false,
-            password: value
+            password: value,
+            errorMessage: ''
         })
-    }
-
-    handleOnClick = () => {
-        
     }
 
     toRegister = () => {
@@ -90,7 +83,6 @@ class Register extends Component {
         const { isEmailOn, isPasswordOn } = this.state
         return (
             <View style={styles.Login}>
-                {/* <Header isHidden={true} /> */}
                 <View style={styles.Register}>
                     <View style={styles.FormTitle}>
                         <Text style={[styles.IconsOptionText, { color: "black", fontFamily: "Inter-Regular", fontSize: 30, fontWeight: "bold" }]}>Login</Text>
@@ -103,10 +95,11 @@ class Register extends Component {
                             </View>
                             <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPasswordOn ? "#54b77c" : "white" }]}>
                                 <Image style={styles.InputImage} source={Icons.Login.Password} />
-                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(e, value) => this.handlePasswordOnChange(value)} />
+                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(value) => this.handlePasswordOnChange(value)} />
                             </View>
+                            <Text style={[{ color: "#2ba97a", fontFamily: "Inter-Regular", fontSize: 14, paddingLeft: 5, color: "red", textAlign: "center" }]}>{this.state.errorMessage}</Text>
                         </View>
-                        <TouchableHighlight style={styles.Touchable} underlayColor="#2ba97a" onPress={this.createUsers}>
+                        <TouchableHighlight style={styles.Touchable} underlayColor="#2ba97a" onPress={this.handleLogin}>
                             <Text style={[styles.IconsOptionText, { color: "white", fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "600" }]}>Log In</Text>
                         </TouchableHighlight>
                         <View style={styles.toLogin}>

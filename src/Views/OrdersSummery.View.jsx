@@ -61,6 +61,7 @@ class Summery extends Component {
             orderId: id,
             dialogVisible: false
         })
+    console.log(this.formatDate(date));
     }
     componentDidMount() {
         this.handleAppoinments()
