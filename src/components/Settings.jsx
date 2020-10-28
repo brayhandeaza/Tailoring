@@ -3,17 +3,23 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableHighlight } from 're
 import { Icons, Img } from '../constants/Image'
 import { Actions, } from "react-native-router-flux";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import AsyncStorage from "@react-native-community/async-storage"
+import axios from 'axios'
 
 // redux
 import { connect } from "react-redux"
+import { log } from 'react-native-reanimated';
 
 class Settings extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            user: {},
             title: ["Full Name", "phone", "Age"],
             titleImg: [Icons.Login.UserOn, Icons.Login.Phone,],
-            phone: "",
+            errorMessage: "",
+            emailErrorColor: "#54b77c",
+            emailError: false,
 
             isAge: false,
             isUpdate: false,
@@ -41,17 +47,41 @@ class Settings extends Component {
     }
 
 
-    handleUpdateOnPress = () => {
-        this.setState({
-            isTextField: false,
-            isUpdate: true,
-            isInputEditable: true,
-            isSuccefullyUpdated: true,
-            hasBorder: false
+    handleUpdateOnPress = async () => {
+        const token = await AsyncStorage.getItem("userId")
+        const { fullName, email, phone } = this.state.textFieldValues
+        await axios.put(`https://alteration-database.herokuapp.com/users/${token}`, {
+            fullName: fullName,
+            email: email,
+            phone: phone,
+        }).then((User) => {
+            if (User.data.error) {
+                this.setState({
+                    errorMessage: User.data.message,
+                    emailErrorColor: "red"
+                })
+            } else {
+                this.setState({
+                    isTextField: false,
+                    isUpdate: true,
+                    isInputEditable: true,
+                    isSuccefullyUpdated: true,
+                    hasBorder: false,
+                    errorMessage: User.data.message,
+                    emailErrorColor: "#54b77c"
+                })
+            }
+            console.log(User.data)
+        }).catch(err => {
+            console.log(err)
         })
+
 
         setTimeout(() => {
             this.setState({
+                isFullNameOn: false,
+                isPhoneOn: false,
+                isEmailOn: false,
                 isSuccefullyUpdated: false
             })
         }, 2000)
@@ -65,7 +95,9 @@ class Settings extends Component {
         this.setState({
             isFullNameOn: value.length > 1 ? true : false,
             textFieldValues: {
-                fullName: value
+                fullName: value,
+                email: this.state.textFieldValues.email,
+                phone: this.state.textFieldValues.phone
             }
         })
     }
@@ -78,20 +110,22 @@ class Settings extends Component {
     handleEmailOnChange = (value) => {
         this.setState({
             isEmailOn: this.validateEmail(value) ? true : false,
-            // isEmailOn: value.length > 5 ? true : false,
             textFieldValues: {
-                email: value
+                fullName: this.state.textFieldValues.fullName,
+                email: value,
+                phone: this.state.textFieldValues.phone
             }
         })
     }
 
     handlePhoneOnChange = (value) => {
         this.setState({
-            
+            isPhoneOn: value.length == 14 ? true : false,
             textFieldValues: {
-                phone: value
-            },
-            phone: value
+                fullName: this.state.textFieldValues.fullName,
+                email: this.state.textFieldValues.email,
+                phone: value.replace(/^(\d{3})(\d{3})(\d)+$/, "($1) $2-$3")
+            }
         })
     }
 
@@ -102,15 +136,36 @@ class Settings extends Component {
         })
     }
 
+    handleFetchUser = async () => {
+        const token = await AsyncStorage.getItem("userId")
+        await axios.get(`https://alteration-database.herokuapp.com/users/${token}`).then((User) => {
+            const user = User.data.User
+            this.setState({
+                user: User.data.User,
+                textFieldValues: {
+                    fullName: user.fullName.trim().toLowerCase().replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))),
+                    phone: user.phone,
+                    email: user.email
+                }
+            })
+            console.log(User.data.User);
+        })
+    }
+
+    componentDidMount() {
+        this.handleFetchUser()
+    }
     render() {
         const { isFullNameOn, isPhoneOn, isEmailOn, isTextField, hasBorder, isSuccefullyUpdated } = this.state
+        const { email, phone, fullName } = this.state.textFieldValues
+
         return (
             <View style={styles.Settings}>
                 <View style={styles.SettingsHeaderContainer}>
                     <TouchableHighlight underlayColor="white" style={styles.TouchableArrow} onPress={this.handdleOnPressArrow}>
                         <Image style={styles.Arrow} source={Icons.Arrow} />
                     </TouchableHighlight>
-                    <View underlayColor="white" style={[styles.TouchableArrow, { width: 200 }]} onPress={this.handdleOnPressArrow}>
+                    <View underlayColor="white" style={[styles.TouchableArrow, { width: 200 }]}>
                         <Text style={{ color: "rgba(000, 000, 000, 0.7)", fontSize: 18, fontFamily: "Inter-Regular" }}>Hello, Brayhan</Text>
                     </View>
                     <TouchableHighlight underlayColor="white" style={styles.TouchableArrow}>
@@ -130,19 +185,19 @@ class Settings extends Component {
                             <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isFullNameOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
                                 <Image style={styles.InputImage} source={isFullNameOn ? Icons.Login.UserOn : Icons.Login.User} />
                                 {isTextField ?
-                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
+                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" value={fullName} style={[styles.Input]} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
                                     :
-                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{"Brayhan De Aza"}</Text>
+                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{fullName}</Text>
                                 }
                             </View>
                         </TouchableHighlight>
                         <TouchableHighlight ref={this.myRefs} underlayColor="white">
-                            <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isEmailOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                            <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isEmailOn ? this.state.emailErrorColor : "rgba(000,000,000,0.1)" }]}>
                                 <Image style={styles.InputImage} source={isEmailOn ? Icons.Login.EmailOn : Icons.Login.Email} />
                                 {isTextField ?
-                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
+                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" value={email} style={styles.Input} placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
                                     :
-                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{"brayhandeaza@email.com"}</Text>
+                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{email}</Text>
                                 }
                             </View>
                         </TouchableHighlight>
@@ -150,9 +205,9 @@ class Settings extends Component {
                             <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isPhoneOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
                                 <Image style={styles.InputImage} source={isPhoneOn ? Icons.Login.PhoneOn : Icons.Login.Phone} />
                                 {isTextField ?
-                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" keyboardType="number-pad" maxLength={14} style={styles.Input} placeholder="Phone" value={this.state.phone.replace(/^(\d{3})(\d{3})(\d)+$/, "($1) $2-$3")} onChangeText={(value) => this.handlePhoneOnChange(value)} />
+                                    <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} keyboardType="number-pad" maxLength={14} placeholder="Phone" value={phone} onChangeText={(value) => this.handlePhoneOnChange(value)} />
                                     :
-                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{"(646) 982-73-56"}</Text>
+                                    <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{phone}</Text>
                                 }
                             </View>
                         </TouchableHighlight>
@@ -167,7 +222,7 @@ class Settings extends Component {
                                 <Text style={{ color: "rgba(43, 169, 123, 1)", fontSize: 18, textTransform: "capitalize", textDecorationLine: "underline" }}>{!isSuccefullyUpdated ? "Update Value" : ""}</Text>
                             </TouchableHighlight>
                     }
-                    <Text style={{ color: "green", fontSize: 15 }}>{isSuccefullyUpdated ? "Succefully updated" : ""}</Text>
+                    <Text style={{ color: this.state.emailErrorColor, fontSize: 15 }}>{isSuccefullyUpdated ? "Succefully updated" : this.state.errorMessage}</Text>
                 </KeyboardAwareScrollView>
             </View>
         )
@@ -265,6 +320,7 @@ const styles = StyleSheet.create({
         width: "90%",
         height: 75,
         paddingTop: 15,
+        color: "red",
 
         display: "flex",
         justifyContent: "center",
