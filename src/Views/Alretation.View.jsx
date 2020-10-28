@@ -54,7 +54,6 @@ class Alretation extends Component {
 			"date": date,
 			"time": time
 		}).then((res) => {
-			console.log(res);
 			this.props.dispatch({ type: "isOrders" })
 			this.setState({
 				fullName: "",
@@ -81,7 +80,6 @@ class Alretation extends Component {
 			activeDay: e.dateString,
 			date: e.dateString
 		})
-		console.log(e.dateString);
 	}
 
 	handleMinDate = () => {

@@ -41,7 +41,7 @@ class Orders extends Component {
     handleOnPress = (id) => {
         Actions.reset("_Summery")
         this.props.dispatch({ type: "summey", payload: Object.assign({}, id) })
-        // console.log(id);
+        
     }
 
     handleOnPressEmpty = () => {
@@ -51,7 +51,6 @@ class Orders extends Component {
 
     componentDidMount() {
         this.fetchAppointment()
-        console.log(this.state.appointments);
         this.props.dispatch({ type: "isOrders" })
     }
 

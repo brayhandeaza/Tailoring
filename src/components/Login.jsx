@@ -75,7 +75,7 @@ class Register extends Component {
     }
 
     handleOnClick = () => {
-        // console.log(this.state)
+        
     }
 
     toRegister = () => {

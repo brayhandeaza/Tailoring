@@ -28,12 +28,9 @@ let isLoginInitial
 
 
 const getUser = async () => {
-	await AsyncStorage.setItem("userId", "11")
-	// await AsyncStorage.removeItem("userId")
+	// await AsyncStorage.setItem("userId", "11")
 
 	const storage = await AsyncStorage.getItem("userId")
-
-	console.log(storage);
 
 	isHomeInitial = storage ? true : false
 	isLoginInitial= !storage ? true : false
@@ -42,8 +39,6 @@ const getUser = async () => {
 
 export default function App() {
 	getUser()
-
-	console.log({home: isHomeInitial, login: isLoginInitial})
 
 	let [isFontLoaded, error] = useFonts({
 		"Inter-Regular": Inter_400Regular,

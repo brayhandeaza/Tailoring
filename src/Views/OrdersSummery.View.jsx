@@ -22,7 +22,6 @@ class Summery extends Component {
 
     handleDeleteCancelOrder = async (id) => {
         await axios.delete(`https://alteration-database.herokuapp.com/appointments/${id}`).then((res) => {
-            console.log(res);
             this.setState({
                 dialogVisible: false
             })
