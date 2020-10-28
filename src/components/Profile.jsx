@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, Dimensions, TouchableHighlight } from 'react-native'
 import { Icons, Img } from '../constants/Image'
 import { Actions } from 'react-native-router-flux'
+import AsyncStorage from "@react-native-community/async-storage"
 
 // redux
 import { connect } from "react-redux"
@@ -51,6 +52,14 @@ class Profile extends Component {
         }
         this.props.dispatch({ type: pView })
     }
+
+    handleLogOut = async () => {
+        await AsyncStorage.removeItem("userId")
+        this.props.dispatch({ type: "isUserLogedIn", payloa: true })
+        this.props.dispatch({type: "isProfile" })
+        Actions.reset("_Profile")
+    }
+
     render() {
         const { isNotificationOn, title } = this.state
         return (
@@ -78,7 +87,7 @@ class Profile extends Component {
                                 : null}
                         </View>
                     ))}
-                    <TouchableHighlight style={styles.Logout} underlayColor="white">
+                    <TouchableHighlight style={styles.Logout} underlayColor="white" onPress={this.handleLogOut}>
                         <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular" , color: "rgba(43, 169, 123, 1)"}]}>{"Log Out"}</Text>
                     </TouchableHighlight>
                 </View>

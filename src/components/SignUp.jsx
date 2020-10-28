@@ -123,7 +123,7 @@ class Register extends Component {
                             </View>
                             <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isEmailOn ? "#54b77c" : "white" }]}>
                                 <Image style={styles.InputImage} source={Icons.Login.Email} />
-                                <TextInput placeholderTextColor="#747374" style={styles.Input} autoCorrect={false} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
+                                <TextInput placeholderTextColor="#747374" style={styles.Input} autoCorrect={false} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value.toLowerCase())} />
                             </View>
                             <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPhoneOn ? "#54b77c" : "white" }]}>
                                 <Image style={styles.InputImage} source={Icons.Login.Phone} />

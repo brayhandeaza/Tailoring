@@ -28,8 +28,9 @@ let isLoginInitial
 
 
 const getUser = async () => {
-	// await AsynchStorege.setItem("userId", "11")
+	await AsyncStorage.setItem("userId", "11")
 	// await AsyncStorage.removeItem("userId")
+
 	const storage = await AsyncStorage.getItem("userId")
 
 	console.log(storage);
