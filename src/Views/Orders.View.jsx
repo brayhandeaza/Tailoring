@@ -52,6 +52,7 @@ class Orders extends Component {
     componentDidMount() {
         this.fetchAppointment()
         console.log(this.state.appointments);
+        this.props.dispatch({ type: "isOrders" })
     }
 
 

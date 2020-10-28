@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput, ScrollView, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput } from 'react-native'
 import { Icons } from "../constants/Image"
 import axios from "axios"
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from "react-redux"
+import AsyncStorage from "@react-native-community/async-storage"
+import { Actions } from 'react-native-router-flux'
 
 // Components
 import Header from "./Header"
@@ -39,20 +41,22 @@ class Register extends Component {
     createUsers = async () => {
         const { fullName, email, password, phone } = this.state
         // await axios.post("http://localhost:3000/users", {
-        await axios.post("https://alteration-database.herokuapp.com/users", {
+        await axios.post("https://alteration-database.herokuapp.com/users/signup", {
             "fullName": fullName,
             "email": email,
             "password": password,
-            "phone": phone
-
-        }).then((User) => {
+            "phone": phone,
+            "secreKey": Date.now().toLocaleString().replace(/\s/g, ''),
+            "toToken": `${(Math.random() % 100).toString()}` + Date.now().toLocaleString().replace(/\s/g, '')
+        }).then(async (User) => {
             if (!User.data.error) {
-                this.setState({
-                    fullName: "",
-                    email: "",
-                    password: "",
-                    phone: ""
+                await AsyncStorage.setItem("userId", User.data.User.token).then(() => {
+                    this.props.dispatch({ type: "isUserLogedIn", payloa: true })
+                    this.props.dispatch({ type: "isHome" })
+                    Actions.reset("_Home")
                 })
+            } else {
+                console.log({ state: this.state, User });
             }
         }).catch(err => console.log(err))
     }
@@ -60,9 +64,7 @@ class Register extends Component {
     handleFullNameOnChange = (value) => {
         this.setState({
             isFullNameOn: value.length > 1 ? true : false,
-            textFieldValues: {
-                fullName: value
-            }
+            fullName: value
         })
     }
 
@@ -74,9 +76,7 @@ class Register extends Component {
     handleEmailOnChange = (value) => {
         this.setState({
             isEmailOn: this.validateEmail(value) ? true : false,
-            textFieldValues: {
-                email: value
-            }
+            email: value
         })
     }
 
@@ -96,7 +96,7 @@ class Register extends Component {
 
     handlePasswordComfirmOnChange = (value) => {
         this.setState({
-            isPasswordComfirmOn: this.state.isPasswordComfirmOn === value ? true : false,
+            isPasswordComfirmOn: value.length > 13 ? true : false,
             password: value
         })
     }
@@ -119,23 +119,23 @@ class Register extends Component {
                         <View style={styles.InputContainer}>
                             <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isFullNameOn ? "#54b77c" : "white" }]}>
                                 <Image style={styles.InputImage} source={Icons.Login.User} />
-                                <TextInput placeholderTextColor="#747374" style={styles.Input} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
+                                <TextInput placeholderTextColor="#747374" style={styles.Input} autoCorrect={false} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
                             </View>
                             <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isEmailOn ? "#54b77c" : "white" }]}>
                                 <Image style={styles.InputImage} source={Icons.Login.Email} />
-                                <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
+                                <TextInput placeholderTextColor="#747374" style={styles.Input} autoCorrect={false} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
                             </View>
                             <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPhoneOn ? "#54b77c" : "white" }]}>
                                 <Image style={styles.InputImage} source={Icons.Login.Phone} />
-                                <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="number-pad" maxLength={14} placeholder="Phone" value={this.state.phone.replace(/^(\d{3})(\d{3})(\d)+$/, "($1) $2-$3")} onChangeText={(value) => this.handlePhoneOnChange(value)} />
+                                <TextInput placeholderTextColor="#747374" style={styles.Input} autoCorrect={false} keyboardType="number-pad" maxLength={14} placeholder="Phone" value={this.state.phone.replace(/^(\d{3})(\d{3})(\d)+$/, "($1) $2-$3")} onChangeText={(value) => this.handlePhoneOnChange(value)} />
                             </View>
                             <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPasswordOn ? "#54b77c" : "white" }]}>
                                 <Image style={styles.InputImage} source={Icons.Login.Password} />
-                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(value) => this.handlePasswordOnChange(value)} />
+                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} autoCorrect={false} placeholder="Password" onChangeText={(value) => this.handlePasswordOnChange(value)} />
                             </View>
                             <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPasswordComfirmOn ? "#54b77c" : "white" }]}>
                                 <Image style={styles.InputImage} source={Icons.Login.Password} />
-                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Confirm Password" onChangeText={(value) => this.handlePasswordComfirmOnChange(value)} />
+                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} autoCorrect={false} placeholder="Confirm Password" onChangeText={(value) => this.handlePasswordComfirmOnChange(value)} />
                             </View>
                         </View>
                     </View>
