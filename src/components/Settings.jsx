@@ -160,28 +160,10 @@ class Settings extends Component {
 
         return (
             <View style={styles.Settings}>
-                <View style={styles.SettingsHeaderContainer}>
-                    <TouchableHighlight underlayColor="white" style={styles.TouchableArrow} onPress={this.handdleOnPressArrow}>
-                        <Image style={styles.Arrow} source={Icons.Arrow} />
-                    </TouchableHighlight>
-                    <View underlayColor="white" style={[styles.TouchableArrow, { width: 200 }]}>
-                        <Text style={{ color: "rgba(000, 000, 000, 0.7)", fontSize: 18, fontFamily: "Inter-Regular" }}>Hello, Brayhan</Text>
-                    </View>
-                    <TouchableHighlight underlayColor="white" style={styles.TouchableArrow}>
-                        <View style={[styles.SettingsHeaderContainerImgBox]}>
-                            <Image style={[styles.Arrow, { width: 18, height: 18 }]} source={Icons.Gift} />
-                        </View>
-                    </TouchableHighlight>
-                </View>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={styles.Scroll}>
-                    <View style={styles.SettingsPictureContainer}>
-                        <View style={styles.SettingsPictureImgBox}>
-                            <Image style={styles.SettingsPicture} source={Img.Avatar} />
-                        </View>
-                    </View>
                     <View style={styles.Form}>
                         <TouchableHighlight ref={this.myRefs} underlayColor="white">
-                            <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isFullNameOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                            <View style={[styles.InputContainerBox, { paddingLeft: isTextField ? 20 : 0, borderWidth: hasBorder ? 1 : 0, borderColor: isFullNameOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
                                 <Image style={styles.InputImage} source={isFullNameOn ? Icons.Login.UserOn : Icons.Login.User} />
                                 {isTextField ?
                                     <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" value={fullName} style={[styles.Input]} placeholder="Full Name" onChangeText={(value) => this.handleFullNameOnChange(value)} />
@@ -191,7 +173,7 @@ class Settings extends Component {
                             </View>
                         </TouchableHighlight>
                         <TouchableHighlight ref={this.myRefs} underlayColor="white">
-                            <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isEmailOn ? this.state.emailErrorColor : "rgba(000,000,000,0.1)" }]}>
+                            <View style={[styles.InputContainerBox, { paddingLeft: isTextField ? 20 : 0, borderWidth: hasBorder ? 1 : 0, borderColor: isEmailOn ? this.state.emailErrorColor : "rgba(000,000,000,0.1)" }]}>
                                 <Image style={styles.InputImage} source={isEmailOn ? Icons.Login.EmailOn : Icons.Login.Email} />
                                 {isTextField ?
                                     <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" value={email} style={styles.Input} placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
@@ -201,7 +183,7 @@ class Settings extends Component {
                             </View>
                         </TouchableHighlight>
                         <TouchableHighlight ref={this.myRefs} underlayColor="white">
-                            <View style={[styles.InputContainerBox, { borderWidth: hasBorder ? 1 : 0, borderColor: isPhoneOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                            <View style={[styles.InputContainerBox, { paddingLeft: isTextField ? 20 : 0, borderWidth: hasBorder ? 1 : 0, borderColor: isPhoneOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
                                 <Image style={styles.InputImage} source={isPhoneOn ? Icons.Login.PhoneOn : Icons.Login.Phone} />
                                 {isTextField ?
                                     <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} keyboardType="number-pad" maxLength={14} placeholder="Phone" value={phone} onChangeText={(value) => this.handlePhoneOnChange(value)} />
@@ -232,6 +214,7 @@ const styles = StyleSheet.create({
     Settings: {
         width: "100%",
         height: "100%",
+        paddingLeft: 25,
 
         display: "flex",
         justifyContent: "flex-start",
@@ -303,8 +286,8 @@ const styles = StyleSheet.create({
     Form: {
         width: "100%",
         marginTop: 30,
-        paddingLeft: 10,
-        paddingRight: 20,
+        // paddingLeft: 10,
+        // paddingRight: 20,
     },
     Input: {
         width: "100%",
@@ -316,7 +299,7 @@ const styles = StyleSheet.create({
         borderColor: "red"
     },
     InputBox: {
-        width: "90%",
+        width: "100%",
         height: 75,
         paddingTop: 15,
         color: "red",
@@ -345,7 +328,7 @@ const styles = StyleSheet.create({
         width: 300,
         height: 60,
         borderRadius: 10,
-        // marginTop: 5,
+        marginTop: 5,
         marginBottom: 20,
         backgroundColor: "white",
         borderWidth: 0.5,
@@ -367,7 +350,6 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         marginBottom: 10,
-
 
         shadowColor: "#000",
         shadowOffset: {
@@ -413,10 +395,8 @@ const styles = StyleSheet.create({
     },
     InputContainerBox: {
         height: 60,
-        paddingLeft: 25,
-        marginBottom: 20,
+        marginBottom: 15,
         borderRadius: 5,
-
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-start",

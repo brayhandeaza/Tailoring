@@ -3,18 +3,21 @@ import { StyleSheet, Text, View, Image, Dimensions, TouchableHighlight } from 'r
 import { Icons, Img } from '../constants/Image'
 import { Actions } from 'react-native-router-flux'
 import AsyncStorage from "@react-native-community/async-storage"
+import { Header, Left, Right } from "native-base";
+
+// components
+import Settings from "../components/Settings"
 
 // redux
 import { connect } from "react-redux"
-import { color, log } from 'react-native-reanimated'
 
-const { width, height } = Dimensions.get("screen")
+const {height } = Dimensions.get("screen")
 
 class Profile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: ["Notifications", "Settings"],
+            title: ["Notifications"],
             isNotificationOn: true
         }
     }
@@ -56,7 +59,7 @@ class Profile extends Component {
     handleLogOut = async () => {
         await AsyncStorage.removeItem("userId")
         this.props.dispatch({ type: "isUserLogedIn", payloa: true })
-        this.props.dispatch({type: "isProfile" })
+        this.props.dispatch({ type: "isProfile" })
         Actions.reset("_Profile")
     }
 
@@ -64,32 +67,34 @@ class Profile extends Component {
         const { isNotificationOn, title } = this.state
         return (
             <View style={styles.Profile}>
-                <View style={styles.Header}>
-                    <TouchableHighlight underlayColor="white" style={styles.Touchable} onPress={this.handdleOnPressArrow}>
-                        <Image style={styles.Arrow} source={Icons.Arrow} />
-                    </TouchableHighlight>
-                </View>
+                <Header style={styles.Header}>
+                    <Left>
+                        <TouchableHighlight underlayColor="white" style={styles.Touchable} onPress={this.handdleOnPressArrow}>
+                            <Image style={styles.Arrow} source={Icons.Arrow} />
+                        </TouchableHighlight>
+                    </Left>
+                    <Right>
+                        <TouchableHighlight style={styles.Logout} underlayColor="white" onPress={this.handleLogOut}>
+                            <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular", color: "rgba(43, 169, 123, 1)"}]}>{"Log Out"}</Text>
+                        </TouchableHighlight>
+                    </Right>
+                </Header>
                 <View style={styles.ProfilePictureContainer}>
                     <View style={styles.ProfilePictureImgBox}>
                         <Image style={styles.ProfilePicture} source={Img.Avatar} />
                     </View>
                 </View>
                 <View style={styles.ProfileTitlesContainer}>
-                    {title.map((title, i) => (
-                        <View key={i} style={styles.ProfileTitlesBox}>
-                            <TouchableHighlight underlayColor="white" onPress={title != "Notifications" ? (e) => this.handleTitleOnPress(e, `_${title.replace(" ", "")}`) : null}>
-                                <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular" }]}>{title}</Text>
-                            </TouchableHighlight>
-                            {title == "Notifications" ?
-                                <TouchableHighlight underlayColor="rgba(000,000,000,0.1)" style={[styles.PushBotsContainer, { backgroundColor: isNotificationOn ? "rgba(43, 169, 123, 0.14)" : "rgba(000,000,000,0.1)", alignItems: isNotificationOn ? "flex-end" : "flex-start" }]} onPress={this.handleNotificationstate}>
-                                    <View style={[styles.PushBotsButton, { backgroundColor: isNotificationOn ? "rgba(43, 169, 123, 1)" : "white" }]}></View>
-                                </TouchableHighlight>
-                                : null}
-                        </View>
-                    ))}
-                    <TouchableHighlight style={styles.Logout} underlayColor="white" onPress={this.handleLogOut}>
-                        <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular" , color: "rgba(43, 169, 123, 1)"}]}>{"Log Out"}</Text>
-                    </TouchableHighlight>
+                    <View style={styles.ProfileTitlesBox}>
+                        <TouchableHighlight underlayColor="white" onPress={title != "Notifications" ? (e) => this.handleTitleOnPress(e, `_${title.replace(" ", "")}`) : null}>
+                            <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular" }]}>Notifications</Text>
+                        </TouchableHighlight>
+
+                        <TouchableHighlight underlayColor="rgba(000,000,000,0.1)" style={[styles.PushBotsContainer, { backgroundColor: isNotificationOn ? "rgba(43, 169, 123, 0.14)" : "rgba(000,000,000,0.1)", alignItems: isNotificationOn ? "flex-end" : "flex-start" }]} onPress={this.handleNotificationstate}>
+                            <View style={[styles.PushBotsButton, { backgroundColor: isNotificationOn ? "rgba(43, 169, 123, 1)" : "white" }]}></View>
+                        </TouchableHighlight>
+                    </View>
+                    <Settings />
                 </View>
             </View>
         )
@@ -106,23 +111,23 @@ const styles = StyleSheet.create({
 
         display: "flex",
         justifyContent: "center",
+        alignItems: "center"
 
     },
     Header: {
-        width: "100%",
-        height: 100,
-        backgroundColor: "rgba(255, 255, 255, 0.3)",
-
-    },
-    Touchable: {
-        width: "100%",
-        height: 100,
-        paddingLeft: 25,
-        paddingBottom: 10,
+        backgroundColor: "white",
+        borderBottomColor: "white",
 
         display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "flex-start"
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    Touchable: {
+        paddingLeft: 10,
+
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
     Arrow: {
         width: 25,
@@ -179,7 +184,6 @@ const styles = StyleSheet.create({
     SloganContainer: {
         width: "100%",
         height: 85,
-        // backgroundColor: "red",
 
         display: "flex",
         justifyContent: "center",
@@ -216,7 +220,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: height - (160 + 110),
         paddingTop: 50,
-        paddingLeft: 30,
+        
         paddingRight: 35,
 
         display: "flex",
@@ -224,16 +228,17 @@ const styles = StyleSheet.create({
         alignItems: "flex-start"
     },
     ProfileHeaderText: {
-        fontSize: 18,
+        fontSize: 16,
         color: "rgba(000,000,000, 0.6)",
         fontWeight: "600"
     },
     ProfileTitlesBox: {
         width: "100%",
-        height: 75,
+        height: 50,
+        paddingLeft: 25,
 
-        borderBottomWidth: 0.6,
-        borderColor: "rgba(000,000,000, 0.2)",
+        // borderBottomWidth: 0.6,
+        // borderColor: "rgba(000,000,000, 0.2)",
 
         display: "flex",
         flexDirection: "row",
@@ -243,8 +248,7 @@ const styles = StyleSheet.create({
         // backgroundColor: "red"
     },
     Logout: {
-        width: "100%",
-        height: 75,
+        paddingRight: 10,
 
         display: "flex",
         justifyContent: "center",

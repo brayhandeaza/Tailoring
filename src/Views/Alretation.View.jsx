@@ -18,11 +18,13 @@ import AsyncStorage from "@react-native-community/async-storage"
 // componets
 import Header from "../components//Header"
 import Address from '../Views/Address.View'
+import { log } from 'react-native-reanimated'
 
 class Alretation extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			dates: [],
 			errors: {
 				fullName: "",
 				phone: "",
@@ -43,6 +45,41 @@ class Alretation extends Component {
 			date: this.handleMinDate(),
 			time: "8:00 am"
 		}
+	}
+
+	handleGroupDate = (arr) => {
+		const grp = arr.reduce((r, c, i, a) => {
+			r[c] = [...r[c] || [], c]
+			r[c] = (a[i + 1] != c && r[c].length == 1) ? r[c][0] : r[c]
+			return r
+		}, {})
+		return Object.values(grp)
+	}
+
+	handleFetcheAppointmentByDate = async (activeDay) => {
+		let dates = []
+		let res = {
+			[activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true },
+		}
+		await axios.get("https://alteration-database.herokuapp.com/appointments/").then((appointments) => {
+			const appointmentsDate = appointments.data.Appointments
+			for (let i = 0; i < appointmentsDate.length; i++) {
+				dates.push(appointmentsDate[i].date)
+			}
+		})
+
+		const dateGrouped = this.handleGroupDate(dates)
+
+		dateGrouped.forEach(date => {
+			res[date[0]] = { dotColor: 'white', disabled: true, selected: date[0].length > 4 ? false : true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true }
+		})
+
+		console.log(res)
+		this.setState({
+			dates: res
+		})
+
+
 	}
 
 	handleMakeAppointment = async () => {
@@ -78,6 +115,7 @@ class Alretation extends Component {
 	}
 
 	handleDayOnPress = (e) => {
+		console.log(); e
 		this.setState({
 			activeDay: e.dateString,
 			date: e.dateString
@@ -108,6 +146,7 @@ class Alretation extends Component {
 			}
 		})
 	}
+
 	handlePhoneNumberOnChange = (value) => {
 		this.setState({
 			phone: value,
@@ -121,6 +160,7 @@ class Alretation extends Component {
 		})
 
 	}
+
 	handleAddressOnChange = (value) => {
 		this.setState({
 			address: value,
@@ -159,6 +199,7 @@ class Alretation extends Component {
 	componentDidMount() {
 		this.handleMinDate()
 		this.handleErrors()
+		this.handleFetcheAppointmentByDate(this.state.activeDay)
 	}
 
 	render() {
@@ -170,9 +211,7 @@ class Alretation extends Component {
 					<Calendar
 						minDate={this.handleMinDate()}
 						onDayPress={this.handleDayOnPress}
-						markedDates={{
-							[activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true },
-						}}
+						markedDates={Object.assign({}, this.state.dates, {[activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true }})}
 						enableSwipeMonths={true}
 						theme={{
 							arrowColor: "#2ba97a",
