@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
         borderColor: "rgba(112,112,112,0.3)",
 
         shadowColor: "#000",
+        elevation: 3,
         shadowOffset: {
             width: 0,
             height: 2
@@ -260,6 +261,7 @@ const styles = StyleSheet.create({
 
 
         shadowColor: "#000",
+        elevation: 3,
         shadowOffset: {
             width: 0,
             height: 2

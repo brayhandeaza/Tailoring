@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Tailor-Front-End",
+    "android":{"softwareKeyboardLayoutMode": "pan"},
     "slug": "Tailor-Front-End",
     "platforms": [
       "ios",

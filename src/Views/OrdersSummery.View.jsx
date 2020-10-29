@@ -4,7 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from "react-redux"
 import { Icons } from "../constants/Image";
 import axios from "axios"
-import { Dialog, ConfirmDialog } from 'react-native-simple-dialogs';
+import { Dialog, ConfirmDialog,  } from 'react-native-simple-dialogs';
 
 class Summery extends Component {
     constructor(props) {

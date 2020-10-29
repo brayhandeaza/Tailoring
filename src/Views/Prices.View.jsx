@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, TextInput, TouchableHighlight, ScrollView, Dimensions, Image } from 'react-native'
+import { StyleSheet, View, Text, TextInput, TouchableHighlight, ScrollView, Dimensions, Image, Platform } from 'react-native'
 import { connect } from "react-redux"
 import io from "socket.io-client"
 import Svg, { Path } from "react-native-svg"
@@ -138,7 +138,8 @@ class Prices extends Component {
 
 const styles = StyleSheet.create({
     Appointments: {
-        flex: 1,
+        width: "100%",
+        height: "100%",
         backgroundColor: "white",
     },
     PriceTitleContainer: {
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
 
     },
     Scroll: {
-        width,
+        // width,
         paddingBottom: 125,
         marginTop: 10,
 
@@ -203,10 +204,10 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: "white",
         borderWidth: 0.5,
-
-        borderColor: "rgba(112,112,112,0.2)",
+        borderColor: Platform.OS == "android" ? "rgba(112,112,112,0.4)" : "rgba(112,112,112,0.2)",
 
         shadowColor: "#000",
+        elevation: 3,
         shadowOffset: {
             width: 0,
             height: 2
@@ -258,9 +259,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: "white",
         borderWidth: 0.5,
-        borderColor: "rgba(112,112,112,0.2)",
+        borderColor: Platform.OS == "android" ? "rgba(112,112,112, 0.4)" : "rgba(112,112,112,0.2)",
 
         shadowColor: "#000",
+        elevation: 3,
         shadowOffset: {
             width: 0,
             height: 2

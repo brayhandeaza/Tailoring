@@ -19,6 +19,8 @@ module.exports = (state = initalState, actions) => {
             return Object.assign({}, state, {isHome: false, isOrders: false, isPrices: true, isProfile: false, isFooter: true, pView: "isPrices"})
 		case "isProfile":
             return Object.assign({}, state, {isHome: false, isOrders: false, isPrices: false, isProfile: true, isFooter: false,})
+		case "isPolicy":
+            return Object.assign({}, state, {isHome: false, isOrders: false, isPrices: false, isProfile: false, isFooter: true,})
 		case "isFooter":
             return Object.assign({}, state, {isHome: false, isOrders: false, isPrices: false, isProfile: true, isFooter: true, pView: "isFooter"})
         default:

@@ -148,7 +148,6 @@ class Settings extends Component {
                     email: user.email
                 }
             })
-            console.log(User.data.User);
         })
     }
 

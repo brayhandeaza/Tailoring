@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-community/async-storage"
 
 // redux
 import { connect } from "react-redux"
-import { color } from 'react-native-reanimated'
+import { color, log } from 'react-native-reanimated'
 
 const { width, height } = Dimensions.get("screen")
 
@@ -14,7 +14,7 @@ class Profile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: ["Notifications", "Settings", "Privacy Policy"],
+            title: ["Notifications", "Settings"],
             isNotificationOn: true
         }
     }

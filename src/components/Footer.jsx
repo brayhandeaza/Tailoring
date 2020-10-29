@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput, Platform } from 'react-native'
 import { Actions } from 'react-native-router-flux'
+import { FooterTab } from "native-base";
 
 import { Icons } from '../constants/Image'
 import { connect } from "react-redux";
@@ -32,7 +33,7 @@ class Navegation extends Component {
             Actions.reset(view)
         }
     }
- 
+
     isViews = (view) => {
         const isTrue = {
             // borderTopColor: "#9d7869",
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
         height: 70,
         borderColor: "#ccc",
         borderTopWidth: 0,
+
         position: "absolute",
         bottom: 20,
 
@@ -92,12 +94,13 @@ const styles = StyleSheet.create({
         height: 55,
         borderRadius: 10,
         backgroundColor: "white",
-        borderWidth: 0.5,
-        borderColor: "rgba(112,112,112,0.4)",
+        borderWidth:  0.5,
+        borderColor: Platform.OS == "android" ? "rgba(112,112,112,0.5)" : "rgba(112,112,112,0.4)",
         paddingBottom: 10,
 
 
         shadowColor: "#000",
+        elevation: 1,
         shadowOffset: {
             width: 0,
             height: 3

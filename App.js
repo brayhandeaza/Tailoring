@@ -14,6 +14,8 @@ import Settings from './src/Views/Settings.View'
 import Summery from './src/Views/OrdersSummery.View'
 import Tailor from './src/Views/TailorProfile.View'
 import Address from './src/Views/Address.View'
+import Policy from './src/Views/Policy.View'
+// import Footer from './src/components/Footer'
 
 // redux
 import { createStore } from "redux"
@@ -59,7 +61,7 @@ export default function App() {
 						<Scene modal key="Alteration" component={Alretation} hideNavBar gestureEnable={false} initial={false}/>
 						<Scene modal key="Prices" component={Prices} hideNavBar gestureEnable={false} initial={false}/>
 						<Scene modal key="Settings" component={Settings} hideNavBar gestureEnable={false} initial={false}/>
-						<Scene modal key="PrivacyPolicy" component={Settings} hideNavBar gestureEnable={false} initial={false}/>
+						<Scene modal key="PrivacyPolicy" component={Policy} hideNavBar gestureEnable={false} initial={false}/>
 						<Scene modal key="Summery" component={Summery} hideNavBar gestureEnable={false} initial={false}/>
 						<Scene modal key="Tailor" component={Tailor} hideNavBar gestureEnable={false} initial={false}/>
 						<Scene modal key="Address" component={Address} hideNavBar gestureEnable={false} initial={false}/>

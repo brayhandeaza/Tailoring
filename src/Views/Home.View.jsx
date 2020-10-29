@@ -70,9 +70,8 @@ const styles = StyleSheet.create({
         borderWidth: Platform.OS == "android" ? 0.6 : 0.2,
         borderColor: "rgba(000,000,000,0.2)",
 
-
-
         shadowColor: "#000",
+        elevation: 3,
         shadowOffset: {
             width: 0,
             height: 2
