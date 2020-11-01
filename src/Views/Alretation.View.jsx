@@ -60,7 +60,7 @@ class Alretation extends Component {
 	handleFetcheAppointmentByDate = async (activeDay) => {
 		let dates = []
 		let res = {
-			[activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true },
+			[activeDay]: { dotColor: 'white', disabled: true, selected: false, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true },
 		}
 		await axios.get("https://alteration-database.herokuapp.com/appointments/").then((appointments) => {
 			const appointmentsDate = appointments.data.Appointments
@@ -112,6 +112,7 @@ class Alretation extends Component {
 	}
 
 	handleDayOnPress = (e) => {
+		console.log(e.dateString);
 		this.setState({
 			activeDay: e.dateString,
 			date: e.dateString
@@ -207,6 +208,7 @@ class Alretation extends Component {
 					<Calendar
 						minDate={this.handleMinDate()}
 						onDayPress={this.handleDayOnPress}
+						// markedDates={this.state.dates}
 						markedDates={Object.assign({}, this.state.dates, { [activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true } })}
 						enableSwipeMonths={true}
 						theme={{
@@ -216,7 +218,7 @@ class Alretation extends Component {
 							textSectionTitleColor: "black",
 						}}
 						disableAllTouchEventsForDisabledDays={true}
-						current={null}
+						current={"2020-11-26"}
 					/>
 						<View style={styles.Time}>
 							<Image style={{ width: 27, height: 27, marginTop: 12 }} source={Icons.Clock} />
