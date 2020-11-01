@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, ScrollView, Dimensions } from 'react-native'
-import axios from "axios"
+import { StyleSheet, Text, ScrollView, Platform } from 'react-native'
 import AsyncStorage from "@react-native-community/async-storage"
 
 
@@ -13,8 +12,6 @@ import Header from "../components/Header"
 
 // redux
 import { connect } from "react-redux"
-
-const { width, height } = Dimensions.get("screen")
 
 class Profile extends Component {
 	constructor(props) {
@@ -44,11 +41,11 @@ class Profile extends Component {
 	}
 
 	render() {
-		
+
 		return (
 			<ScrollView contentContainerStyle={styles.Scroll}>
 				{this.state.isLoged ? <Account /> : this.props.state.Login.isLogedIn ? <Login /> : <SignUp />}
-				<Text style={[styles.Slogan, { color: "rgb(112,112,112)", fontFamily: "Inter-Regular", textAlign: "center" }]}>By Miracle Fit</Text>
+				{!Platform.OS == "androd" ? <Text style={[styles.Slogan, { color: "rgb(112,112,112)", fontFamily: "Inter-Regular", textAlign: "center" }]}>By Miracle Fit</Text> : null}
 			</ScrollView>
 		)
 	}

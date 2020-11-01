@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, ScrollView, TextInput, Image } from 'react-native'
+import { StyleSheet, View, Text, ScrollView, TextInput, Image, Platform, TouchableHighlight } from 'react-native'
 import { Calendar } from "react-native-calendars"
 import Textarea from 'react-native-textarea'
 import { Button } from "native-base"
@@ -12,13 +12,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import AsyncStorage from "@react-native-community/async-storage"
 
 
-
-
+// Test
+import { DynamicSelect } from "react-native-nested-selects";
 
 // componets
 import Header from "../components//Header"
-import Address from '../Views/Address.View'
-import { log } from 'react-native-reanimated'
 
 class Alretation extends Component {
 	constructor(props) {
@@ -43,8 +41,11 @@ class Alretation extends Component {
 			address: "",
 			isAddressOn: false,
 			date: this.handleMinDate(),
-			time: "8:00 am"
+			time: "8:00 am",
+			datePickerVisibility: false,
+
 		}
+		this.select;
 	}
 
 	handleGroupDate = (arr) => {
@@ -74,12 +75,9 @@ class Alretation extends Component {
 			res[date[0]] = { dotColor: 'white', disabled: true, selected: date[0].length > 4 ? false : true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true }
 		})
 
-		console.log(res)
 		this.setState({
 			dates: res
 		})
-
-
 	}
 
 	handleMakeAppointment = async () => {
@@ -110,12 +108,10 @@ class Alretation extends Component {
 	handleTime = (value) => {
 		this.setState({
 			time: value,
-
 		})
 	}
 
 	handleDayOnPress = (e) => {
-		console.log(); e
 		this.setState({
 			activeDay: e.dateString,
 			date: e.dateString
@@ -211,7 +207,7 @@ class Alretation extends Component {
 					<Calendar
 						minDate={this.handleMinDate()}
 						onDayPress={this.handleDayOnPress}
-						markedDates={Object.assign({}, this.state.dates, {[activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true }})}
+						markedDates={Object.assign({}, this.state.dates, { [activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true } })}
 						enableSwipeMonths={true}
 						theme={{
 							arrowColor: "#2ba97a",
@@ -222,15 +218,15 @@ class Alretation extends Component {
 						disableAllTouchEventsForDisabledDays={true}
 						current={null}
 					/>
-					<View style={styles.Time}>
-						<Image style={{ width: 25, height: 25 }} source={Icons.Clock} />
-						<Select onSelect={(value) => this.handleTime(value)} listStyle={styles.List} listHeight={350} selectStyle={styles.Select} selectTextStyle={styles.SelectText}>
-							{this.state.timeDate.map((time, i) => (
-								<Option key={i} optionTextStyle={styles.OptionText} optionStyle={styles.Option} value={time}>{time}</Option>
-							))}
-						</Select>
-						<Image style={{ width: 25, height: 25 }} source={Icons.Drop} />
-					</View>
+						<View style={styles.Time}>
+							<Image style={{ width: 27, height: 27, marginTop: 12 }} source={Icons.Clock} />
+							<Select onSelect={(value) => this.handleTime(value)} listStyle={styles.List} listHeight={350} selectStyle={styles.Select} selectTextStyle={styles.SelectText}>
+								{this.state.timeDate.map((time, i) => (
+									<Option key={i} optionTextStyle={styles.OptionText} optionStyle={styles.Option} value={time}>{time}</Option>
+								))}
+							</Select>
+							<Image style={{ width: 27, height: 27, marginTop: 12 }} source={Icons.Drop} />
+						</View>
 					<View style={styles.FormView}>
 						<View style={[styles.InputContainerBox, { borderColor: isFullNameOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
 							<Image style={styles.InputImage} source={isFullNameOn ? Icons.Login.UserOn : Icons.Login.User} />
@@ -244,7 +240,6 @@ class Alretation extends Component {
 							<Image style={styles.InputImage} source={isAddressOn ? Icons.Login.AddressOn : Icons.Login.Address} />
 							<TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Full Address" onChangeText={(value) => this.handleAddressOnChange(value)} />
 						</View>
-						{/* <Text style={styles.FormText}>Details</Text> */}
 						<Textarea
 							containerStyle={[styles.textareaContainer, { borderColor: isDetailsOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}
 							style={styles.textarea}
@@ -387,6 +382,7 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		borderRadius: 10,
 		borderWidth: 0.5,
+		
 		backgroundColor: "white",
 		borderColor: "rgba(000,000,000,0.2)",
 		paddingLeft: 20
@@ -402,22 +398,24 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 		width: "50%",
 		marginTop: 5,
-		backgroundColor: "rgba(000,000,000,0.1)",
+		
+		backgroundColor: "rgba(000,000,000,0)",
 		marginBottom: 10,
 		borderColor: "rgba(000,000,000,0.5)",
 	},
 	Time: {
 		width: 180,
+		height: 50,
 		backgroundColor: "#2ba97a",
 		marginLeft: 20,
-		// paddingLeft: 30,
 		borderRadius: 10,
 		marginTop: 30,
+
 
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "flex-start"
 	}
 })
 

@@ -1,23 +1,34 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, Image, TouchableHighlight, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableHighlight, ScrollView, Linking, Platform } from 'react-native'
 import { Actions } from 'react-native-router-flux';
 import { connect } from "react-redux"
 import { Icons } from "../constants/Image";
 import axios from "axios"
-import { Dialog, ConfirmDialog,  } from 'react-native-simple-dialogs';
+import { Dialog, ConfirmDialog, } from 'react-native-simple-dialogs';
 
 class Summery extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            status: [],
+            isOrderCompleted: false,
             tailor: '',
             date: '',
             details: '',
             time: '',
             orderId: null
-
         }
+    }
 
+    handleOrderStatus = async () => {
+        const { id } = this.props.state.Orders.orderId
+        await axios.get(`https://alteration-database.herokuapp.com/appointments/status/${id}`).then((res) => {
+            let data = res.data.appointmentsStatus
+            this.setState({
+                status: data,
+                isOrderCompleted: data[data.length -1].isCompleted ? true : false
+            })
+        })
     }
 
     handleDeleteCancelOrder = async (id) => {
@@ -61,14 +72,15 @@ class Summery extends Component {
             orderId: id,
             dialogVisible: false
         })
-    console.log(this.formatDate(date));
     }
+
     componentDidMount() {
         this.handleAppoinments()
+        this.handleOrderStatus()
     }
 
     render() {
-        const { tailor, date, details, time, orderId } = this.state
+        const { tailor, date, details, time, orderId, status, isOrderCompleted } = this.state
         return (
             <View style={styles.Summery}>
                 <View style={styles.Header}>
@@ -82,12 +94,13 @@ class Summery extends Component {
                     </View>
                     <View style={styles.Main}>
                         <View style={styles.StatusContainer}>
+                            {/*  */}
                             <View style={styles.Status}>
                                 <View style={styles.CircleShadow}>
                                     <View style={styles.Circle} />
                                 </View>
                                 <View style={styles.StatusTitleContainer}>
-                                    <Text style={[styles.StatusTitle, { fontFamily: "Inter-Regular" }]}>Order Placed on July 26</Text>
+                                    <Text style={[styles.StatusTitle, { fontFamily: "Inter-Regular" }]}>{"Order Placed on July 26"}</Text>
                                 </View>
                             </View>
                             <View style={styles.Dash}>
@@ -97,26 +110,31 @@ class Summery extends Component {
                                 <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
 
                             </View>
+                            {status.map((status, key) => (
+                                <View key={key}>
+                                    <View style={styles.Status}>
+                                        <View style={[styles.CircleShadow]}>
+                                            <View style={[styles.Circle]} />
+                                        </View>
+                                        <View style={styles.StatusTitleContainer}>
+                                            <Text style={[styles.StatusTitle, { fontFamily: "Inter-Regular" }]}>{status.status}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={styles.Dash}>
+                                        <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
+                                        <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
+                                        <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
+                                        <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
+                                    </View>
+                                </View>
+
+                            ))}
                             <View style={styles.Status}>
-                                <View style={[styles.CircleShadow, { backgroundColor: "rgba(000, 000, 000, 0.04)" }]}>
-                                    <View style={[styles.Circle, { backgroundColor: "rgba(000, 000, 000, 0.07)", }]} />
+                                <View style={[styles.CircleShadow, {  backgroundColor: isOrderCompleted ? "rgba(43, 169, 123, 0.1)" : "rgba(000, 000, 000, 0.04)" }]}>
+                                    <View style={[styles.Circle, { backgroundColor: isOrderCompleted ? "rgba(43, 169, 123, 1)" : "rgba(000, 000, 000, 0.07)", }]} />
                                 </View>
                                 <View style={styles.StatusTitleContainer}>
-                                    <Text style={[styles.StatusTitle, { color: "rgba(000, 000, 000, 0.2)", fontFamily: "Inter-Regular" }]}>Getting Tailored</Text>
-                                </View>
-                            </View>
-                            <View style={styles.Dash}>
-                                <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
-                                <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
-                                <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
-                                <Text style={[styles.DashText, { fontFamily: "Inter-Regular" }]}>-</Text>
-                            </View>
-                            <View style={styles.Status}>
-                                <View style={[styles.CircleShadow, { backgroundColor: "rgba(000, 000, 000, 0.04)" }]}>
-                                    <View style={[styles.Circle, { backgroundColor: "rgba(000, 000, 000, 0.07)", }]} />
-                                </View>
-                                <View style={styles.StatusTitleContainer}>
-                                    <Text style={[styles.StatusTitle, { color: "rgba(000, 000, 000, 0.2)", fontFamily: "Inter-Regular" }]}>Order Completed</Text>
+                                    <Text style={[styles.StatusTitle, { color: isOrderCompleted ? "rgba(000,000,000,0.6)" : "rgba(000, 000, 000, 0.2)", fontFamily: "Inter-Regular" }]}>{isOrderCompleted ? "Order Completed" : "Order is not Completed"}</Text>
                                 </View>
                             </View>
                             <View style={styles.OrderDetailsContainer}>
@@ -136,15 +154,15 @@ class Summery extends Component {
                                         <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, fontWeight: "bold", fontFamily: "Inter-Regular", color: "rgba(43, 169, 123, 1)", }]}>Details</Text>
                                         <Text style={[styles.OrderDetailsTitle, { marginBottom: 5, color: "rgba(000, 000, 000, 0.6)", fontFamily: "Inter-Regular" }]}>{details}</Text>
                                     </View>
-                                    <TouchableHighlight style={styles.OrderDetailsContacts} underlayColor="white" onPress={() => alert()}>
+                                    <TouchableHighlight style={styles.OrderDetailsContacts} underlayColor="white" onPress={() => Linking.openURL("tel:6469827293")}>
                                         <Text style={[styles.OrderDetailsTitle, { color: "rgba(43, 169, 123, 1)", fontFamily: "Inter-Regular" }]}>Contact Us</Text>
                                     </TouchableHighlight>
                                 </View>
-                                <TouchableHighlight style={styles.OrderDetailsContacts} underlayColor="white" onPress={() => this.setState({dialogVisible: true})}>
+                                <TouchableHighlight style={styles.OrderDetailsContacts} underlayColor="white" onPress={() => this.setState({ dialogVisible: true })}>
                                     <Text style={[styles.OrderDetailsTitle, { color: "red", fontFamily: "Inter-Regular" }]}>Cancel Order</Text>
                                 </TouchableHighlight>
                                 <ConfirmDialog title="Are you sure you want o cancel this order?" visible={this.state.dialogVisible} onTouchOutside={() => this.setState({ dialogVisible: false })}
-                                    positiveButton={{ title: "Yes", onPress: () => this.handleDeleteCancelOrder(orderId)}} negativeButton={{ title: "No", onPress: () => this.setState({ dialogVisible: false})}} >
+                                    positiveButton={{ title: "Yes", onPress: () => this.handleDeleteCancelOrder(orderId) }} negativeButton={{ title: "No", onPress: () => this.setState({ dialogVisible: false }) }} >
                                 </ConfirmDialog>
                             </View>
                         </View>
@@ -242,7 +260,8 @@ const styles = StyleSheet.create({
     },
     StatusTitle: {
         fontSize: 16,
-        color: "rgba(000,000,000,0.6)"
+        color: "rgba(000,000,000,0.6)",
+        textTransform: "capitalize"
     },
     CircleShadow: {
         width: 40,
@@ -307,11 +326,9 @@ const styles = StyleSheet.create({
         fontWeight: "600",
     },
     Tailor: {
-        // width: 130,
         paddingTop: 5,
         paddingBottom: 5,
-        // borderBottomWidth: 0.5,
-        // borderColor: "rgba(43, 169, 123, 0.7)"
+
     },
     OrderDetailsText: {
         fontSize: 18,
@@ -323,7 +340,6 @@ const styles = StyleSheet.create({
     OrderDetailsDescription: {
         width: "90%",
         marginTop: 50,
-        // backgroundColor: "red",
         paddingTop: 20,
         paddingBottom: 20,
         borderTopWidth: 0.5,
@@ -331,8 +347,6 @@ const styles = StyleSheet.create({
     },
     OrderDetailsContacts: {
         width: "100%",
-        // marginTop: 20,
-        // backgroundColor: "red",
         paddingTop: 20,
         paddingBottom: 30,
 

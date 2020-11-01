@@ -192,6 +192,41 @@ class Settings extends Component {
                                 }
                             </View>
                         </TouchableHighlight>
+
+                         {/* reset password */}
+                        {isTextField ?
+                            <View>
+                                <TouchableHighlight ref={this.myRefs} underlayColor="white">
+                                    <View style={[styles.InputContainerBox, { paddingLeft: isTextField ? 20 : 0, borderWidth: hasBorder ? 1 : 0, borderColor: isPhoneOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                                        <Image style={styles.InputImage} source={isPhoneOn ? Icons.Login.PasswordOn : Icons.Login.Password} />
+                                        {isTextField ?
+                                            <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Current Password" onChangeText={(value) => this.handlePhoneOnChange(value)} />
+                                            :
+                                            <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{phone}</Text>
+                                        }
+                                    </View>
+                                </TouchableHighlight>
+                                <TouchableHighlight ref={this.myRefs} underlayColor="white">
+                                    <View style={[styles.InputContainerBox, { paddingLeft: isTextField ? 20 : 0, borderWidth: hasBorder ? 1 : 0, borderColor: isPhoneOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                                        <Image style={styles.InputImage} source={isPhoneOn ? Icons.Login.PasswordOn : Icons.Login.Password} />
+                                        {isTextField ?
+                                            <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="New Password" onChangeText={(value) => this.handlePhoneOnChange(value)} />
+                                            :
+                                            <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{phone}</Text>
+                                        }
+                                    </View>
+                                </TouchableHighlight>
+                                <TouchableHighlight ref={this.myRefs} underlayColor="white">
+                                    <View style={[styles.InputContainerBox, { paddingLeft: isTextField ? 20 : 0, borderWidth: hasBorder ? 1 : 0, borderColor: isPhoneOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
+                                        <Image style={styles.InputImage} source={isPhoneOn ? Icons.Login.PasswordOn : Icons.Login.Password} />
+                                        {isTextField ?
+                                            <TextInput placeholderTextColor="#747374" textContentType="oneTimeCode" style={styles.Input} placeholder="Confirm Password" onChangeText={(value) => this.handlePhoneOnChange(value)} />
+                                            :
+                                            <Text style={{ color: "rgba(000,000,000,0.6)", fontFamily: "Inter-Regular", paddingLeft: 15 }}>{phone}</Text>
+                                        }
+                                    </View>
+                                </TouchableHighlight>
+                            </View> : null}
                     </View>
                     {
                         isTextField ?

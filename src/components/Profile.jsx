@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text,SafeAreaView, View, Image, Dimensions, TouchableHighlight } from 'react-native'
 import { Icons, Img } from '../constants/Image'
 import { Actions } from 'react-native-router-flux'
 import AsyncStorage from "@react-native-community/async-storage"
@@ -11,7 +11,7 @@ import Settings from "../components/Settings"
 // redux
 import { connect } from "react-redux"
 
-const {height } = Dimensions.get("screen")
+const { height } = Dimensions.get("screen")
 
 class Profile extends Component {
     constructor(props) {
@@ -66,8 +66,8 @@ class Profile extends Component {
     render() {
         const { isNotificationOn, title } = this.state
         return (
-            <View style={styles.Profile}>
-                <Header style={styles.Header}>
+            <SafeAreaView style={styles.Profile}>
+                <View style={styles.Header}>
                     <Left>
                         <TouchableHighlight underlayColor="white" style={styles.Touchable} onPress={this.handdleOnPressArrow}>
                             <Image style={styles.Arrow} source={Icons.Arrow} />
@@ -75,15 +75,15 @@ class Profile extends Component {
                     </Left>
                     <Right>
                         <TouchableHighlight style={styles.Logout} underlayColor="white" onPress={this.handleLogOut}>
-                            <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular", color: "rgba(43, 169, 123, 1)"}]}>{"Log Out"}</Text>
+                            <Text style={[styles.ProfileHeaderText, { fontFamily: "Inter-Regular", color: "rgba(43, 169, 123, 1)" }]}>{"Log Out"}</Text>
                         </TouchableHighlight>
                     </Right>
-                </Header>
-                <View style={styles.ProfilePictureContainer}>
+                </View>
+                {/* <View style={styles.ProfilePictureContainer}>
                     <View style={styles.ProfilePictureImgBox}>
                         <Image style={styles.ProfilePicture} source={Img.Avatar} />
                     </View>
-                </View>
+                </View> */}
                 <View style={styles.ProfileTitlesContainer}>
                     <View style={styles.ProfileTitlesBox}>
                         <TouchableHighlight underlayColor="white" onPress={title != "Notifications" ? (e) => this.handleTitleOnPress(e, `_${title.replace(" ", "")}`) : null}>
@@ -96,7 +96,7 @@ class Profile extends Component {
                     </View>
                     <Settings />
                 </View>
-            </View>
+            </SafeAreaView>
         )
     }
 }
@@ -115,16 +115,21 @@ const styles = StyleSheet.create({
 
     },
     Header: {
+        width: "100%",
+        height: 60,
         backgroundColor: "white",
         borderBottomColor: "white",
 
+        paddingRight: 10,
+        paddingLeft: 10,
+
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "row",
+        justifyContent: "space-between",
         alignItems: "center"
     },
     Touchable: {
         paddingLeft: 10,
-
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -220,7 +225,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: height - (160 + 110),
         paddingTop: 50,
-        
+
         paddingRight: 35,
 
         display: "flex",
