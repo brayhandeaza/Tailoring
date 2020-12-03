@@ -37,23 +37,28 @@ class Profile extends Component {
         }
     }
 
-    handdleOnPressArrow = (view) => {
+    handdleOnPressArrow = () => {
+        const {isTextField} = this.props.state.Header
         const { pView } = this.props.state.Footer
-        switch (pView) {
-            case "isHome":
-                Actions.Home()
-                break;
-            case "isOrders":
-                Actions.Orders()
-                break;
-            case "isPrices":
-                Actions.Prices()
-                break;
-            case "isProfile":
-                Actions.Profile()
-                break;
+        if (isTextField) {
+            this.props.dispatch({type: "isTextField", payload: false})
+        } else{
+            switch (pView) {
+                case "isHome":
+                    Actions.Home()
+                    break;
+                case "isOrders":
+                    Actions.Orders()
+                    break;
+                case "isPrices":
+                    Actions.Prices()
+                    break;
+                case "isProfile":
+                    Actions.Profile()
+                    break;
+            }
+            this.props.dispatch({ type: pView })
         }
-        this.props.dispatch({ type: pView })
     }
 
     handleLogOut = async () => {
@@ -65,6 +70,7 @@ class Profile extends Component {
 
     render() {
         const { isNotificationOn, title } = this.state
+        const {isTextField} = this.props.state.Header
         return (
             <SafeAreaView style={styles.Profile}>
                 <View style={styles.Header}>
@@ -79,11 +85,6 @@ class Profile extends Component {
                         </TouchableHighlight>
                     </Right>
                 </View>
-                {/* <View style={styles.ProfilePictureContainer}>
-                    <View style={styles.ProfilePictureImgBox}>
-                        <Image style={styles.ProfilePicture} source={Img.Avatar} />
-                    </View>
-                </View> */}
                 <View style={styles.ProfileTitlesContainer}>
                     <View style={styles.ProfileTitlesBox}>
                         <TouchableHighlight underlayColor="white" onPress={title != "Notifications" ? (e) => this.handleTitleOnPress(e, `_${title.replace(" ", "")}`) : null}>

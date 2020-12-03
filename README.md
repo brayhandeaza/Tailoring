@@ -5,7 +5,9 @@ Home: Redy
 Orders: Ready
 Prices: Ready
 Profile: Working On It
-Aletarion: Almost Ready
-Register:
-Login:
+Aletarion: Ready
+Register: Ready
+Login: Ready
+OrderDetails: 
+Notification: 
 -->

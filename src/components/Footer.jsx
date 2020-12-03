@@ -41,7 +41,7 @@ class Navegation extends Component {
         }
         return view ? isTrue : {}
     }
-
+   
     render() {
         const { isHome, isProfile, isOrders, isPrices, isFooter } = this.props.state.Footer
         return (
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         height: 55,
         borderRadius: 10,
         backgroundColor: "white",
-        borderWidth:  0.5,
+        borderWidth: 0.5,
         borderColor: Platform.OS == "android" ? "rgba(112,112,112,0.5)" : "rgba(112,112,112,0.4)",
         paddingBottom: 10,
 

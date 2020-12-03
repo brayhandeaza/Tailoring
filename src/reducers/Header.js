@@ -1,7 +1,8 @@
 let initalState = {
 	isLogo: true,
 	isArrow: false,
-	isHeader: false
+	isHeader: false,
+	isTextField: false
 }
 
 module.exports = (state = initalState, actions) => {
@@ -15,6 +16,8 @@ module.exports = (state = initalState, actions) => {
 			return Object.assign({}, state, {  isHeader: true})
 		case "isHeaderNotHidden":
 			return Object.assign({}, state, {  isHeader: false})
+		case "isTextField":
+			return Object.assign({}, state, {  isTextField: actions.payload})
 		default:
 			return state
 	}

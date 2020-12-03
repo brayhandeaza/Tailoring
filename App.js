@@ -15,7 +15,7 @@ import Summery from './src/Views/OrdersSummery.View'
 import Tailor from './src/Views/TailorProfile.View'
 import Address from './src/Views/Address.View'
 import Policy from './src/Views/Policy.View'
-// import Footer from './src/components/Footer'
+import Reset from './src/Views/ResetPassword'
 
 // redux
 import { createStore } from "redux"
@@ -65,6 +65,7 @@ export default function App() {
 						<Scene modal key="Summery" component={Summery} hideNavBar gestureEnable={false} initial={false}/>
 						<Scene modal key="Tailor" component={Tailor} hideNavBar gestureEnable={false} initial={false}/>
 						<Scene modal key="Address" component={Address} hideNavBar gestureEnable={false} initial={false}/>
+						<Scene modal key="Reset" component={Reset} hideNavBar gestureEnable={false} initial={false}/>
 					</Scene>
 				</Router>
 			</Provider>

@@ -11,10 +11,6 @@ import axios from "axios"
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AsyncStorage from "@react-native-community/async-storage"
 
-
-// Test
-import { DynamicSelect } from "react-native-nested-selects";
-
 // componets
 import Header from "../components//Header"
 
@@ -37,6 +33,7 @@ class Alretation extends Component {
 			phone: "",
 			isPhoneOn: false,
 			details: "",
+			placedOn: this.handlePlacedOn(),
 			isDetailsOn: false,
 			address: "",
 			isAddressOn: false,
@@ -82,14 +79,15 @@ class Alretation extends Component {
 
 	handleMakeAppointment = async () => {
 		const token = await AsyncStorage.getItem("userId")
-		const { fullName, details, phone, address, date, time } = this.state
+		const { fullName, details, phone, address, date, time, placedOn } = this.state
 		await axios.post(`https://alteration-database.herokuapp.com/appointments/${token}`, {
 			"fullName": fullName,
 			"details": details,
 			"phone": phone,
 			"address": address,
 			"date": date,
-			"time": time
+			"time": time,
+			"placedOn": placedOn
 		}).then((res) => {
 			this.props.dispatch({ type: "isOrders" })
 			this.setState({
@@ -98,7 +96,8 @@ class Alretation extends Component {
 				phone: "",
 				address: "",
 				date: this.handleMinDate(),
-				time: "8:00 am"
+				time: "8:00 am",
+				placedOn
 			})
 			Actions.reset("_Orders")
 		}).catch(err => console.log(err))
@@ -112,7 +111,6 @@ class Alretation extends Component {
 	}
 
 	handleDayOnPress = (e) => {
-		console.log(e.dateString);
 		this.setState({
 			activeDay: e.dateString,
 			date: e.dateString
@@ -120,6 +118,18 @@ class Alretation extends Component {
 	}
 
 	handleMinDate = () => {
+		let date = new Date()
+		let tempMonth = date.getMonth()
+		let tempDay = date.getDate()
+
+		let month = tempMonth < 9 ? ("0" + (tempMonth + 1)) : (tempMonth + 1)
+		let day = tempDay < 9 ? ("0" + (tempDay + 5)) :  tempDay + 5
+		let year = date.getFullYear()
+
+		return year + "-" + month + "-" + day
+	}
+
+	handlePlacedOn = () => {
 		let date = new Date()
 		let tempMonth = date.getMonth()
 		let tempDay = date.getDate()
@@ -197,6 +207,7 @@ class Alretation extends Component {
 		this.handleMinDate()
 		this.handleErrors()
 		this.handleFetcheAppointmentByDate(this.state.activeDay)
+		console.log(this.handlePlacedOn());
 	}
 
 	render() {
@@ -208,7 +219,6 @@ class Alretation extends Component {
 					<Calendar
 						minDate={this.handleMinDate()}
 						onDayPress={this.handleDayOnPress}
-						// markedDates={this.state.dates}
 						markedDates={Object.assign({}, this.state.dates, { [activeDay]: { dotColor: 'white', disabled: true, selected: true, marked: false, selectedColor: "#2ba97a", disableTouchEvent: true } })}
 						enableSwipeMonths={true}
 						theme={{
@@ -218,17 +228,17 @@ class Alretation extends Component {
 							textSectionTitleColor: "black",
 						}}
 						disableAllTouchEventsForDisabledDays={true}
-						current={"2020-11-26"}
+						current={activeDay}
 					/>
-						<View style={styles.Time}>
-							<Image style={{ width: 27, height: 27, marginTop: 12 }} source={Icons.Clock} />
-							<Select onSelect={(value) => this.handleTime(value)} listStyle={styles.List} listHeight={350} selectStyle={styles.Select} selectTextStyle={styles.SelectText}>
-								{this.state.timeDate.map((time, i) => (
-									<Option key={i} optionTextStyle={styles.OptionText} optionStyle={styles.Option} value={time}>{time}</Option>
-								))}
-							</Select>
-							<Image style={{ width: 27, height: 27, marginTop: 12 }} source={Icons.Drop} />
-						</View>
+					<View style={styles.Time}>
+						<Image style={{ width: 27, height: 27, marginTop: 12 }} source={Icons.Clock} />
+						<Select onSelect={(value) => this.handleTime(value)} listStyle={styles.List} listHeight={350} selectStyle={styles.Select} selectTextStyle={styles.SelectText}>
+							{this.state.timeDate.map((time, i) => (
+								<Option key={i} optionTextStyle={styles.OptionText} optionStyle={styles.Option} value={time}>{time}</Option>
+							))}
+						</Select>
+						<Image style={{ width: 27, height: 27, marginTop: 12 }} source={Icons.Drop} />
+					</View>
 					<View style={styles.FormView}>
 						<View style={[styles.InputContainerBox, { borderColor: isFullNameOn ? "#54b77c" : "rgba(000,000,000,0.1)" }]}>
 							<Image style={styles.InputImage} source={isFullNameOn ? Icons.Login.UserOn : Icons.Login.User} />
@@ -250,7 +260,6 @@ class Alretation extends Component {
 							placeholderTextColor={"rgba(000,000,000,0.5)"}
 							underlineColorAndroid={'transparent'}
 							onChangeText={(value) => this.handleDetailsOnChange(value)}
-
 						/>
 						{this, this.handleErrors() ?
 							<Button style={[styles.Button, { backgroundColor: "#2ba97a" }]} onPress={this.handleMakeAppointment}>
@@ -384,7 +393,7 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		borderRadius: 10,
 		borderWidth: 0.5,
-		
+
 		backgroundColor: "white",
 		borderColor: "rgba(000,000,000,0.2)",
 		paddingLeft: 20
@@ -400,7 +409,7 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 		width: "50%",
 		marginTop: 5,
-		
+
 		backgroundColor: "rgba(000,000,000,0)",
 		marginBottom: 10,
 		borderColor: "rgba(000,000,000,0.5)",

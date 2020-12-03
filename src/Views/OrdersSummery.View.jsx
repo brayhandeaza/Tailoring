@@ -13,6 +13,7 @@ class Summery extends Component {
             status: [],
             isOrderCompleted: false,
             tailor: '',
+            placedOn: '',
             date: '',
             details: '',
             time: '',
@@ -44,7 +45,7 @@ class Summery extends Component {
 
     formatDate = (date) => {
         let dateArray = date.split("-")
-        let monthsArray = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "June", "July", "Aug.", "Sept.", "Oct.", "Nov", "Dec."]
+        let monthsArray = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]
         let monthIndex = dateArray[1] > 9 ? dateArray[1] : dateArray[1][1]
 
         let month = monthsArray[(parseInt(monthIndex)) - 1]
@@ -63,24 +64,28 @@ class Summery extends Component {
     }
 
     handleAppoinments = () => {
-        const { tailor, date, details, time, id } = this.props.state.Orders.orderId
+        const { tailor, date, details, time, id, placedOn} = this.props.state.Orders.orderId
         this.setState({
             tailor: tailor,
             date: this.formatDate(date),
             details: details,
             time: time,
             orderId: id,
-            dialogVisible: false
+            dialogVisible: false,
+            placedOn: this.formatDate(placedOn)
         })
+        console.log(placedOn);
     }
 
     componentDidMount() {
-        this.handleAppoinments()
+        this.handleAppoinments()    
         this.handleOrderStatus()
     }
 
+
     render() {
-        const { tailor, date, details, time, orderId, status, isOrderCompleted } = this.state
+        const { tailor, date, details, time, orderId, status, isOrderCompleted, placedOn } = this.state
+        console.log(placedOn);
         return (
             <View style={styles.Summery}>
                 <View style={styles.Header}>
@@ -100,7 +105,7 @@ class Summery extends Component {
                                     <View style={styles.Circle} />
                                 </View>
                                 <View style={styles.StatusTitleContainer}>
-                                    <Text style={[styles.StatusTitle, { fontFamily: "Inter-Regular" }]}>{"Order Placed on July 26"}</Text>
+                                    <Text style={[styles.StatusTitle, { fontFamily: "Inter-Regular" }]}>{`Placed on ${placedOn}`}</Text>
                                 </View>
                             </View>
                             <View style={styles.Dash}>
@@ -161,7 +166,7 @@ class Summery extends Component {
                                 <TouchableHighlight style={styles.OrderDetailsContacts} underlayColor="white" onPress={() => this.setState({ dialogVisible: true })}>
                                     <Text style={[styles.OrderDetailsTitle, { color: "red", fontFamily: "Inter-Regular" }]}>Cancel Order</Text>
                                 </TouchableHighlight>
-                                <ConfirmDialog title="Are you sure you want o cancel this order?" visible={this.state.dialogVisible} onTouchOutside={() => this.setState({ dialogVisible: false })}
+                                <ConfirmDialog message="Are you sure about that?" visible={this.state.dialogVisible} onTouchOutside={() => this.setState({ dialogVisible: false })}
                                     positiveButton={{ title: "Yes", onPress: () => this.handleDeleteCancelOrder(orderId) }} negativeButton={{ title: "No", onPress: () => this.setState({ dialogVisible: false }) }} >
                                 </ConfirmDialog>
                             </View>

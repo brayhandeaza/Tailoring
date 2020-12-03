@@ -29,14 +29,32 @@ class Orders extends Component {
         this.socket = io("https://alteration-database.herokuapp.com/")
     }
 
+    formatDate = (date) => {
+        let dateArray = date.split("-")
+        let monthsArray = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]
+        let monthIndex = dateArray[1] > 9 ? dateArray[1] : dateArray[1][1]
+
+        let month = monthsArray[(parseInt(monthIndex)) - 1]
+        let day = dateArray[2]
+        let year = dateArray[0]
+
+        let result = `${month} ${day} ${year}`
+        return result
+    }
+
     fetchAppointment = async () => {
        const userId = await AsyncStorage.getItem("userId")
         this.socket.emit("userId", userId)
         this.socket.on("appointment", (res) => {
-            this.setState({
-                appointments: res
+           let date = []
+
+            res.forEach(item => {
+                date.push(this.formatDate(item.date))
             })
-            console.log(res);
+
+            this.setState({
+                appointments: res,
+            })
         })
     }
 
@@ -54,8 +72,8 @@ class Orders extends Component {
     componentDidMount() {
         this.fetchAppointment()
         this.props.dispatch({ type: "isOrders" })
+        this.formatDate("2020-11-11")
     }
-
 
     render() {
         return (
@@ -79,7 +97,7 @@ class Orders extends Component {
                                         </View>
                                         <View style={styles.BottomRight}>
                                             <Text style={{ fontSize: 15, color: "rgba(112,112,112,1)", fontFamily: "Inter-Regular", }}>Schedule</Text>
-                                            <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5 }}>{`${appointment.date} ${appointment.time}`}</Text>
+                                            <Text style={{ fontSize: 15, color: "rgba(000,000,000,0.8)", fontFamily: "Inter-Regular", paddingTop: 5 }}>{`${this.formatDate(appointment.date)} ${appointment.time}`}</Text>
                                         </View>
                                     </View>
                                 </View>

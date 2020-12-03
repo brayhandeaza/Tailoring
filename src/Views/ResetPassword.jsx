@@ -71,13 +71,8 @@ class Register extends Component {
         })
     }
 
-    toRegister = () => {
-        this.props.dispatch({ type: "isLogOut" })
-    }
-
-    toReset = () => {
-        // this.props.dispatch({ type: "isLogOut" })
-        Actions.reset("_Reset")
+    toLogin = () => {
+        Actions.reset("_Profile")
     }
 
     componentDidMount = () => {
@@ -90,7 +85,7 @@ class Register extends Component {
             <View style={styles.Login}>
                 <View style={styles.Register}>
                     <View style={styles.FormTitle}>
-                        <Text style={[styles.IconsOptionText, { color: "black", fontFamily: "Inter-Regular", fontSize: 30, fontWeight: "bold" }]}>Login</Text>
+                        <Text style={[styles.IconsOptionText, { color: "black", fontFamily: "Inter-Regular", fontSize: 25, fontWeight: "bold" }]}>Enter your email</Text>
                     </View>
                     <View style={styles.Form}>
                         <View style={[styles.InputContainer]}>
@@ -98,31 +93,19 @@ class Register extends Component {
                                 <Image style={styles.InputImage} source={Icons.Login.Email} />
                                 <TextInput placeholderTextColor="#747374" style={styles.Input} keyboardType="email-address" placeholder="Email" onChangeText={(value) => this.handleEmailOnChange(value)} />
                             </View>
-                            <View style={[styles.InputContainerBox, { borderWidth: 1, borderColor: isPasswordOn ? "#54b77c" : "white" }]}>
-                                <Image style={styles.InputImage} source={Icons.Login.Password} />
-                                <TextInput placeholderTextColor="#747374" secureTextEntry style={styles.Input} placeholder="Password" onChangeText={(value) => this.handlePasswordOnChange(value)} />
-                            </View>
-                            <Text style={[{ color: "#2ba97a", fontFamily: "Inter-Regular", marginBottom: 10, fontSize: 14, paddingLeft: 5, color: "red", textAlign: "center" }]}>{this.state.errorMessage}</Text>
-                        </View>
-                        <View style={[styles.toLogin, { marginBottom: 15 }]}>
-                            <View style={{}}>
-                                <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 16 }]}>Forgot your password?</Text>
-                            </View>
-                            <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.toReset}>
-                                <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontFamily: "Inter-Regular", fontSize: 16, paddingLeft: 5 }]}>Reset it</Text>
-                            </TouchableHighlight>
+                            <Text style={[{ color: "#2ba97a", fontFamily: "Inter-Regular", fontSize: 14, paddingLeft: 5, color: "red", textAlign: "center" }]}>{this.state.errorMessage}</Text>
                         </View>
                         <TouchableHighlight style={styles.Touchable} underlayColor="#2ba97a" onPress={this.handleLogin}>
-                            <Text style={[styles.IconsOptionText, { color: "white", fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "600" }]}>Log In</Text>
+                            <Text style={[styles.IconsOptionText, { color: "white", fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "600" }]}>Submit</Text>
                         </TouchableHighlight>
-                        <View style={styles.toLogin}>
-                            <View style={{}}>
-                                <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 16 }]}>Do not have an account yet?</Text>
-                            </View>
-                            <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.toRegister}>
-                                <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontFamily: "Inter-Regular", fontSize: 16, paddingLeft: 5 }]}>Sign Up</Text>
-                            </TouchableHighlight>
+                    </View>
+                    <View style={[styles.toLogin, { marginTop: 10 }]}>
+                        <View style={{}}>
+                            <Text style={[styles.IconsOptionText, { color: "rgb(112,112,112)", fontSize: 16 }]}>Signin with your</Text>
                         </View>
+                        <TouchableHighlight underlayColor="white" style={styles.Links} onPress={this.toLogin}>
+                            <Text style={[styles.IconsOptionText, { color: "#2ba97a", fontFamily: "Inter-Regular", fontSize: 16, paddingLeft: 5 }]}>Account</Text>
+                        </TouchableHighlight>
                     </View>
                 </View>
             </View>
